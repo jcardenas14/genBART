@@ -1,7 +1,6 @@
 Package: genBART
 Type: Package
 Title: Biostatistical Analysis Reporting Tool
-biocViews: rnaseq
 Version: 0.1.0
 Author: Jacob Cardenas
 Maintainer: Jacob Cardenas <jacob.cardenas@bswhealth.org>
@@ -26,3 +25,4 @@ Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+biocViews: Microarray, RNASeq

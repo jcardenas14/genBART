@@ -1,6 +1,7 @@
 Package: genBART
 Type: Package
 Title: Biostatistical Analysis Reporting Tool
+biocViews
 Version: 0.1.0
 Author: Jacob Cardenas
 Maintainer: Jacob Cardenas <jacob.cardenas@bswhealth.org>

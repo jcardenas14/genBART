@@ -8,14 +8,29 @@ Description: A pipeline to generate and format results from statistical
     analysis of a wide range of high throughput experiments that can then 
     be uploaded into the BART shiny app. The app provides users with tools
     to visualize and efficiently sift through large amounts of data and results. 
-Depends: R (>= 3.3.3), limma (>= 3.30.13)
+Depends: R (>= 3.3.3)
 Imports: 
+    clValid (>= 0.6-6),
+    data.table (>= 1.10.4),
     fastcluster (>= 1.1.22),
+    ggplot2 (>= 2.2.1),
+    grid (>= 3.3.3),
+    gtools (>= 3.5.0),
     limma (>= 3.30.13),
-    psych (>= 1.7.3.21), 
-    reshape2 (>= 1.4.2),
+    NMF (>= 0.20.6),
+    pca3d (>= 0.10),
+    psych (>= 1.7.3.21),
     qusage (>= 2.6.1),
-    tools (>= 3.3.3)
+    RColorBrewer (>= 1.1-2),
+    reshape2 (>= 1.4.2),
+    rmarkdown (>= 1.5),
+    scales (>= 0.4.1),
+    shiny (>= 1.0.3),
+    shinydashboard (>= 0.5.3),
+    shinyjs (>= 0.9),
+    stringr (>= 1.2.0),
+    tools (>= 3.3.3),
+    VennDiagram (>= 1.6.17)
 Suggests: 
     DESeq2 (>= 1.14.1),
     edgeR (>= 3.16.5),

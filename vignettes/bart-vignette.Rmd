@@ -28,6 +28,7 @@ This is a quick walkthrough of an analysis in limma. The example we are using co
 
 ```{r}
 library(genBART)
+library(limma)
 ```
 Create a grouping factor by combining responder status and time point. 
 ```{r}

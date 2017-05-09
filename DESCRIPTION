@@ -4,7 +4,7 @@ Title: Biostatistical Analysis Reporting Tool
 Version: 0.1.0
 Author: Jacob Cardenas
 Maintainer: Jacob Cardenas <jacob.cardenas@bswhealth.org>
-Description: A pipeline to generate and format results from statistical
+Description: A set of functions to generate and format results from statistical
     analysis of a wide range of high throughput experiments that can then 
     be uploaded into the BART shiny app. The app provides users with tools
     to visualize and efficiently sift through large amounts of data and results. 
@@ -35,7 +35,8 @@ Suggests:
     DESeq2 (>= 1.14.1),
     edgeR (>= 3.16.5),
     statmod (>= 1.4.29)
-License: What license is it under?
+License: GPL-2|GPL-3
+Materials: README
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr

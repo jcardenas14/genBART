@@ -41,7 +41,7 @@ is available in `genBART` and is taken from a longitudinal microarray experiment
 monitoring the gene expression changes in cynomolgus macaques infected with *M.
 tuberculosis* (Skinner et al.). To speed up the hierarchical clustering step,
 I randomly selected a subset (1000) of the probes for the example. Please see 
-the [genBART vignette](vignettes/bart-vignette.rmd) for a full analysis workflow
+the [genBART vignette](vignettes/bart-vignette.Rmd) for a full analysis workflow
 walk-through from the same microarray study.
 
 ``` r

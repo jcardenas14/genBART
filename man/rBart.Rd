@@ -44,21 +44,3 @@ This function runs the ROAST gene set tests across all summary set
   statistics ("mean", "floormean", "mean50", and "msq") and returns formatted
   results for BART.
 }
-\examples{
-# des.info object is obtained using the desInfo function
-data(tb.design)
-data(tb.expr)
-data(des.info)
-data(modules)
-
-tb.design$Group <- paste(tb.design$clinical_status,tb.design$mytimepoint,sep = "")
-grp <- factor(tb.design$Group)
-design2 <- model.matrix(~0+grp)
-colnames(design2) <- levels(grp)
-dupcor <- duplicateCorrelation(tb.expr, design2, block = tb.design$monkey_id)
-contrasts <- makeContrasts(A_20vsPre = Active20-Active0,A_30vsPre = Active30-Active0,A_42vsPre = Active42-Active0,
-                           A_56vsPre = Active56-Active0,levels=design2)
-roast.res <- rBart(design_info = des.info, gene_sets = modules, design = design2, contrast = contrasts, block = tb.design$monkey_id,
-                   correlation = dupcor$consensus.correlation)
-
-}

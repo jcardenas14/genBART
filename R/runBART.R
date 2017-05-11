@@ -3,6 +3,7 @@
 #' This function runs the BART shiny app.
 #' @examples
 #' if (interactive()) genBART::runBart()
+#' @import ggplot2
 #' @export
 runBart <- function() {
   appDir <- system.file("shiny-app", "BART", package = "genBART")

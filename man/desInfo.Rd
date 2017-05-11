@@ -61,7 +61,9 @@ Match design and expression matrices. Declare and store design parameters.
 # Using example dataset in genBART package
 data(tb.expr)
 data(tb.design)
-des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", columnname = "columnname", long = TRUE, patient_id = "monkey_id",
-                    baseline_var = "mytimepoint", baseline_val = 0, time_var = "mytimepoint", responder_var = "clinical_status",
-                    summary_var = "numbChip", sample_id = "sample_group", project_name = "Jason_TB")
+des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 
+                    columnname = "columnname", long = TRUE, patient_id = "monkey_id",
+                    baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
+                    responder_var = "clinical_status", sample_id = "sample_id", 
+                    project_name = "TB")
 }

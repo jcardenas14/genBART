@@ -23,30 +23,34 @@
 #'   workign directory. All function inputs are the objects generated from
 #'   running the other available functions in \code{genBART}.
 #' @examples
-#' # des.info and mod.results objects are obtained using the desInfo and genModelResults functions respectively
+#' # des.info and model.results objects are obtained using desInfo and genModelResults respectively
 #' data(des.info)
-#' data(mod.results)
+#' data(model.results)
 #'
 #' # gene sets and data for correlations
 #' data(modules)
-#' data(flow)
-#' data(mod.as)
+#' data(tb.flow)
+#' data(module.as)
 #'
 #' # generate module maps and cluster probes
 #' mods <- genModules(des.info, modules)
 #' dendros <- genDendrograms(des.info)
 #'
 #' # create BART file
-#' genFile(design_info = des.info, module_maps = mods, dendros = dendros)
+#' genFile(design_info = list(des.info), module_maps = mods, dendros = dendros)
 #'
 #' # run qusage and correlations
-#' qus <- qBart(mod.results, modules)
-#' corrs <- crossCorr(x = mod.as, y = flow.dat, by = time, by_name = "days", description = "Mod.Act.Score vs Flow",
-#'                    x_var = "Mod.Act.Score", y_var = "Flow",method = "spearman")
+#' qus <- qBart(model.results, modules)
+#' 
+#' time <- module.as$time
+#' module.as$time <- NULL
+#' corrs <- crossCorr(x = module.as, y = tb.flow, by = time, by_name = "days", 
+#'                    description = "Mod.Act.Score vs Flow", x_var = "Mod.Act.Score", 
+#'                    y_var = "Flow",method = "spearman")
 #'
 #' # update and override BART file by adding qusage results and correlations
-#' updateFile(load.path = paste(getwd(), "/", project_name, " Pipeline/", sep = ""), qusage_results = qus, corr_results = corrs)
-
+#' path <- paste(getwd(), "/", des.info$project_name, " Pipeline/", sep = "")
+#' updateFile(load.path = path, qusage_results = qus, corr_results = corrs)
 
 #' @export
 genFile <- function(design_info, model_results = NULL, module_maps = NULL,
@@ -280,6 +284,7 @@ updateFile <- function(load.path = NULL, output.path = NULL, design_info = NULL,
   if (!is.null(load.path)) {
     if (file.exists(load.path)) {
       qresults <- qusage_results
+      mod1 <- mod2 <- long <- data_type <- NULL
       data <- load(paste(load.path,"/Unsupervised.RData",sep = ""))
       if (!is.null(module_maps)) {
         base_mod <- module_maps$base_mod
@@ -368,6 +373,8 @@ updateFile <- function(load.path = NULL, output.path = NULL, design_info = NULL,
             patient_id <- design_info[[i]]$patient_id
             hc <- design_info[[i]]$hc
             project_name <- design_info[[i]]$project_name
+            data_type <- design_info[[i]]$data_type
+            long <- design_info[[i]]$long
           }
           if (design_info[[i]]$data_type == "flow") {
             f_design <- design_info[[i]]$design

@@ -1,5 +1,5 @@
-require(shiny)
-library(ggplot2)
+#require(shiny)
+#library(ggplot2)
 #library(RColorBrewer)
 #library(fastcluster)
 #library(NMF)

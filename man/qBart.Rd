@@ -30,7 +30,7 @@ This function takes the gene level comparison estimates and test
 }
 \examples{
 # mod.results object is obtained using the genModelResults function
-data(mod.results)
+data(model.results)
 data(modules)
-qus <- qBart(mod.results, modules)
+qus <- qBart(model.results, modules)
 }

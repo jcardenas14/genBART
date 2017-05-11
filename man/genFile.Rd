@@ -60,27 +60,32 @@ app
   save the updated file.
 }
 \examples{
-# des.info and mod.results objects are obtained using the desInfo and genModelResults functions respectively
+# des.info and model.results objects are obtained using desInfo and genModelResults respectively
 data(des.info)
-data(mod.results)
+data(model.results)
 
 # gene sets and data for correlations
 data(modules)
-data(flow)
-data(mod.as)
+data(tb.flow)
+data(module.as)
 
 # generate module maps and cluster probes
 mods <- genModules(des.info, modules)
 dendros <- genDendrograms(des.info)
 
 # create BART file
-genFile(design_info = des.info, module_maps = mods, dendros = dendros)
+genFile(design_info = list(des.info), module_maps = mods, dendros = dendros)
 
 # run qusage and correlations
-qus <- qBart(mod.results, modules)
-corrs <- crossCorr(x = mod.as, y = flow.dat, by = time, by_name = "days", description = "Mod.Act.Score vs Flow",
-                   x_var = "Mod.Act.Score", y_var = "Flow",method = "spearman")
+qus <- qBart(model.results, modules)
+
+time <- module.as$time
+module.as$time <- NULL
+corrs <- crossCorr(x = module.as, y = tb.flow, by = time, by_name = "days", 
+                   description = "Mod.Act.Score vs Flow", x_var = "Mod.Act.Score", 
+                   y_var = "Flow",method = "spearman")
 
 # update and override BART file by adding qusage results and correlations
-updateFile(load.path = paste(getwd(), "/", project_name, " Pipeline/", sep = ""), qusage_results = qus, corr_results = corrs)
+path <- paste(getwd(), "/", des.info$project_name, " Pipeline/", sep = "")
+updateFile(load.path = path, qusage_results = qus, corr_results = corrs)
 }

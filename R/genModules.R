@@ -187,7 +187,7 @@ genModules <- function(design_info, gene_sets) {
       control_cols <- design$columnname[which(design[, control_var] ==
                                                 control_val)]
       final_expression2 <- final_expression[, -which(colnames(final_expression)
-                                                     %in% conrol_cols)]
+                                                     %in% control_cols)]
       design2 <- design[-which(design$columnname %in% control_cols),
                         ]
       sort_des <- design2[order(design2[, time_var], design2[, subject_id]),

@@ -114,6 +114,7 @@ dataManipulate <- function(y, x, colname, ref_var, ref_level, long = FALSE,
 #' # des.info object is obtained using the desInfo function
 #' data(des.info)
 #' dendros <- genDendrograms(des.info)
+#' @importFrom stats as.dendrogram dist qt sd
 #' @export
 genDendrograms <- function(design_info) {
   hc <- design_info$hc

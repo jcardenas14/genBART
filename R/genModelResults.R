@@ -1,60 +1,65 @@
 #' Generate formatted results file
-#'
-#' Generate formatted results file from completed differential analysis in
+#' 
+#' Generate formatted results file from completed differential analysis in 
 #' limma, DESeq2, or edgeR
 #' @param design_info list generated from \code{\link{desInfo}}
-#' @param object result object generated from \code{limma}, \code{DESeq2}, or
+#' @param object result object generated from \code{limma}, \code{DESeq2}, or 
 #'   \code{edgeR}
-#' @param lm_Fit linear model fit object generated from \code{limma},
+#' @param lm_Fit linear model fit object generated from \code{limma}, 
 #'   \code{DESeq2}, or \code{edgeR}
 #' @param method Which method is being used? ("limma","deseq2","edgeR")
-#' @param comp_names comp_names=NULL is the default. A vector of comparison
+#' @param comp_names comp_names=NULL is the default. A vector of comparison 
 #'   (contrast) names
-#' @param var_names var_names=NULL is the default. Optional vector of variable
+#' @param var_names var_names=NULL is the default. Optional vector of variable 
 #'   names. Otherwise, the rownames of the expression dataframe are used
-#' @param var_symbols var_symbols=NULL is the default. Optional vector of
-#'   secondary annotations for the variables. Otherwise, the rownames of the
+#' @param var_symbols var_symbols=NULL is the default. Optional vector of 
+#'   secondary annotations for the variables. Otherwise, the rownames of the 
 #'   expression dataframe are used
 #' @details This function formats the results obtained from running differential
 #'   analysis in either one of \code{limma}, \code{DESeq2}, or \code{edgeR}. The
-#'   parameter \code{object} accepts as input a results object from functions
-#'   \code{\link[limma]{eBayes}} (limma), \code{\link[DESeq2]{results}}
-#'   (DESeq2), \code{\link[edgeR]{glmLRT}} or \code{\link[edgeR]{glmQLFTest}}
-#'   (edgeR). The parameter \code{lm_Fit} accepts a fitted model object from
-#'   functions \code{\link[limma]{lmFit}} (limma), \code{\link[DESeq2]{DESeq}}
-#'   (DESeq2), \code{\link[edgeR]{glmFit}} or \code{\link[edgeR]{glmQLFit}}
+#'   parameter \code{object} accepts as input a results object from functions 
+#'   \code{\link[limma]{eBayes}} (limma), \code{\link[DESeq2]{results}} 
+#'   (DESeq2), \code{\link[edgeR]{glmLRT}} or \code{\link[edgeR]{glmQLFTest}} 
+#'   (edgeR). The parameter \code{lm_Fit} accepts a fitted model object from 
+#'   functions \code{\link[limma]{lmFit}} (limma), \code{\link[DESeq2]{DESeq}} 
+#'   (DESeq2), \code{\link[edgeR]{glmFit}} or \code{\link[edgeR]{glmQLFit}} 
 #'   (edgeR).
 #' @return \code{data_type} String denoting the type of data that was analyzed
 #' @return \code{results} The formatted results file
 #' @return \code{resids} Matrix of residuals. Returned only if data_type="micro"
-#'   or "rna". Used to estimate VIFs when running the QUSAGE algorithim in
+#'   or "rna". Used to estimate VIFs when running the QUSAGE algorithim in 
 #'   \code{\link{qBart}}
 #' @examples
 #' # Using example dataset in genBART package
 #' data(tb.expr)
 #' data(tb.design)
-#'
+#' 
 #' # Gene symbols
-#' data(geneSymb)
-#'
+#' data(gene.symbols)
+#' 
 #' # des.info object is obtained using the desInfo function
 #' data(des.info)
-#'
+#' 
 #' # Generate lmFit and eBayes (limma) objects needed for genModelResults
-#' tb.design$Group <- paste(tb.design$clinical_status,tb.design$mytimepoint,sep = "")
+#' tb.design$Group <- paste(tb.design$clinical_status,tb.design$timepoint,
+#'                          sep = "")
 #' grp <- factor(tb.design$Group)
 #' design2 <- model.matrix(~0+grp)
 #' colnames(design2) <- levels(grp)
-#' dupcor <- duplicateCorrelation(tb.expr, design2, block = tb.design$monkey_id)
-#' fit <- lmFit(tb.expr, design2, block = tb.design$monkey_id, correlation = dupcor$consensus.correlation)
-#' contrasts <- makeContrasts(A_20vsPre = Active20-Active0,A_30vsPre = Active30-Active0,A_42vsPre = Active42-Active0,
-#'                            A_56vsPre = Active56-Active0,levels=design2)
-#' fit2 <- contrasts.fit(fit, contrasts)
-#' fit2 <- eBayes(fit2, trend = FALSE)
-#'
-#' mod.results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, method = "limma", var_symbols = geneSymb)
+#' dupcor <- limma::duplicateCorrelation(tb.expr, design2, block = tb.design$monkey_id)
+#' fit <- limma::lmFit(tb.expr, design2, block = tb.design$monkey_id, 
+#'              correlation = dupcor$consensus.correlation)
+#' contrasts <- limma::makeContrasts(A_20vsPre = Active20-Active0, A_30vsPre = Active30-Active0,
+#'                            A_42vsPre = Active42-Active0, A_56vsPre = Active56-Active0,
+#'                            levels=design2)
+#' fit2 <- limma::contrasts.fit(fit, contrasts)
+#' fit2 <- limma::eBayes(fit2, trend = FALSE)
+#' 
+#' mod.results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, 
+#'                                method = "limma", var_symbols = gene.symbols)
 #' @import limma
 #' @import qusage
+#' @importFrom SummarizedExperiment assays
 #' @export
 genModelResults <- function(design_info, object, lm_Fit, method = "limma",
                             comp_names = NULL, var_names = NULL,
@@ -158,8 +163,9 @@ genModelResults <- function(design_info, object, lm_Fit, method = "limma",
       }
     }
     if (method == "deseq2") {
-      fitted <- t(t(assays(lm_Fit)[["mu"]])/sizeFactors(lm_Fit))
-      resids <- counts(lm_Fit, normalized = TRUE) - fitted
+      fitted <- t(t(SummarizedExperiment::assays(lm_Fit)[["mu"]])/
+                    DESeq2::sizeFactors(lm_Fit))
+      resids <- DESeq2::counts(lm_Fit, normalized = TRUE) - fitted
       resids <- as.data.frame(resids)
       results <- list(data_type = data_type, results = results, resids = resids)
     }

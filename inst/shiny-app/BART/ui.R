@@ -1,8 +1,8 @@
 #User Interface for PALO FILTER Script!
 #options(shiny.deprecation.messages = FALSE)
-require(shiny)
+#require(shiny)
 library(shinydashboard)
-library(rmarkdown)
+#library(rmarkdown)
 
 function(request){
 

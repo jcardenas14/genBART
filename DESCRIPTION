@@ -12,6 +12,8 @@ Depends: R (>= 3.3.3)
 Imports: 
     clValid (>= 0.6-6),
     data.table (>= 1.10.4),
+    DESeq2 (>= 1.14.1),
+    edgeR (>= 3.16.5),
     fastcluster (>= 1.1.22),
     ggplot2 (>= 2.2.1),
     grid (>= 3.3.3),
@@ -28,17 +30,19 @@ Imports:
     shiny (>= 1.0.3),
     shinydashboard (>= 0.5.3),
     shinyjs (>= 0.9),
+    stats (>= 3.3.3),
     stringr (>= 1.2.0),
+    SummarizedExperiment (>= 1.4.0),
     tools (>= 3.3.3),
     VennDiagram (>= 1.6.17)
 Suggests: 
-    DESeq2 (>= 1.14.1),
-    edgeR (>= 3.16.5),
+    knitr (>= 1.15.1),
     statmod (>= 1.4.29)
 License: GPL-2|GPL-3
 Materials: README
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 biocViews: Microarray, RNASeq

@@ -4,11 +4,21 @@ library(genBART)
 library(limma)
 
 ## ------------------------------------------------------------------------
-#library(genBART)
-#library(limma)
+head(tb.design)
 
 ## ------------------------------------------------------------------------
-tb.design$Group <- paste(tb.design$clinical_status,tb.design$timepoint,sep = "")
+des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 
+                    columnname = "columnname", long = TRUE, patient_id = "monkey_id", 
+                    baseline_var = "timepoint", baseline_val = 0, control_var = NULL,
+                    control_val = NULL, time_var = "timepoint", summary_var = NULL, 
+                    responder_var = "clinical_status", sample_id = "sample_id", 
+                    project_name = "TB")
+
+## ------------------------------------------------------------------------
+dendros <- genDendrograms(design_info = des.info)
+
+## ------------------------------------------------------------------------
+tb.design$Group <- paste(tb.design$clinical_status, tb.design$timepoint, sep = "")
 grp <- factor(tb.design$Group)
 
 
@@ -29,14 +39,6 @@ contrasts <- makeContrasts(A_20vsPre = Active20-Active0,A_30vsPre = Active30-Act
 
 fit2 <- contrasts.fit(fit, contrasts)
 fit2 <- eBayes(fit2, trend = FALSE)
-
-## ------------------------------------------------------------------------
-head(tb.design)
-
-## ------------------------------------------------------------------------
-des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", columnname = "columnname", long = TRUE, patient_id = "monkey_id", 
-                       baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", responder_var = "clinical_status", 
-                       sample_id = "sample_id", project_name = "TB")
 
 ## ------------------------------------------------------------------------
 mod_results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, method = "limma")

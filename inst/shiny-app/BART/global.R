@@ -6,8 +6,8 @@
 #library(shinyjs)
 
 enableBookmarking(store = "server")
-load("moduleinfo.Rdata")
-load("moduleinfo_rna.RData")
+load("moduleinfo.rda")
+load("moduleinfo_rna.rda")
 moduleinfo2<-qusage::read.gmt("BaylorModules.gmt")
 x1<-unlist(moduleinfo2)
 x2<-rep(names(moduleinfo2),times=lapply(moduleinfo2,length))

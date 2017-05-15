@@ -15,6 +15,7 @@
 #library(pca3d)
 #library(shinyjs)
 #library(stringr)
+library(ggplot2)
 
 #Increase maximum file size input; currently set to 1GB -- Not sure if we need more.
 options(shiny.maxRequestSize=1000*1024^2)

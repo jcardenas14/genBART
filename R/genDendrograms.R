@@ -111,8 +111,21 @@ dataManipulate <- function(y, x, colname, ref_var, ref_level, long = FALSE,
 #' @return Returns dendrogram objects obtained through hierarchical clustering
 #'   of the various normalized expression datasets.
 #' @examples
-#' # des.info object is obtained using the desInfo function
-#' data(des.info)
+#' # Example data
+#' data(tb.expr)
+#' data(tb.design)
+#' 
+#' # Use first 100 probes to demonstrate
+#' dat <- tb.expr[1:100,]
+#' 
+#' # Create desInfo object
+#' des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
+#'                     columnname = "columnname", long = TRUE, patient_id = "monkey_id",
+#'                     baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
+#'                     responder_var = "clinical_status", sample_id = "sample_id", 
+#'                     project_name = "TB")
+#' 
+#' # Normalize and cluster data
 #' dendros <- genDendrograms(des.info)
 #' @importFrom stats as.dendrogram dist qt sd
 #' @export

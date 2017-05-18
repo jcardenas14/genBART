@@ -53,11 +53,20 @@ This function uses the \code{\link[psych]{corr.test}} function in the \code{pysc
   BART.
 }
 \examples{
+# Example data
 data(tb.flow)
 data(module.as)
+
+# Define time variable
 time <- module.as$time
 module.as$time <- NULL
-corrs <- crossCorr(x = module.as, y = tb.flow, by = time, by_name = "days", 
+
+# Format flow data to run correlations and match flow samples with module.as 
+flow <- data.frame(t(tb.flow))
+flow <- flow[match(rownames(module.as), rownames(flow), nomatch = 0), ]
+
+# Run correlations and format for BART
+corrs <- crossCorr(x = module.as, y = flow, by = time, by_name = "days", 
                    description = "Mod.Act.Score vs Flow", x_var = "Mod.Act.Score", 
                    y_var = "Flow", method = "spearman")
 }

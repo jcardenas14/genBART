@@ -3,8 +3,9 @@
 \docType{data}
 \name{tb.flow}
 \alias{tb.flow}
-\title{Flow dataset on cynomolgus macaques infected with M. tuberculosis}
-\format{A data frame with 194 rows of samples and 13 flow variables.}
+\title{Flow data on cynomolgus macaques infected with M. tuberculosis}
+\format{A data frame with 13 rows of flow variables and 213 columns of
+  samples}
 \source{
 \url{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84152}
 }
@@ -12,6 +13,6 @@
 tb.flow
 }
 \description{
-A dataset containing flow absolute count and percentage data
+A dataset containing flow variables of absolute counts and percentages.
 }
 \keyword{datasets}

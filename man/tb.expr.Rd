@@ -3,9 +3,9 @@
 \docType{data}
 \name{tb.expr}
 \alias{tb.expr}
-\title{Microarray dataset on cynomolgus macaques infected with M. tuberculosis}
-\format{A data frame with 1000 rows and 436 columns, where each row is a 
-probe and each column a sample.}
+\title{Microarray data on cynomolgus macaques infected with M. tuberculosis}
+\format{A data frame with 4000 rows and 30 columns, where each row is a probe
+  and each column a sample.}
 \source{
 \url{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84152}
 }
@@ -13,7 +13,8 @@ probe and each column a sample.}
 tb.expr
 }
 \description{
-A dataset containing gene expression data on 38 monkeys at various time 
-points.
+A microarray dataset on cynomolgus macaques infected with M. tuberculosis. 
+The study was conducted on 38 monkeys at 11 unequally spaced time points. The
+dataset presented is a subset of the full dataset.
 }
 \keyword{datasets}

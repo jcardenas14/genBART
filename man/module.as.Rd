@@ -4,9 +4,10 @@
 \name{module.as}
 \alias{module.as}
 \title{Module Activity Scores}
-\format{A data frame with 194 rows of samples and 260 columns of modules.}
+\format{A data frame with 194 rows of samples and 260 columns of baylor
+  modules.}
 \source{
-baylor modules and
+baylor modules and 
   \url{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84152}
 }
 \usage{

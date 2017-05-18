@@ -40,8 +40,21 @@ This function calculates modules scores whose values are constructed
   threshold.
 }
 \examples{
-# des.info object is obtained using the desInfo function
-data(des.info)
+# Example data
+data(tb.expr)
+data(tb.design)
 data(modules)
+
+# Demonstrate on first 100 probes
+dat <- tb.expr[1:100, ]
+
+# Create desInfo object
+des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
+                    columnname = "columnname", long = TRUE, patient_id = "monkey_id",
+                    baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
+                    responder_var = "clinical_status", sample_id = "sample_id", 
+                    project_name = "TB")
+
+# Generate module maps                                      
 mods <- genModules(des.info, modules)
 }

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jacob Cardenas" />
 
-<meta name="date" content="2017-05-15" />
+<meta name="date" content="2017-05-18" />
 
 <title>genBART package Vignette</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">genBART package Vignette</h1>
 <h4 class="author"><em>Jacob Cardenas</em></h4>
-<h4 class="date"><em>2017-05-15</em></h4>
+<h4 class="date"><em>2017-05-18</em></h4>
 
 
 
@@ -151,29 +151,38 @@ Summary of genBART package
 <p>Before running any analysis, the first step in generating a BART ready file is to define the elements of the design file and sample information. Keep in mind that not every one of these elements is necessary for the rest of the genBART functions to run, so in practice, much of this section is left to user discretion and the particular project at hand.</p>
 <pre><code>library(genBART)
 library(limma)</code></pre>
-<p>Below are the first six lines of the design file from the TB study described in the introduction.</p>
+<p>Below are the first six lines of the design file from the TB microarray study described in the introduction.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(tb.design)
 <span class="co">#&gt;                  columnname monkey_id timepoint sample_id clinical_status</span>
 <span class="co">#&gt; 1  AVG_Signal__7196763044_K        M1         0   M1-Pre1          Active</span>
 <span class="co">#&gt; 5  AVG_Signal__6303256034_B        M1        20    M1-D20          Active</span>
-<span class="co">#&gt; 6  AVG_Signal__7196763081_E        M1        30    M1-D30          Active</span>
 <span class="co">#&gt; 7  AVG_Signal__6303256020_I        M1        42    M1-D42          Active</span>
-<span class="co">#&gt; 8  AVG_Signal__6303256038_A        M1        56    M1-D56          Active</span>
-<span class="co">#&gt; 46 AVG_Signal__7196763059_H       M13         0  M13-Pre1          Latent</span>
+<span class="co">#&gt; 22 AVG_Signal__7196763078_I       M11         0  M11-Pre1          Latent</span>
+<span class="co">#&gt; 26 AVG_Signal__7196771011_D       M11        20   M11-D20          Latent</span>
+<span class="co">#&gt; 28 AVG_Signal__7196763087_B       M11        42   M11-D42          Latent</span>
 <span class="co">#&gt;    timerange</span>
 <span class="co">#&gt; 1        Pre</span>
 <span class="co">#&gt; 5      Early</span>
-<span class="co">#&gt; 6     Middle</span>
 <span class="co">#&gt; 7     Middle</span>
-<span class="co">#&gt; 8     Middle</span>
-<span class="co">#&gt; 46       Pre</span></code></pre></div>
+<span class="co">#&gt; 22       Pre</span>
+<span class="co">#&gt; 26     Early</span>
+<span class="co">#&gt; 28    Middle</span></code></pre></div>
 <p>For this study, the function call would be:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">des.info &lt;-<span class="st"> </span><span class="kw">desInfo</span>(<span class="dt">y =</span> tb.expr, <span class="dt">design =</span> tb.design, <span class="dt">data_type =</span> <span class="st">&quot;micro&quot;</span>, 
                     <span class="dt">columnname =</span> <span class="st">&quot;columnname&quot;</span>, <span class="dt">long =</span> <span class="ot">TRUE</span>, <span class="dt">patient_id =</span> <span class="st">&quot;monkey_id&quot;</span>, 
-                    <span class="dt">baseline_var =</span> <span class="st">&quot;timepoint&quot;</span>, <span class="dt">baseline_val =</span> <span class="dv">0</span>, <span class="dt">control_var =</span> <span class="ot">NULL</span>,
-                    <span class="dt">control_val =</span> <span class="ot">NULL</span>, <span class="dt">time_var =</span> <span class="st">&quot;timepoint&quot;</span>, <span class="dt">summary_var =</span> <span class="ot">NULL</span>, 
+                    <span class="dt">baseline_var =</span> <span class="st">&quot;timepoint&quot;</span>, <span class="dt">baseline_val =</span> <span class="dv">0</span>, 
+                    <span class="dt">control_var =</span> <span class="st">&quot;clinical_status&quot;</span>, <span class="dt">control_val =</span> <span class="st">&quot;Latent&quot;</span>, 
+                    <span class="dt">time_var =</span> <span class="st">&quot;timepoint&quot;</span>, <span class="dt">summary_var =</span> <span class="ot">NULL</span>, 
                     <span class="dt">responder_var =</span> <span class="st">&quot;clinical_status&quot;</span>, <span class="dt">sample_id =</span> <span class="st">&quot;sample_id&quot;</span>, 
                     <span class="dt">project_name =</span> <span class="st">&quot;TB&quot;</span>)</code></pre></div>
+<p>We proceed similarly for the flow data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">des.info.flow &lt;-<span class="st"> </span><span class="kw">desInfo</span>(<span class="dt">y =</span> tb.flow, <span class="dt">design =</span> tb.flow.des, <span class="dt">data_type =</span> <span class="st">&quot;flow&quot;</span>, 
+                         <span class="dt">columnname =</span> <span class="st">&quot;columnname&quot;</span>, <span class="dt">long =</span> <span class="ot">TRUE</span>, <span class="dt">patient_id =</span> <span class="st">&quot;monkey_id&quot;</span>, 
+                         <span class="dt">baseline_var =</span> <span class="st">&quot;timepoint&quot;</span>, <span class="dt">baseline_val =</span> <span class="dv">0</span>, 
+                         <span class="dt">control_var =</span> <span class="st">&quot;clinical_status&quot;</span>, <span class="dt">control_val =</span> <span class="st">&quot;Latent&quot;</span>, 
+                         <span class="dt">time_var =</span> <span class="st">&quot;timepoint&quot;</span>, <span class="dt">summary_var =</span> <span class="ot">NULL</span>, 
+                         <span class="dt">responder_var =</span> <span class="st">&quot;clinical_status&quot;</span>, <span class="dt">sample_id =</span> <span class="st">&quot;sample_id&quot;</span>, 
+                         <span class="dt">project_name =</span> <span class="st">&quot;TB&quot;</span>)</code></pre></div>
 <p>Please refer to the R help for <code>desInfo</code> for more details on function parameters.</p>
 </div>
 <div id="clustering-generate-dendrograms" class="section level3">
@@ -182,17 +191,22 @@ library(limma)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dendros &lt;-<span class="st"> </span><span class="kw">genDendrograms</span>(<span class="dt">design_info =</span> des.info)
 <span class="co">#&gt; [1] &quot;Normalizing Expression and Clustering....&quot;</span>
 <span class="co">#&gt; [1] &quot;Clustering Baseline Median Normalized Heatmap&quot;</span>
+<span class="co">#&gt; [1] &quot;Clustering Baseline Healthy Normalized Heatmap&quot;</span>
 <span class="co">#&gt; [1] &quot;Clustering All Samples Median Normalized Heatmap&quot;</span>
+<span class="co">#&gt; [1] &quot;Clustering All Samples Healthy Normalized Heatmap&quot;</span>
 <span class="co">#&gt; [1] &quot;Clustering All Samples Baseline Normalized Heatmap&quot;</span></code></pre></div>
 <p>From the output we can see that the data was normalized in three different ways, and this is determined by the study design and the information given to <code>desInfo</code>. For example, if the study included healthy controls then additional normalizations to healthies would have been included.</p>
 </div>
 <div id="generate-module-maps" class="section level3">
 <h3>Generate Module Maps</h3>
-<p>By default, BART automatically generates module maps using a set of 260 coregulated Baylor modules. However, in addition to the default, the user has the option to provide his own gene sets.</p>
+<p>By default, BART automatically generates module maps using a set of 260 biologically similar and generally co-regulated Baylor modules. The user is also able to provide his own list of gene sets to plot. As an example, we formed gene sets by choosing 10 clusters determined through hierarchical clustering. The function call to generate the gene set maps is below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mods &lt;-<span class="st"> </span><span class="kw">genModules</span>(<span class="dt">design_info =</span> des.info, <span class="dt">gene_sets =</span> clusters)</code></pre></div>
 </div>
 <div id="sample-limma-analysis" class="section level3">
 <h3>Sample limma Analysis</h3>
-<p>Now we demonstrate a quick walkthrough of a limma analysis. The example we are using comes from a study in which 38 healthy macaques were infected with <em>M. tuberculosis</em>. Data measurements were taken at baseline (before infection) and at 11 additional unequally spaced timepoints up to 6 months post infection. Each macaque was identified as developing symptomatic (active) TB or asymptomatic (latent) infection. For the purposes of illustration and time, a subset of the data was chosen for analysis. We randomly selected 1000 probes, 15 of the 38 macaques, and 5 time points (days 0, 20, 30, 42, and 56). For more details about modeling in limma, refer to the limma User’s Guide.</p>
+<p>Now we demonstrate a quick walkthrough of limma analysis for microarray and flow data. The example we are using comes from a study in which 38 healthy macaques were infected with <em>M. tuberculosis</em>. Data measurements were taken at baseline (before infection) and at 11 additional unequally spaced timepoints up to 6 months post infection. Each macaque was identified as developing symptomatic (active) TB or asymptomatic (latent) infection. For the purposes of illustration and time, a subset of the microarray data was chosen for analysis. We randomly selected 4000 probes from those contained within the first seven rounds of the Baylor modules, 10 macaques, and 3 time points (days 0, 20, and 42). For the flow, data was collected on 19 of the 38 macaques and 13 variables are analyzed. For more details about modeling in limma, refer to the limma User’s Guide.</p>
+<div id="microarray" class="section level4">
+<h4>Microarray</h4>
 <p>Create a grouping factor by combining clinical status and time point.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tb.design$Group &lt;-<span class="st"> </span><span class="kw">paste</span>(tb.design$clinical_status, tb.design$timepoint, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
 grp &lt;-<span class="st"> </span><span class="kw">factor</span>(tb.design$Group)</code></pre></div>
@@ -203,54 +217,81 @@ grp &lt;-<span class="st"> </span><span class="kw">factor</span>(tb.design$Group
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dupcor &lt;-<span class="st"> </span><span class="kw">duplicateCorrelation</span>(tb.expr, design2, <span class="dt">block =</span> tb.design$monkey_id)</code></pre></div>
 <p>Fit model and extract contrasts of interest.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lmFit</span>(tb.expr, design2, <span class="dt">block =</span> tb.design$monkey_id, <span class="dt">correlation =</span> dupcor$consensus.correlation)
-contrasts &lt;-<span class="st"> </span><span class="kw">makeContrasts</span>(<span class="dt">A_20vsPre =</span> Active20-Active0,<span class="dt">A_30vsPre =</span> Active30-Active0,
-                           <span class="dt">A_42vsPre =</span> Active42-Active0,<span class="dt">A_56vsPre =</span> Active56-Active0,
-                           <span class="dt">L_20vsPre =</span> Latent20-Latent0,<span class="dt">L_30vsPre =</span> Latent30-Latent0,
-                           <span class="dt">L_42vsPre =</span> Latent42-Latent0,<span class="dt">L_56vsPre =</span> Latent56-Latent0,
+contrasts &lt;-<span class="st"> </span><span class="kw">makeContrasts</span>(<span class="dt">A_20vsPre =</span> Active20-Active0, <span class="dt">A_42vsPre =</span> Active42-Active0,
+                           <span class="dt">L_20vsPre =</span> Latent20-Latent0, <span class="dt">L_42vsPre =</span> Latent42-Latent0,
                            <span class="dt">levels=</span>design2)
 
 fit2 &lt;-<span class="st"> </span><span class="kw">contrasts.fit</span>(fit, contrasts)
 fit2 &lt;-<span class="st"> </span><span class="kw">eBayes</span>(fit2, <span class="dt">trend =</span> <span class="ot">FALSE</span>)</code></pre></div>
 </div>
+<div id="flow" class="section level4">
+<h4>Flow</h4>
+<p>Analysis of flow data in limma proceeds similarly.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tb.flow.des$Group &lt;-<span class="st"> </span><span class="kw">paste</span>(tb.flow.des$clinical_status, tb.flow.des$timepoint, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
+grp &lt;-<span class="st"> </span><span class="kw">factor</span>(tb.flow.des$Group)
+
+design2 &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~<span class="dv">0</span>+grp)
+<span class="kw">colnames</span>(design2) &lt;-<span class="st"> </span><span class="kw">levels</span>(grp)
+dupcor &lt;-<span class="st"> </span><span class="kw">duplicateCorrelation</span>(tb.flow, design2, <span class="dt">block =</span> tb.flow.des$monkey_id)
+
+fit.flow &lt;-<span class="st"> </span><span class="kw">lmFit</span>(tb.flow, design2, <span class="dt">block =</span> tb.flow.des$monkey_id, <span class="dt">correlation =</span> dupcor$consensus.correlation)
+
+<span class="co"># Add more contrasts since we have all timepoints available. Additional contrasts could be added as well.</span>
+contrasts &lt;-<span class="st"> </span><span class="kw">makeContrasts</span>(<span class="dt">A_20vsPre =</span> Active20-Active0, <span class="dt">A_30vsPre =</span> Active30-Active0,
+                           <span class="dt">A_42vsPre =</span> Active42-Active0, <span class="dt">A_56vsPre =</span> Active56-Active0,
+                           <span class="dt">L_20vsPre =</span> Latent20-Latent0, <span class="dt">L_30vsPre =</span> Latent30-Latent0,
+                           <span class="dt">L_42vsPre =</span> Latent42-Latent0, <span class="dt">L_46vsPre =</span> Latent56-Latent0,
+                           <span class="dt">levels=</span>design2)
+
+fit2.flow &lt;-<span class="st"> </span><span class="kw">contrasts.fit</span>(fit.flow, contrasts)
+fit2.flow &lt;-<span class="st"> </span><span class="kw">eBayes</span>(fit2.flow, <span class="dt">trend =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+</div>
 <div id="generate-model-results-file" class="section level3">
 <h3>Generate Model Results File</h3>
-<p>The next step in the process is to generate a model results file that is formatted specifically for BART. This can be done by using the <code>genModelResults</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_results &lt;-<span class="st"> </span><span class="kw">genModelResults</span>(<span class="dt">design_info =</span> des.info, <span class="dt">object =</span> fit2, <span class="dt">lm_Fit =</span> fit, <span class="dt">method =</span> <span class="st">&quot;limma&quot;</span>)</code></pre></div>
+<p>The next step in the process is to generate a model results file that is formatted specifically for BART. This can be done by using the <code>genModelResults</code> function, which takes as input the results output from <code>desInfo</code>, as well as models run in limma, DESeq2, or edgeR. In our example, we are ran limma models on both microarray and flow data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_results &lt;-<span class="st"> </span><span class="kw">genModelResults</span>(<span class="dt">design_info =</span> des.info, <span class="dt">object =</span> fit2, <span class="dt">lm_Fit =</span> fit, <span class="dt">method =</span> <span class="st">&quot;limma&quot;</span>)
+mod_results.flow &lt;-<span class="st"> </span><span class="kw">genModelResults</span>(<span class="dt">design_info =</span> des.info.flow, <span class="dt">object =</span> fit2.flow, <span class="dt">lm_Fit =</span> fit.flow,
+                                    <span class="dt">method =</span> <span class="st">&quot;limma&quot;</span>)</code></pre></div>
 </div>
 <div id="gene-set-analysis" class="section level3">
 <h3>Gene Set Analysis</h3>
-<p>Next we run gene set analysis by incorporating functions available in the qusage package. The function <code>geneSetTesting</code> simplifies the process by requiring only two input parameters.</p>
-<ol style="list-style-type: decimal">
-<li><code>object</code> - The model results object generated from <code>genModelResults</code>.</li>
-<li><code>gene_sets</code> - A list of gene sets.</li>
-</ol>
-<pre><code>gene.set.test &lt;- geneSetTesting(object = mod_results, gene_sets = genesets)</code></pre>
+<p>Next we run gene set analysis by incorporating functions available in the <code>qusage</code> package, which tests whether the average log2 fold change of the genes within a gene set are different than 0. The The function <code>qBart</code> simplifies the process by requiring only two input parameters, the model results object produced by <code>genModelResults</code> and a list of gene sets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">qus &lt;-<span class="st"> </span><span class="kw">qBart</span>(<span class="dt">object =</span> mod_results, <span class="dt">gene_sets =</span> modules)
+<span class="co">#&gt; Aggregating gene data for gene sets.Done. </span>
+<span class="co">#&gt; Calculating VIF's on residual matrix.</span>
+<span class="co">#&gt; Q-Gen analysis complete.Aggregating gene data for gene sets.Done. </span>
+<span class="co">#&gt; Calculating VIF's on residual matrix.</span>
+<span class="co">#&gt; Q-Gen analysis complete.Aggregating gene data for gene sets.Done. </span>
+<span class="co">#&gt; Calculating VIF's on residual matrix.</span>
+<span class="co">#&gt; Q-Gen analysis complete.Aggregating gene data for gene sets.Done. </span>
+<span class="co">#&gt; Calculating VIF's on residual matrix.</span>
+<span class="co">#&gt; Q-Gen analysis complete.</span></code></pre></div>
 </div>
 <div id="correlations" class="section level3">
 <h3>Correlations</h3>
-<p>In addition to providing tools for the standard analysis workflow, BART also offers a tool that allows users to visualize and sort through potentially hundreds of thousands pairwise correlations between clinical outcomes. The <code>crossCorr</code> function takes two matrices of outcomes and outputs a long format file of all their pairwise correlations. The input parameters are described below.</p>
-<ol style="list-style-type: decimal">
-<li><code>x</code> - A numeric matrix or dataframe in which the columns are variables. Optional grouping column (i.e. time in longitudinal setting).</li>
-<li><code>y</code> - A second matrix or dataframe with the same number of rows as x</li>
-<li><code>by</code>- Defualt is set to NA. If grouping column in x exists, set <code>by</code> equal to its columnname.</li>
-<li><code>method</code> - Default is set to “pearson”. The alternatives are “spearman” and “kendall”.</li>
-<li><code>description</code> - Description of what’s being correlated. Default is “X vs Y”. Can be any string.</li>
-<li><code>xvar</code> - Description of variables in x matrix. Default is “X”. Can be any string.</li>
-<li><code>yvar</code> - Description of variables in y matrix. Default is “Y”. Can be any string.</li>
-<li><code>order.by</code> - Order output file by p-value (p) or correlation value (r). Defualt is set to “p” and alternative is “r”.</li>
-<li><code>decreasing</code> - Default is TRUE. If FALSE, then the ordering is from smallest to largest.</li>
-</ol>
-<p>We walk through an example in which we wish to correlate Baylor modules with probes from the flu dataset that we have been working with. Since module scores are calculated as percentages up or down relative to the mean of the baseline samples, we subtract the mean of the baseline samples from the probes before correlating. For the purposes of this tutorial, we randomly selected 500 probes to correlate with 259 Baylor modules (one of them had zero standard deviation so we threw it out). Since this is a longitudinal setting, we correlate by time.</p>
-<pre><code># Add grouping column to module matrix. We don't include baseline since it has been subtracted out.
+<p>In addition to providing tools for the standard analysis workflow, BART also offers a tool that allows users to visualize and sort through potentially hundreds of thousands pairwise correlations between clinical outcomes. The <code>crossCorr</code> function takes two data frames of outcomes and outputs a long format file of all pairwise correlations. We walk through an example in which we wish to correlate module activity scores with flow variables. Since this is a longitudinal setting, we correlate by time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create time variable</span>
+time &lt;-<span class="st"> </span>module.as$time
+module.as$time &lt;-<span class="st"> </span><span class="ot">NULL</span>
 
-mods$Hours &lt;- design$Hours[-which(design$Hours == 0)]
-corrs &lt;- crossCorr(x = mods, y = exp, by = &quot;Hours&quot;, description = &quot;Modules vs Probes&quot;, xvar = &quot;Modules&quot;, yvar = &quot;Probes&quot;)
-</code></pre>
+<span class="co"># Format flow data to run correlations and match flow samples with module.as</span>
+flow &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(tb.flow))
+flow &lt;-<span class="st"> </span>flow[<span class="kw">match</span>(<span class="kw">rownames</span>(module.as), <span class="kw">rownames</span>(flow), <span class="dt">nomatch =</span> <span class="dv">0</span>), ]
+
+<span class="co"># Run correlations formatted for BART</span>
+corrs &lt;-<span class="st"> </span><span class="kw">crossCorr</span>(<span class="dt">x =</span> module.as, <span class="dt">y =</span> flow, <span class="dt">by =</span> time, <span class="dt">by_name =</span> <span class="st">&quot;days&quot;</span>, 
+                   <span class="dt">description =</span> <span class="st">&quot;Mod.Act.Score vs Flow&quot;</span>, <span class="dt">x_var =</span> <span class="st">&quot;Mod.Act.Score&quot;</span>, 
+                   <span class="dt">y_var =</span> <span class="st">&quot;Flow&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;spearman&quot;</span>)</code></pre></div>
 </div>
 <div id="generate-bart-file" class="section level3">
 <h3>Generate BART file</h3>
-<p>The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function <code>genBartFiles</code>, which takes as its arguments the objects generated from the previous functions. Conveniently, not every object is required to generate a BART file. For example, if for some reason gene set analysis was not run, the <code>designInfo</code>, <code>genModelResults</code>, and <code>genDendrograms</code> objects can still be run through <code>genBartFiles</code>. The BART app will only show the results that are uploaded in.</p>
-<pre><code>genFile(y = tb.expr, design.info = des.info, modelResults = mod_results, dendrograms = dendros, geneSetTest = gene.set.test, corr = corrs, Illumina = FALSE)</code></pre>
+<p>The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function <code>genFile</code>, which takes as its arguments the objects generated from the previous functions. Not every object is required to generate a BART file. For example, if gene set analysis and correlations are not run, <code>desInfo</code>, <code>genDendrograms</code>, <code>genModules</code>, and <code>genModelResults</code> objects can still be run through <code>genFile</code>. BART will only show the results that are uploaded in.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">genFile</span>(<span class="dt">design_info =</span> <span class="kw">list</span>(des.info, des.info.flow), <span class="dt">module_maps =</span> mods, <span class="dt">dendros =</span> dendros, 
+        <span class="dt">model_results =</span> <span class="kw">list</span>(mod_results, mod_results.flow))</code></pre></div>
+<p>In our example, we did run gene set analysis and correlations. Adding these results into BART is made simple through the <code>updateFile</code> function. The user must simply provide the path to the BART file that needs to be updated and add the new additions in the same way that <code>genFile</code> takes them.</p>
+<pre><code>path &lt;- paste(getwd(), &quot;/&quot;, des.info$project_name, &quot; Pipeline/&quot;, sep = &quot;&quot;)
+updateFile(load.path = path, qusage_results = qus, corr_results = corrs)</code></pre>
 </div>
 
 

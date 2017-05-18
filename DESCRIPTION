@@ -12,8 +12,6 @@ Depends: R (>= 3.3.3)
 Imports: 
     clValid (>= 0.6-6),
     data.table (>= 1.10.4),
-    DESeq2 (>= 1.14.1),
-    edgeR (>= 3.16.5),
     fastcluster (>= 1.1.22),
     ggplot2 (>= 2.2.1),
     grid (>= 3.3.3),
@@ -36,6 +34,8 @@ Imports:
     tools (>= 3.3.3),
     VennDiagram (>= 1.6.17)
 Suggests: 
+    DESeq2 (>= 1.14.1),
+    edgeR (>= 3.16.5),
     knitr (>= 1.15.1),
     statmod (>= 1.4.29)
 License: GPL-2|GPL-3

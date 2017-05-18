@@ -41,8 +41,38 @@ qusageGen <- function(resids, labels, estimates, dof, std_errors, gene_sets,
 #' @return \code{lowerCI} Matrix of gene level lower 95\% confidence intervals
 #' @return \code{upperCI} Matrix gene level upper 95\% confidence intervals
 #' @examples
-#' # mod.results object is obtained using the genModelResults function
-#' data(model.results)
+#' # Example data
+#' data(tb.expr)
+#' data(tb.design)
+#' 
+#' # Use first 100 probes to demonstrate
+#' dat <- tb.expr[1:100,]
+#' 
+#' # Create desInfo object
+#' des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
+#'                     columnname = "columnname", long = TRUE, patient_id = "monkey_id",
+#'                     baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
+#'                     responder_var = "clinical_status", sample_id = "sample_id", 
+#'                     project_name = "TB")
+#' 
+#' # Generate lmFit and eBayes (limma) objects needed for genModelResults
+#' tb.design$Group <- paste(tb.design$clinical_status,tb.design$timepoint, sep = "")
+#' grp <- factor(tb.design$Group)
+#' design2 <- model.matrix(~0+grp)
+#' colnames(design2) <- levels(grp)
+#' dupcor <- limma::duplicateCorrelation(dat, design2, block = tb.design$monkey_id)
+#' fit <- limma::lmFit(dat, design2, block = tb.design$monkey_id, 
+#'                     correlation = dupcor$consensus.correlation)
+#' contrasts <- limma::makeContrasts(A_20vsPre = Active20-Active0, A_42vsPre = Active42-Active0, 
+#'                                   levels=design2)
+#' fit2 <- limma::contrasts.fit(fit, contrasts)
+#' fit2 <- limma::eBayes(fit2, trend = FALSE)
+#' 
+#' # Create model results object for qBart
+#' model.results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, 
+#'                                method = "limma")
+#'                                
+#' # Run qusage on baylor modules                             
 #' data(modules)
 #' qus <- qBart(model.results, modules)
 #' @export

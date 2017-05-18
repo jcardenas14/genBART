@@ -30,15 +30,19 @@
 #'   or "rna". Used to estimate VIFs when running the QUSAGE algorithim in 
 #'   \code{\link{qBart}}
 #' @examples
-#' # Using example dataset in genBART package
+#' # Example data
 #' data(tb.expr)
 #' data(tb.design)
 #' 
-#' # Gene symbols
-#' data(gene.symbols)
+#' # Only use first 100 probes to demonstrate
+#' dat <- tb.expr[1:100,]
 #' 
-#' # des.info object is obtained using the desInfo function
-#' data(des.info)
+#' # Create desInfo object
+#' des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
+#'                     columnname = "columnname", long = TRUE, patient_id = "monkey_id",
+#'                     baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
+#'                     responder_var = "clinical_status", sample_id = "sample_id", 
+#'                     project_name = "TB")
 #' 
 #' # Generate lmFit and eBayes (limma) objects needed for genModelResults
 #' tb.design$Group <- paste(tb.design$clinical_status,tb.design$timepoint,
@@ -46,17 +50,18 @@
 #' grp <- factor(tb.design$Group)
 #' design2 <- model.matrix(~0+grp)
 #' colnames(design2) <- levels(grp)
-#' dupcor <- limma::duplicateCorrelation(tb.expr, design2, block = tb.design$monkey_id)
-#' fit <- limma::lmFit(tb.expr, design2, block = tb.design$monkey_id, 
+#' 
+#' dupcor <- limma::duplicateCorrelation(dat, design2, block = tb.design$monkey_id)
+#' fit <- limma::lmFit(dat, design2, block = tb.design$monkey_id, 
 #'              correlation = dupcor$consensus.correlation)
-#' contrasts <- limma::makeContrasts(A_20vsPre = Active20-Active0, A_30vsPre = Active30-Active0,
-#'                            A_42vsPre = Active42-Active0, A_56vsPre = Active56-Active0,
-#'                            levels=design2)
+#' contrasts <- limma::makeContrasts(A_20vsPre = Active20-Active0, A_42vsPre = Active42-Active0, 
+#'                                   levels=design2)
 #' fit2 <- limma::contrasts.fit(fit, contrasts)
 #' fit2 <- limma::eBayes(fit2, trend = FALSE)
 #' 
-#' mod.results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, 
-#'                                method = "limma", var_symbols = gene.symbols)
+#' # Format results
+#' model.results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, 
+#'                                method = "limma")
 #' @import limma
 #' @import qusage
 #' @importFrom SummarizedExperiment assays

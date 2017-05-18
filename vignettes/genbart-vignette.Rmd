@@ -64,7 +64,7 @@ library(genBART)
 library(limma)
 ```
 
-Below are the first six lines of the design file from the TB study described in the introduction.
+Below are the first six lines of the design file from the TB microarray study described in the introduction.
 ```{r}
 head(tb.design)
 ```
@@ -73,10 +73,22 @@ For this study, the function call would be:
 ```{r}
 des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 
                     columnname = "columnname", long = TRUE, patient_id = "monkey_id", 
-                    baseline_var = "timepoint", baseline_val = 0, control_var = NULL,
-                    control_val = NULL, time_var = "timepoint", summary_var = NULL, 
+                    baseline_var = "timepoint", baseline_val = 0, 
+                    control_var = "clinical_status", control_val = "Latent", 
+                    time_var = "timepoint", summary_var = NULL, 
                     responder_var = "clinical_status", sample_id = "sample_id", 
                     project_name = "TB")
+```
+
+We proceed similarly for the flow data:
+```{r}
+des.info.flow <- desInfo(y = tb.flow, design = tb.flow.des, data_type = "flow", 
+                         columnname = "columnname", long = TRUE, patient_id = "monkey_id", 
+                         baseline_var = "timepoint", baseline_val = 0, 
+                         control_var = "clinical_status", control_val = "Latent", 
+                         time_var = "timepoint", summary_var = NULL, 
+                         responder_var = "clinical_status", sample_id = "sample_id", 
+                         project_name = "TB")
 ```
 Please refer to the R help for `desInfo` for more details on function parameters.
 
@@ -91,13 +103,17 @@ From the output we can see that the data was normalized in three different ways,
 
 ### Generate Module Maps
 
-By default, BART automatically generates module maps using a set of 260 coregulated Baylor modules. However, in addition to the default, the user has the option to provide his own gene sets.
+By default, BART automatically generates module maps using a set of 260 biologically similar and generally co-regulated Baylor modules. The user is also able to provide his own list of gene sets to plot. As an example, we formed gene sets by choosing 10 clusters determined through hierarchical clustering. The function call to generate the gene set maps is below.
 
+```{r}
+mods <- genModules(design_info = des.info, gene_sets = clusters)
+```
 
 ### Sample limma Analysis
 
-Now we demonstrate a quick walkthrough of a limma analysis. The example we are using comes from a study in which 38 healthy macaques were infected with *M. tuberculosis*. Data measurements were taken at baseline (before infection) and at 11 additional unequally spaced timepoints up to 6 months post infection. Each macaque was identified as developing symptomatic (active) TB or asymptomatic (latent) infection. For the purposes of illustration and time, a subset of the data was chosen for analysis. We randomly selected 1000 probes, 15 of the 38 macaques, and 5 time points (days 0, 20, 30, 42, and 56). For more details about modeling in limma, refer to the limma User's Guide.
+Now we demonstrate a quick walkthrough of limma analysis for microarray and flow data. The example we are using comes from a study in which 38 healthy macaques were infected with *M. tuberculosis*. Data measurements were taken at baseline (before infection) and at 11 additional unequally spaced timepoints up to 6 months post infection. Each macaque was identified as developing symptomatic (active) TB or asymptomatic (latent) infection. For the purposes of illustration and time, a subset of the microarray data was chosen for analysis. We randomly selected 4000 probes from those contained within the first seven rounds of the Baylor modules, 10 macaques, and 3 time points (days 0, 20, and 42). For the flow, data was collected on 19 of the 38 macaques and 13 variables are analyzed. For more details about modeling in limma, refer to the limma User's Guide.
 
+#### Microarray
 Create a grouping factor by combining clinical status and time point. 
 ```{r}
 tb.design$Group <- paste(tb.design$clinical_status, tb.design$timepoint, sep = "")
@@ -116,64 +132,91 @@ dupcor <- duplicateCorrelation(tb.expr, design2, block = tb.design$monkey_id)
 Fit model and extract contrasts of interest.
 ```{r}
 fit <- lmFit(tb.expr, design2, block = tb.design$monkey_id, correlation = dupcor$consensus.correlation)
-contrasts <- makeContrasts(A_20vsPre = Active20-Active0,A_30vsPre = Active30-Active0,
-                           A_42vsPre = Active42-Active0,A_56vsPre = Active56-Active0,
-                           L_20vsPre = Latent20-Latent0,L_30vsPre = Latent30-Latent0,
-                           L_42vsPre = Latent42-Latent0,L_56vsPre = Latent56-Latent0,
+contrasts <- makeContrasts(A_20vsPre = Active20-Active0, A_42vsPre = Active42-Active0,
+                           L_20vsPre = Latent20-Latent0, L_42vsPre = Latent42-Latent0,
                            levels=design2)
 
 fit2 <- contrasts.fit(fit, contrasts)
 fit2 <- eBayes(fit2, trend = FALSE)
 ```
 
+#### Flow
+
+Analysis of flow data in limma proceeds similarly.
+
+```{r}
+tb.flow.des$Group <- paste(tb.flow.des$clinical_status, tb.flow.des$timepoint, sep = "")
+grp <- factor(tb.flow.des$Group)
+
+design2 <- model.matrix(~0+grp)
+colnames(design2) <- levels(grp)
+dupcor <- duplicateCorrelation(tb.flow, design2, block = tb.flow.des$monkey_id)
+
+fit.flow <- lmFit(tb.flow, design2, block = tb.flow.des$monkey_id, correlation = dupcor$consensus.correlation)
+
+# Add more contrasts since we have all timepoints available. Additional contrasts could be added as well.
+contrasts <- makeContrasts(A_20vsPre = Active20-Active0, A_30vsPre = Active30-Active0,
+                           A_42vsPre = Active42-Active0, A_56vsPre = Active56-Active0,
+                           L_20vsPre = Latent20-Latent0, L_30vsPre = Latent30-Latent0,
+                           L_42vsPre = Latent42-Latent0, L_46vsPre = Latent56-Latent0,
+                           levels=design2)
+
+fit2.flow <- contrasts.fit(fit.flow, contrasts)
+fit2.flow <- eBayes(fit2.flow, trend = FALSE)
+```
+
 ### Generate Model Results File
-The next step in the process is to generate a model results file that is formatted specifically for BART. This can be done by using the `genModelResults` function.
+The next step in the process is to generate a model results file that is formatted specifically for BART. This can be done by using the `genModelResults` function, which takes as input the results output from `desInfo`, as well as models run in limma, DESeq2, or edgeR. In our example, we are ran limma models on both microarray and flow data.
 
 ```{r}
 mod_results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, method = "limma")
+mod_results.flow <- genModelResults(design_info = des.info.flow, object = fit2.flow, lm_Fit = fit.flow,
+                                    method = "limma")
 ```
 
 ### Gene Set Analysis
 
-Next we run gene set analysis by incorporating functions available in the qusage package. The function `geneSetTesting` simplifies the process by requiring only two input parameters.
+Next we run gene set analysis by incorporating functions available in the `qusage` package, which tests whether the average log2 fold change of the genes within a gene set are different than 0. The  The function `qBart` simplifies the process by requiring only two input parameters, the model results object produced by `genModelResults` and a list of gene sets.
 
-1. ```object``` - The model results object generated from `genModelResults`.
-2. ```gene_sets``` - A list of gene sets.
-
-```
-gene.set.test <- geneSetTesting(object = mod_results, gene_sets = genesets)
+```{r}
+qus <- qBart(object = mod_results, gene_sets = modules)
 ```
 
 ### Correlations
-In addition to providing tools for the standard analysis workflow, BART also offers a tool that allows users to visualize and sort through potentially hundreds of thousands pairwise correlations between clinical outcomes. The `crossCorr` function takes two matrices of outcomes and outputs a long format file of all their pairwise correlations. The input parameters are described below.
+In addition to providing tools for the standard analysis workflow, BART also offers a tool that allows users to visualize and sort through potentially hundreds of thousands pairwise correlations between clinical outcomes. The `crossCorr` function takes two data frames of outcomes and outputs a long format file of all pairwise correlations. We walk through an example in which we wish to correlate module activity scores with flow variables. Since this is a longitudinal setting, we correlate by time.
 
-1. ```x``` - A numeric matrix or dataframe in which the columns are variables. Optional grouping column (i.e. time in longitudinal setting).
-2. ```y``` - A second matrix or dataframe with the same number of rows as x
-3. ```by```- Defualt is set to NA. If grouping column in x exists, set `by` equal to its columnname.
-4. ```method``` - Default is set to "pearson". The alternatives are "spearman" and "kendall".
-5. ```description``` - Description of what's being correlated. Default is "X vs Y". Can be any string.
-6. ```xvar``` - Description of variables in x matrix. Default is "X". Can be any string.
-7. ```yvar``` - Description of variables in y matrix. Default is "Y". Can be any string.
-8. ```order.by``` - Order output file by p-value (p) or correlation value (r). Defualt is set to "p" and alternative is "r".
-9. ```decreasing``` - Default is TRUE. If FALSE, then the ordering is from smallest to largest.
+```{r}
+# Create time variable
+time <- module.as$time
+module.as$time <- NULL
 
-We walk through an example in which we wish to correlate Baylor modules with probes from the flu dataset that we have been working with. Since module scores are calculated as percentages up or down relative to the mean of the baseline samples, we subtract the mean of the baseline samples from the probes before correlating. For the purposes of this tutorial, we randomly selected 500 probes to correlate with 259 Baylor modules (one of them had zero standard deviation so we threw it out). Since this is a longitudinal setting, we correlate by time.
+# Format flow data to run correlations and match flow samples with module.as
+flow <- data.frame(t(tb.flow))
+flow <- flow[match(rownames(module.as), rownames(flow), nomatch = 0), ]
 
-```
-# Add grouping column to module matrix. We don't include baseline since it has been subtracted out.
-
-mods$Hours <- design$Hours[-which(design$Hours == 0)]
-corrs <- crossCorr(x = mods, y = exp, by = "Hours", description = "Modules vs Probes", xvar = "Modules", yvar = "Probes")
+# Run correlations formatted for BART
+corrs <- crossCorr(x = module.as, y = flow, by = time, by_name = "days", 
+                   description = "Mod.Act.Score vs Flow", x_var = "Mod.Act.Score", 
+                   y_var = "Flow", method = "spearman")
 
 ```
 
 ### Generate BART file
 
-The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function `genBartFiles`, which takes as its arguments the objects generated from the previous functions. Conveniently, not every object is required to generate a BART file. For example, if for some reason gene set analysis was not run, the `designInfo`, `genModelResults`, and `genDendrograms` objects can still be run through `genBartFiles`. The BART app will only show the results that are uploaded in.
+The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function `genFile`, which takes as its arguments the objects generated from the previous functions. Not every object is required to generate a BART file. For example, if gene set analysis and correlations are not run, `desInfo`, `genDendrograms`, `genModules`, and `genModelResults` objects can still be run through `genFile`. BART will only show the results that are uploaded in.
+
+```{r}
+genFile(design_info = list(des.info, des.info.flow), module_maps = mods, dendros = dendros, 
+        model_results = list(mod_results, mod_results.flow))
+```
+
+In our example, we did run gene set analysis and correlations. Adding these results into BART is made simple through the `updateFile` function. The user must simply provide the path to the BART file that needs to be updated and add the new additions in the same way that `genFile` takes them.
 
 ```
-genFile(y = tb.expr, design.info = des.info, modelResults = mod_results, dendrograms = dendros, geneSetTest = gene.set.test, corr = corrs, Illumina = FALSE)
+path <- paste(getwd(), "/", des.info$project_name, " Pipeline/", sep = "")
+updateFile(load.path = path, qusage_results = qus, corr_results = corrs)
 ```
+
 
 
 

@@ -30,14 +30,14 @@ Imports:
     shinyjs (>= 0.9),
     stats (>= 3.3.3),
     stringr (>= 1.2.0),
-    SummarizedExperiment (>= 1.4.0),
     tools (>= 3.3.3),
     VennDiagram (>= 1.6.17)
 Suggests: 
     DESeq2 (>= 1.14.1),
     edgeR (>= 3.16.5),
     knitr (>= 1.15.1),
-    statmod (>= 1.4.29)
+    statmod (>= 1.4.29),
+    SummarizedExperiment (>= 1.1.6)
 License: GPL-2|GPL-3
 Materials: README
 Encoding: UTF-8

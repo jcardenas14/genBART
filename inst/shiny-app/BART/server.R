@@ -685,7 +685,9 @@ shinyServer(function(input,output, session){
         if(data_type == "rna"){
           modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
           index<-which(modexp$Module=="")
-          modexp<-modexp[-index,]
+          if(length(index) > 0){
+            modexp<-modexp[-index,]
+          }
         }
         else{
           modexp<-merge(final_expression,moduleinfo2,by=c("SYMBOL"))
@@ -698,7 +700,9 @@ shinyServer(function(input,output, session){
       if(illumina){
         modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
         index<-which(modexp$Module=="")
-        modexp<-modexp[-index,]
+        if(length(index) > 0){
+          modexp<-modexp[-index,]
+        }
       }
 
       #Creating an ordered Module List and the total number of modules
@@ -781,7 +785,9 @@ shinyServer(function(input,output, session){
           if(data_type == "rna"){
             modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
             index<-which(modexp$Module=="")
-            modexp<-modexp[-index,]
+            if(length(index) > 0){
+              modexp<-modexp[-index,]
+            }
           }
           else{
             modexp<-merge(final_expression,moduleinfo2,by=c("SYMBOL"))
@@ -793,7 +799,9 @@ shinyServer(function(input,output, session){
         if(illumina){
           modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
           index<-which(modexp$Module=="")
-          modexp<-modexp[-index,]
+          if(length(index) > 0){
+            modexp<-modexp[-index,]
+          }
         }
 
         #Creating an ordered Module List and the total number of modules
@@ -850,7 +858,9 @@ shinyServer(function(input,output, session){
           if(data_type == "rna"){
             modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
             index<-which(modexp$Module=="")
-            modexp<-modexp[-index,]
+            if(length(index) > 0){
+              modexp<-modexp[-index,]
+            }
           }
           else{
             modexp<-merge(final_expression,moduleinfo2,by=c("SYMBOL"))
@@ -862,7 +872,9 @@ shinyServer(function(input,output, session){
         if(illumina){
           modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
           index<-which(modexp$Module=="")
-          modexp<-modexp[-index,]
+          if(length(index) > 0){
+            modexp<-modexp[-index,]
+          }
         }
 
         #Creating an ordered Module List and the total number of modules
@@ -956,7 +968,9 @@ shinyServer(function(input,output, session){
         if(data_type == "rna"){
           modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
           index<-which(modexp$Module=="")
-          modexp<-modexp[-index,]
+          if(length(index) > 0){
+            modexp<-modexp[-index,]
+          }
         }
         else{
           modexp<-merge(final_expression,moduleinfo2,by=c("SYMBOL"))
@@ -968,7 +982,9 @@ shinyServer(function(input,output, session){
       if(illumina){
         modexp<-merge(final_expression,moduleinfo,by=c("PROBE_ID"))
         index<-which(modexp$Module=="")
-        modexp<-modexp[-index,]
+        if(length(index) > 0){
+          modexp<-modexp[-index,]
+        }
       }
       #Creating an ordered Module List and the total number of modules
       modnames<-unique(moduleinfo$Module)[-1]

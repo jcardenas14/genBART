@@ -671,15 +671,15 @@ draw_legend <-  function (color, breaks, legend, legendheight = legendheight, gp
     upViewport()
 }
 
-tryViewport <- NMF:::tryViewport
-L_gridDirty <- grid:::L_gridDirty
-L_currentViewport <- grid:::L_currentViewport
-.grid.pathSep <- grid:::.grid.pathSep
-L_getEngineDLon <- grid:::L_getEngineDLon
-L_upviewport <- grid:::L_upviewport
-L_getDLon <- grid:::L_getDLon
-vpDepth <- grid:::vpDepth
+#tryViewport <- NMF:::tryViewport
+#L_gridDirty <- grid:::L_gridDirty
+#L_currentViewport <- grid:::L_currentViewport
+#.grid.pathSep <- grid:::.grid.pathSep
+#L_getEngineDLon <- grid:::L_getEngineDLon
+#L_upviewport <- grid:::L_upviewport
+#L_getDLon <- grid:::L_getDLon
+#vpDepth <- grid:::vpDepth
 gridPLT <- gridBase:::gridPLT
-currentViewportLoc <- gridBase:::currentViewportLoc
+#currentViewportLoc <- gridBase:::currentViewportLoc
 current.transform <- grid:::current.transform
-badFIG <- gridBase:::badFIG
+#badFIG <- gridBase:::badFIG

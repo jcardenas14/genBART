@@ -64,7 +64,6 @@
 #'                                method = "limma")
 #' @import limma
 #' @import qusage
-#' @importFrom SummarizedExperiment assays
 #' @export
 genModelResults <- function(design_info, object, lm_Fit, method = "limma",
                             comp_names = NULL, var_names = NULL,

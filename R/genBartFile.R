@@ -245,7 +245,9 @@ genFile <- function(design_info, model_results = NULL, module_maps = NULL,
     results_file <- NULL
   }
   illumina <- illumina
-  dir.create(paste(getwd(), "/", project_name, " Pipeline/", sep = ""))
+  if (!dir.exists(paste(getwd(), "/", project_name, " Pipeline/", sep = ""))) {
+    dir.create(paste(getwd(), "/", project_name, " Pipeline/", sep = ""))
+  }
   save(mod1, mod2, final_expression, design, base_mod, long, long_mod, long_mod2,
        h1b_rowdendro, h1b_coldendro, h2b_rowdendro, h2b_coldendro, h1_rowdendro,
        h2_rowdendro, h3_rowdendro, h1_coldendro, h2_coldendro, h3_coldendro,
@@ -272,10 +274,12 @@ genFile <- function(design_info, model_results = NULL, module_maps = NULL,
 #'   file by leaving \code{output.path} as NULL or give a new path in which to
 #'   save the updated file.
 #' @export
-updateFile <- function(load.path = NULL, output.path = NULL, design_info = NULL, model_results = NULL, module_maps = NULL,
-                       dendros = NULL, qusage_results = NULL,
-                       roast_results = NULL, corr_results = NULL,
-                       illumina = NULL) {
+updateFile <- function(load.path = NULL, output.path = NULL, design_info = NULL, 
+                       model_results = NULL, module_maps = NULL, dendros = NULL, 
+                       qusage_results = NULL, roast_results = NULL, 
+                       corr_results = NULL, illumina = NULL) {
+  old <- setwd(tempdir())
+  on.exit(setwd(old), add = TRUE)
   if (!is.null(load.path)) {
     if (file.exists(load.path)) {
       qresults <- qusage_results
@@ -401,44 +405,31 @@ updateFile <- function(load.path = NULL, output.path = NULL, design_info = NULL,
       }
       if(is.null(output.path)){
         setwd(load.path)
-        save(mod1, mod2, final_expression, design, base_mod, long_mod, long, long_mod2,
-             h1b_rowdendro, h1b_coldendro, h2b_rowdendro, h2b_coldendro, h1_rowdendro,
-             h2_rowdendro, h3_rowdendro, h1_coldendro, h2_coldendro, h3_coldendro,
-             summary_var, time_var, responder_var, control_var, control_val,
-             baseline_var, baseline_val, sample_id, patient_id, f_design,
-             f_summary_var, f_time_var, f_responder_var, f_control_var, f_control_val,
-             f_baseline_var, f_baseline_val, f_sample_id, f_patient_id, f_hc,
-             m_design, m_summary_var, m_time_var, m_responder_var, m_control_var,
-             m_control_val, m_baseline_var, m_baseline_val, m_sample_id, m_patient_id,
-             m_hc, hc, results_file, project_name, lowerCI, upperCI, qusage_results,
-             roast_results, flow_results, flow_data, metab_results, metab_data,
-             illumina, correlation_files_count, correlation_names, y_var, x_var,
-             correlation_method, correlations, correlation_files, data_type,
-             file = "Unsupervised.RData")
       } else {
         setwd(output.path)
         dir.create(paste(getwd(), "/", project_name, " Pipeline/", sep = ""))
-        save(mod1, mod2, final_expression, design, base_mod, long_mod, long, long_mod2,
-             h1b_rowdendro, h1b_coldendro, h2b_rowdendro, h2b_coldendro, h1_rowdendro,
-             h2_rowdendro, h3_rowdendro, h1_coldendro, h2_coldendro, h3_coldendro,
-             summary_var, time_var, responder_var, control_var, control_val,
-             baseline_var, baseline_val, sample_id, patient_id, f_design,
-             f_summary_var, f_time_var, f_responder_var, f_control_var, f_control_val,
-             f_baseline_var, f_baseline_val, f_sample_id, f_patient_id, f_hc,
-             m_design, m_summary_var, m_time_var, m_responder_var, m_control_var,
-             m_control_val, m_baseline_var, m_baseline_val, m_sample_id, m_patient_id,
-             m_hc, hc, results_file, project_name, lowerCI, upperCI, qusage_results,
-             roast_results, flow_results, flow_data, metab_results, metab_data,
-             illumina, correlation_files_count, correlation_names, y_var, x_var,
-             correlation_method, correlations, correlation_files, data_type,
-             file = file.path(paste(getwd(), "/", project_name, " Pipeline/",
-                                    "Unsupervised.Rdata", sep = "")))
       }
+      save(mod1, mod2, final_expression, design, base_mod, long_mod, long, 
+           long_mod2, h1b_rowdendro, h1b_coldendro, h2b_rowdendro, 
+           h2b_coldendro, h1_rowdendro, h2_rowdendro, h3_rowdendro, 
+           h1_coldendro, h2_coldendro, h3_coldendro, summary_var, time_var, 
+           responder_var, control_var, control_val, baseline_var, baseline_val, 
+           sample_id, patient_id, f_design, f_summary_var, f_time_var, 
+           f_responder_var, f_control_var, f_control_val, f_baseline_var, 
+           f_baseline_val, f_sample_id, f_patient_id, f_hc, m_design, 
+           m_summary_var, m_time_var, m_responder_var, m_control_var, 
+           m_control_val, m_baseline_var, m_baseline_val, m_sample_id, 
+           m_patient_id, m_hc, hc, results_file, project_name, lowerCI, 
+           upperCI, qusage_results, roast_results, flow_results, flow_data, 
+           metab_results, metab_data, illumina, correlation_files_count, 
+           correlation_names, y_var, x_var, correlation_method, correlations, 
+           correlation_files, data_type, file = "Unsupervised.RData")
     } else {
       return(print("File path or data file does not exist"))
     }
   } else {
-    return(print("Please enter a valid existing BART file path, or create a new BART file using genFile"))
+    return(print("Please enter a valid existing BART file path, or create a new 
+                 BART file using genFile"))
   }
 }
 

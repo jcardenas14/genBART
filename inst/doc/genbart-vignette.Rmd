@@ -212,11 +212,15 @@ genFile(design_info = list(des.info, des.info.flow), module_maps = mods, dendros
 
 In our example, we did run gene set analysis and correlations. Adding these results into BART is made simple through the `updateFile` function. The user must simply provide the path to the BART file that needs to be updated and add the new additions in the same way that `genFile` takes them.
 
-```
+```{r, eval = FALSE}
 path <- paste(getwd(), "/", des.info$project_name, " Pipeline", sep = "")
 updateFile(load.path = path, qusage_results = qus, corr_results = list(corrs))
 ```
 
+### Run BART App
 
+Now that a BART file has been created, it is now time to begin using the app by running the function `runBart`. An in-app vignette is provided that walks through each of the tools BART provides and how to use them.
 
-
+```{r, eval = FALSE}
+runBart()
+```

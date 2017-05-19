@@ -98,3 +98,10 @@ corrs <- crossCorr(x = module.as, y = flow, by = time, by_name = "days",
 genFile(design_info = list(des.info, des.info.flow), module_maps = mods, dendros = dendros, 
         model_results = list(mod_results, mod_results.flow))
 
+## ---- eval = FALSE-------------------------------------------------------
+#  path <- paste(getwd(), "/", des.info$project_name, " Pipeline", sep = "")
+#  updateFile(load.path = path, qusage_results = qus, corr_results = list(corrs))
+
+## ---- eval = FALSE-------------------------------------------------------
+#  runBart()
+

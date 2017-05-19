@@ -288,10 +288,18 @@ corrs &lt;-<span class="st"> </span><span class="kw">crossCorr</span>(<span clas
 <h3>Generate BART file</h3>
 <p>The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function <code>genFile</code>, which takes as its arguments the objects generated from the previous functions. Not every object is required to generate a BART file. For example, if gene set analysis and correlations are not run, <code>desInfo</code>, <code>genDendrograms</code>, <code>genModules</code>, and <code>genModelResults</code> objects can still be run through <code>genFile</code>. BART will only show the results that are uploaded in.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">genFile</span>(<span class="dt">design_info =</span> <span class="kw">list</span>(des.info, des.info.flow), <span class="dt">module_maps =</span> mods, <span class="dt">dendros =</span> dendros, 
-        <span class="dt">model_results =</span> <span class="kw">list</span>(mod_results, mod_results.flow))</code></pre></div>
+        <span class="dt">model_results =</span> <span class="kw">list</span>(mod_results, mod_results.flow))
+<span class="co">#&gt; Warning in dir.create(paste(getwd(), &quot;/&quot;, project_name, &quot; Pipeline/&quot;, sep</span>
+<span class="co">#&gt; = &quot;&quot;)): 'C:\Users\e89628\Documents\genBART\vignettes\TB Pipeline' already</span>
+<span class="co">#&gt; exists</span></code></pre></div>
 <p>In our example, we did run gene set analysis and correlations. Adding these results into BART is made simple through the <code>updateFile</code> function. The user must simply provide the path to the BART file that needs to be updated and add the new additions in the same way that <code>genFile</code> takes them.</p>
-<pre><code>path &lt;- paste(getwd(), &quot;/&quot;, des.info$project_name, &quot; Pipeline&quot;, sep = &quot;&quot;)
-updateFile(load.path = path, qusage_results = qus, corr_results = list(corrs))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">path &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">getwd</span>(), <span class="st">&quot;/&quot;</span>, des.info$project_name, <span class="st">&quot; Pipeline&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
+<span class="kw">updateFile</span>(<span class="dt">load.path =</span> path, <span class="dt">qusage_results =</span> qus, <span class="dt">corr_results =</span> <span class="kw">list</span>(corrs))</code></pre></div>
+</div>
+<div id="run-bart-app" class="section level3">
+<h3>Run BART App</h3>
+<p>Now that a BART file has been created, it is now time to begin using the app by running the function <code>runBart</code>. An in-app vignette is provided that walks through each of the tools BART provides and how to use them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">runBart</span>()</code></pre></div>
 </div>
 
 

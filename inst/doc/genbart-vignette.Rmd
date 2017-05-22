@@ -25,7 +25,8 @@ BART is a user friendly, point and click, R shiny application that was developed
 
 To make the tools that BART offers more readily available, we introduce the genBART package, a series of functions that transforms R objects generated from modeling packages limma, DESeq2, and edgeR into files that can be uploaded into BART. In the following sections, we illustrate how to use the functions available in genBART by walking through the analysis of a longitudinal microarray study tracking gene expression changes in cynomolgus macaques infected with *M. tuberculosis* [(Skinner et al.)](http://www.jimmunol.org/content/197/12/4817.long). In addition to microarray data, the study also has flow data that will be incorporated in to demonstrate the flexibility of the BART app.
 
-<h2 style = "text-align: center">Summary of genBART package</h2>
+\vspace{12pt}
+\begin{center} \large{\textbf{Summary of genBART package}} \end{center}
 
 | Function            | Purpose                                                |
 |:--------------------|:------------------------------------------------------ |
@@ -53,9 +54,8 @@ The genBART package contains 10 functions, each of which is listed in the table 
 8. `updateFile` - Allows the user to easily update and/or add on to an exisiting BART file without having to re-run all of the functions. 
 9. `runBart` - Run the BART shiny app.
 
-
-
-### Design Information
+\vspace{12pt}
+\begin{center} \large{\textbf{Design Information}} \end{center}
 
 Before running any analysis, the first step in generating a BART ready file is to define the elements of the design file and sample information. Keep in mind that not every one of these elements is necessary for the rest of the genBART functions to run, so in practice, much of this section is left to user discretion and the particular project at hand.
 
@@ -92,7 +92,8 @@ des.info.flow <- desInfo(y = tb.flow, design = tb.flow.des, data_type = "flow",
 ```
 Please refer to the R help for `desInfo` for more details on function parameters.
 
-### Clustering (Generate Dendrograms)
+\vspace{12pt}
+\begin{center} \large{\textbf{Normalization and Clustering}} \end{center}
 
 Next we generating dendrograms through hierarchical clustering. This step is necessary to produce the heat maps that can be viewed and downloaded in BART. This can be done through the `genDendrograms` function, which takes as input the output from `desInfo`. 
 
@@ -101,7 +102,8 @@ dendros <- genDendrograms(design_info = des.info)
 ```
 From the output we can see that the data was normalized in three different ways, and this is determined by the study design and the information given to `desInfo`. For example, if the study included healthy controls then additional normalizations to healthies would have been included. 
 
-### Generate Module Maps
+\vspace{12pt}
+\begin{center} \large{\textbf{Generate Module Maps}} \end{center}
 
 By default, BART automatically generates module maps using a set of 260 biologically similar and generally co-regulated Baylor modules. The user is also able to provide his own list of gene sets to plot. As an example, we formed gene sets by choosing 10 clusters determined through hierarchical clustering. The function call to generate the gene set maps is below.
 
@@ -109,9 +111,11 @@ By default, BART automatically generates module maps using a set of 260 biologic
 mods <- genModules(design_info = des.info, gene_sets = clusters)
 ```
 
-### Sample limma Analysis
+\vspace{12pt}
+\begin{center} \large{\textbf{Sample limma Analysis}} \end{center}
 
 Now we demonstrate a quick walkthrough of limma analysis for microarray and flow data. The example we are using comes from a study in which 38 healthy macaques were infected with *M. tuberculosis*. Data measurements were taken at baseline (before infection) and at 11 additional unequally spaced timepoints up to 6 months post infection. Each macaque was identified as developing symptomatic (active) TB or asymptomatic (latent) infection. For the purposes of illustration and time, a subset of the microarray data was chosen for analysis. We randomly selected 4000 probes from those contained within the first seven rounds of the Baylor modules, 10 macaques, and 3 time points (days 0, 20, and 42). For the flow, data was collected on 19 of the 38 macaques and 13 variables are analyzed. For more details about modeling in limma, refer to the limma User's Guide.
+
 
 #### Microarray
 Create a grouping factor by combining clinical status and time point. 
@@ -140,6 +144,7 @@ fit2 <- contrasts.fit(fit, contrasts)
 fit2 <- eBayes(fit2, trend = FALSE)
 ```
 
+
 #### Flow
 
 Analysis of flow data in limma proceeds similarly.
@@ -165,7 +170,9 @@ fit2.flow <- contrasts.fit(fit.flow, contrasts)
 fit2.flow <- eBayes(fit2.flow, trend = FALSE)
 ```
 
-### Generate Model Results File
+\vspace{12pt}
+\begin{center} \large{\textbf{Generate Model Results File}} \end{center}
+
 The next step in the process is to generate a model results file that is formatted specifically for BART. This can be done by using the `genModelResults` function, which takes as input the results output from `desInfo`, as well as models run in limma, DESeq2, or edgeR. In our example, we are ran limma models on both microarray and flow data.
 
 ```{r}
@@ -174,7 +181,8 @@ mod_results.flow <- genModelResults(design_info = des.info.flow, object = fit2.f
                                     method = "limma")
 ```
 
-### Gene Set Analysis
+\vspace{12pt}
+\begin{center} \large{\textbf{Gene Set Analysis}} \end{center}
 
 Next we run gene set analysis by incorporating functions available in the `qusage` package, which tests whether the average log2 fold change of the genes within a gene set are different than 0. The  The function `qBart` simplifies the process by requiring only two input parameters, the model results object produced by `genModelResults` and a list of gene sets.
 
@@ -182,7 +190,9 @@ Next we run gene set analysis by incorporating functions available in the `qusag
 qus <- qBart(object = mod_results, gene_sets = modules)
 ```
 
-### Correlations
+\vspace{12pt}
+\begin{center} \large{\textbf{Correlations}} \end{center}
+
 In addition to providing tools for the standard analysis workflow, BART also offers a tool that allows users to visualize and sort through potentially hundreds of thousands pairwise correlations between clinical outcomes. The `crossCorr` function takes two data frames of outcomes and outputs a long format file of all pairwise correlations. We walk through an example in which we wish to correlate module activity scores with flow variables. Since this is a longitudinal setting, we correlate by time.
 
 ```{r}
@@ -201,7 +211,8 @@ corrs <- crossCorr(x = module.as, y = flow, by = time, by_name = "days",
 
 ```
 
-### Generate BART file
+\vspace{12pt}
+\begin{center} \large{\textbf{Generate BART file}} \end{center}
 
 The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function `genFile`, which takes as its arguments the objects generated from the previous functions. Not every object is required to generate a BART file. For example, if gene set analysis and correlations are not run, `desInfo`, `genDendrograms`, `genModules`, and `genModelResults` objects can still be run through `genFile`. BART will only show the results that are uploaded in.
 
@@ -217,7 +228,8 @@ path <- paste(getwd(), "/", des.info$project_name, " Pipeline", sep = "")
 updateFile(load.path = path, qusage_results = qus, corr_results = list(corrs))
 ```
 
-### Run BART App
+\vspace{12pt}
+\begin{center} \large{\textbf{Run BART App}} \end{center}
 
 Now that a BART file has been created, it is now time to begin using the app by running the function `runBart`. An in-app vignette is provided that walks through each of the tools BART provides and how to use them.
 

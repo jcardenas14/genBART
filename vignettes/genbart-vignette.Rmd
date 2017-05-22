@@ -2,7 +2,7 @@
 title: "genBART package Vignette"
 author: "Jacob Cardenas"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{genBART package Vignette}
   %\VignetteEngine{knitr::rmarkdown}

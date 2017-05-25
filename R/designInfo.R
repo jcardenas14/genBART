@@ -37,8 +37,8 @@
 #'                     responder_var = "clinical_status", sample_id = "sample_id", 
 #'                     project_name = "TB")
 #' @export
-desInfo <- function(y, design, data_type = "micro", columnname = NULL,
-                    long = FALSE, patient_id = NULL, baseline_var = NULL,
+desInfo <- function(y, design, data_type = "micro", long = FALSE,
+                    columnname = NULL, patient_id = NULL, baseline_var = NULL,
                     baseline_val = NULL, control_var = NULL, control_val = NULL,
                     time_var = NULL, responder_var = NULL, summary_var = NULL,
                     sample_id = NULL, project_name = NULL) {
@@ -47,7 +47,23 @@ desInfo <- function(y, design, data_type = "micro", columnname = NULL,
   } else {
     hc <- TRUE
   }
-  colnames(design)[which(colnames(design) %in% columnname)] <- "columnname"
+  if (is.null(columnname)) {
+    return("Must enter columnname to match design and expression")
+  } else {
+    if (!is.null(sample_id)) {
+      if (columnname == sample_id) {
+        design$columnname <- as.character(design[[sample_id]])
+      }
+    }
+    if (!is.null(patient_id)) {
+      if (columnname == patient_id) {
+        design$columnname <- as.character(design[[patient_id]])
+      }
+    }
+    if (columnname != sample_id & columnname != patient_id) {
+      colnames(design)[which(colnames(design) %in% columnname)] <- "columnname"
+    }
+  }
   if (nrow(design) > ncol(y)) {
     print("More samples in design than expression. Throwing out excess samples
           from design and matching.")

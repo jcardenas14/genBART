@@ -15,11 +15,11 @@
 #'   non-longitudinal studies without controls, \code{genModules} cannot be
 #'   used, since there are no reference samples with which to calculate a
 #'   threshold.
-#' @return \code{base_mod} Percentage matrix of baseline samples with respect to
+#' @return \code{base_ctrl} Percentage matrix of baseline samples with respect to
 #'   controls
-#' @return \code{long_mod} Percentage matrix of all time point samples with
+#' @return \code{long_base} Percentage matrix of all time point samples with
 #'   respect to their baseline
-#' @return \code{long_mod2} Percentage matrix of all time point samples with
+#' @return \code{long_ctrl} Percentage matrix of all time point samples with
 #'   respect to controls
 #' @examples
 #' # Example data
@@ -61,7 +61,7 @@ genModules <- function(design_info, gene_sets) {
   modordnum <- table(factor(geneset2$Module))
   modnames <- names(modordnum)
   if (is.null(control_var)) {
-    base_mod <- NULL
+    base_ctrl <- NULL
     if (long) {
       sort_des <- design[order(design[, time_var], design[, subject_id]), ]
       data_ordered <- modexp[, match(sort_des[, "columnname"], names(modexp),
@@ -98,11 +98,11 @@ genModules <- function(design_info, gene_sets) {
       }
       rownames(count_matrix) <- modnames
       PercentMatrix <- count_matrix / as.vector(modordnum)
-      long_mod <- PercentMatrix + 1
-      long_mod2 <- NULL
+      long_base <- PercentMatrix + 1
+      long_ctrl <- NULL
     }  else {
-      long_mod <- NULL
-      long_mod2 <- NULL
+      long_base <- NULL
+      long_ctrl <- NULL
     }
   } else {
     base_index <- design[, baseline_var] == baseline_val
@@ -149,7 +149,7 @@ genModules <- function(design_info, gene_sets) {
     base_case_sample <- base_sample[grp != control_val]
     colnames(bhc_sign) <- base_case_sample
     rownames(bhc_sign) <- modnames
-    base_mod <- bhc_sign
+    base_ctrl <- bhc_sign
     if (long) {
       exp_sam <- modexp[, colnames(modexp) %in% design$columnname]
       column_name <- colnames(exp_sam)
@@ -196,15 +196,13 @@ genModules <- function(design_info, gene_sets) {
       bhc_sign_s <- bhc_sign[, order(case_grp, case_donor, case_wk)]
       colnames(bhc_sign_s) <- case_sample_s
       rownames(bhc_sign_s) <- modnames
-      long_mod <- bhc_sign_s
+      long_ctrl <- bhc_sign_s
       control_cols <- design$columnname[which(design[, control_var] ==
                                                 control_val)]
       final_expression2 <- final_expression[, -which(colnames(final_expression)
                                                      %in% control_cols)]
-      design2 <- design[-which(design$columnname %in% control_cols),
-                        ]
-      sort_des <- design2[order(design2[, time_var], design2[, subject_id]),
-                          ]
+      design2 <- design[-which(design$columnname %in% control_cols), ]
+      sort_des <- design2[order(design2[, time_var], design2[, subject_id]), ]
       data_ordered <- modexp[, match(sort_des[, "columnname"], names(modexp),
                                      nomatch = 0)]
       names(data_ordered) <- sort_des[, sample_id]
@@ -216,6 +214,7 @@ genModules <- function(design_info, gene_sets) {
                                                       names(baseline_data))])
       rownames(final_data) <- modexp$Module
       SignMatrix <- final_data
+      SignMatrix[is.numeric(final_data)] <- 0
       SignMatrix[final_data < (baseline_mean - 2 * baseline_sd)] <- -1
       SignMatrix[final_data > (baseline_mean + 2 * baseline_sd)] <- 1
       count_matrix <- c()
@@ -235,12 +234,12 @@ genModules <- function(design_info, gene_sets) {
       }
       rownames(count_matrix) <- modnames
       PercentMatrix <- count_matrix / as.vector(modordnum)
-      long_mod2 <- PercentMatrix + 1
+      long_base <- PercentMatrix + 1
     } else {
-      long_mod <- NULL
-      long_mod2 <- NULL
+      long_base <- NULL
+      long_ctrl <- NULL
     }
   }
-  z <- list(base_mod = base_mod, long_mod = long_mod, long_mod2 = long_mod2)
+  z <- list(base_ctrl = base_ctrl, long_base = long_base, long_ctrl = long_ctrl)
   return(z)
 }

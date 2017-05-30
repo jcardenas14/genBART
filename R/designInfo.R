@@ -28,7 +28,7 @@
 #' @return A list containing matched design and expression and all of the design
 #'   parameters specified
 #' @examples
-#' # Using example dataset in genBART package
+#' # Using example data
 #' data(tb.expr)
 #' data(tb.design)
 #' des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 

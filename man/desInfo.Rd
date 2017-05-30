@@ -4,7 +4,7 @@
 \alias{desInfo}
 \title{Declare design information for downstream analysis}
 \usage{
-desInfo(y, design, data_type = "micro", columnname = NULL, long = FALSE,
+desInfo(y, design, data_type = "micro", long = FALSE, columnname = NULL,
   patient_id = NULL, baseline_var = NULL, baseline_val = NULL,
   control_var = NULL, control_val = NULL, time_var = NULL,
   responder_var = NULL, summary_var = NULL, sample_id = NULL,
@@ -19,10 +19,10 @@ desInfo(y, design, data_type = "micro", columnname = NULL, long = FALSE,
 \item{data_type}{What type of data is being analyzed? ("micro", "rna",
 "flow", "metab"). Default is data_type="micro"}
 
+\item{long}{logical; Is the study longitudinal?}
+
 \item{columnname}{Name of column in design that contains the column names of
 y}
-
-\item{long}{logical; Is the study longitudinal?}
 
 \item{patient_id}{Name of column in design that contains patient ids}
 
@@ -58,7 +58,7 @@ A list containing matched design and expression and all of the design
 Match design and expression matrices. Declare and store design parameters.
 }
 \examples{
-# Using example dataset in genBART package
+# Using example data
 data(tb.expr)
 data(tb.design)
 des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 

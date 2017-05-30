@@ -12,13 +12,13 @@ genModules(design_info, gene_sets)
 \item{gene_sets}{list of gene sets}
 }
 \value{
-\code{base_mod} Percentage matrix of baseline samples with respect to
+\code{base_ctrl} Percentage matrix of baseline samples with respect to
   controls
 
-\code{long_mod} Percentage matrix of all time point samples with
+\code{long_base} Percentage matrix of all time point samples with
   respect to their baseline
 
-\code{long_mod2} Percentage matrix of all time point samples with
+\code{long_ctrl} Percentage matrix of all time point samples with
   respect to controls
 }
 \description{

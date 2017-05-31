@@ -2,23 +2,30 @@
 #' 
 #' Perform pairwise correlations formatted for BART
 #' @param x A numeric matrix or data frame.
-#' @param y A second numeric matrix or data frame with the same number of rows as \code{x}.
-#' @param by Default is NULL. A grouping vector with length equal to \code{nrow(x)}. Allows
-#'   correlation by group (e.g. time).
-#' @param by_name Default is NULL. String denoting the name of the grouping factor.
-#' @param description String giving description of what's being correlated. Default is "X vs Y".
+#' @param y A second numeric matrix or data frame with the same number of rows
+#'   as \code{x}.
+#' @param by Default is NULL. A grouping vector with length equal to
+#'   \code{nrow(x)}. Allows correlation by group (e.g. time).
+#' @param by_name Default is NULL. String denoting the name of the grouping
+#'   factor.
+#' @param description String giving description of what's being correlated.
+#'   Default is "X vs Y".
 #' @param x_var String denoting type of variables in \code{x}. Default is "X".
 #' @param y_var String denoting type of variables in \code{y}. Default is "Y".
-#' @param method Default is set to "pearson". The alternatives are "spearman" and "kendall".
-#' @param order_by Order by p-value ("p") or correlation value ("r"). Default is "p".
-#' @param decreasing logical. Should the sort be increasing or decreasing? Default is TRUE.
-#' @details This function uses the \code{\link[psych]{corr.test}} function in the \code{pysch}
-#'   package to find the correlations and p-values. It then formats the results in a tall format for
-#'   BART.
+#' @param method Default is set to "pearson". The alternatives are "spearman"
+#'   and "kendall".
+#' @param order_by Order by p-value ("p") or correlation value ("r"). Default is
+#'   "p".
+#' @param decreasing logical. Should the sort be increasing or decreasing?
+#'   Default is TRUE.
+#' @details This function uses the \code{\link[psych]{corr.test}} function in
+#'   the \code{pysch} package to find the correlations and p-values. It then
+#'   formats the results in a tall format for BART.
 #' @return \code{correlations} Tall dataframe of correlations and p-values.
-#' @return \code{correlation_files} A dataframe obtained by \code{cbind(by,x,y)}.
-#' @return \code{correlation_names} A string denoting the description of the variables being
-#'   correlated.
+#' @return \code{correlation_files} A dataframe obtained by
+#'   \code{cbind(by,x,y)}.
+#' @return \code{correlation_names} A string denoting the description of the
+#'   variables being correlated.
 #' @return \code{x_var} String denoting type of variables in \code{x}.
 #' @return \code{y_var} String denoting type of variables in \code{y}.
 #' @return \code{correlation_method} One of "pearson", "spearman", or "kendall".

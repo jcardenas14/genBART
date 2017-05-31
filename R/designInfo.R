@@ -1,28 +1,28 @@
 #' Declare design information for downstream analysis
-#'
+#' 
 #' Match design and expression matrices. Declare and store design parameters.
 #' @param y An expression matrix or dataframe
-#' @param design A design matrix or dataframe containing sample information
+#' @param design A design matrix or dataframe containing sample information 
 #'   (e.g. age, condition, timepoint, etc.)
-#' @param data_type What type of data is being analyzed? ("micro", "rna",
+#' @param data_type What type of data is being analyzed? ("micro", "rna", 
 #'   "flow", "metab"). Default is data_type="micro"
-#' @param columnname Name of column in design that contains the column names of
+#' @param columnname Name of column in design that contains the column names of 
 #'   y
 #' @param long logical; Is the study longitudinal?
 #' @param patient_id Name of column in design that contains patient ids
-#' @param baseline_var Name of column in design that contains values referring
+#' @param baseline_var Name of column in design that contains values referring 
 #'   to baseline observations
 #' @param baseline_val string or numeric value denoting baseline observations
 #' @param control_var Name of column in design that contains values referring to
 #'   controls
 #' @param control_val string or numeric value denoting controls
-#' @param time_var For longitudinal studies. Name of column in design that
+#' @param time_var For longitudinal studies. Name of column in design that 
 #'   contains the study timepoints
 #' @param responder_var Name of column in design that contains subject responder
 #'   status or condition
-#' @param summary_var Column name in design denoting a numeric variable over
+#' @param summary_var Column name in design denoting a numeric variable over 
 #'   which sample design summary tables are initialized (e.g. Age)
-#' @param sample_id Name of column in design that contains unique sample
+#' @param sample_id Name of column in design that contains unique sample 
 #'   identification
 #' @param project_name String denoting the name of the project or study
 #' @return A list containing matched design and expression and all of the design

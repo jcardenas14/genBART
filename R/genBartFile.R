@@ -1,26 +1,26 @@
 #' Generate and Update BART files
-#'
-#' Generate and/or update BART file that can be directly uploaded into the BART
+#' 
+#' Generate and/or update BART file that can be directly uploaded into the BART 
 #' app
 #' @param design_info list generated from \code{desInfo}
-#' @param model_results Default is NULL. Object generated from function
+#' @param model_results Default is NULL. Object generated from function 
 #'   \code{genModelResults}
-#' @param module_maps Default is NULL. Object generated from function
+#' @param module_maps Default is NULL. Object generated from function 
 #'   \code{genModules}
-#' @param dendros Default is NULL. Object generated from function
+#' @param dendros Default is NULL. Object generated from function 
 #'   \code{genDendrograms}
-#' @param qusage_results Default is NULL. Object generated from function
+#' @param qusage_results Default is NULL. Object generated from function 
 #'   \code{qBart}
-#' @param roast_results Default is NULL. Object generated from function
+#' @param roast_results Default is NULL. Object generated from function 
 #'   \code{rBart}
-#' @param corr_results Default is NULL. Object generated from function
+#' @param corr_results Default is NULL. Object generated from function 
 #'   \code{crossCorr}
 #' @param illumina Logical. Are the probe IDs Illumina? Default is TRUE.
-#' @details \code{genFile} creates a formatted BART file (Unsupervised.RData)
-#'   based on input components that the user provides. The function then saves
-#'   the file in a folder named after the project name that was defined in the
-#'   function \code{\link{desInfo}}. The folder is created in the current
-#'   workign directory. All function inputs are the objects generated from
+#' @details \code{genFile} creates a formatted BART file (Unsupervised.RData) 
+#'   based on input components that the user provides. The function then saves 
+#'   the file in a folder named after the project name that was defined in the 
+#'   function \code{\link{desInfo}}. The folder is created in the current 
+#'   workign directory. All function inputs are the objects generated from 
 #'   running the other available functions in \code{genBART}.
 #' @examples
 #' # Example data
@@ -39,11 +39,11 @@
 #'                     
 #' # create BART file (minimal example)
 #' genFile(design_info = list(des.info))                     
-#'
+#' 
 #' # generate module maps and cluster probes
 #' mods <- genModules(des.info, modules)
 #' dendros <- genDendrograms(des.info)
-#'
+#' 
 #' # Update BART file with module maps and heat maps
 #' path <- paste(getwd(), "/", des.info$project_name, " Pipeline", sep = "")
 #' updateFile(load.path = path, module_maps = mods, dendros = dendros)

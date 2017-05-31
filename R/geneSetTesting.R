@@ -29,13 +29,13 @@ qusageGen <- function(resids, labels, estimates, dof, std_errors, gene_sets,
   }
 
 #' Run Qusage algorithm using gene level statistics
-#'
+#' 
 #' @param object object generated from \code{genModelResults}
 #' @param gene_sets list of gene_sets
-#' @details This function takes the gene level comparison estimates and test
-#'   statistics contained in the object produced from
-#'   \code{\link{genModelResults}} and runs the Qusage algorithm across all of
-#'   the comparisons. The VIFs are estimated using the raw residuals, which are
+#' @details This function takes the gene level comparison estimates and test 
+#'   statistics contained in the object produced from 
+#'   \code{\link{genModelResults}} and runs the Qusage algorithm across all of 
+#'   the comparisons. The VIFs are estimated using the raw residuals, which are 
 #'   also contained in the output of \code{\link{genModelResults}}.
 #' @return \code{qusage_results} tall formatted matrix of results
 #' @return \code{lowerCI} Matrix of gene level lower 95\% confidence intervals

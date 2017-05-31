@@ -94,21 +94,21 @@ dataManipulate <- function(y, x, colname, ref_var, ref_level, long = FALSE,
 }
 
 #' Normalization and hierarchical clustering
-#'
-#' Performs hierarchical clustering and various normalizations of expression
+#' 
+#' Performs hierarchical clustering and various normalizations of expression 
 #' matrix
 #' @param design_info list generated from \code{desInfo}
-#' @details This function performs various normalizations of the expression
-#'   data, depending on the study design and the parameters defined in
+#' @details This function performs various normalizations of the expression 
+#'   data, depending on the study design and the parameters defined in 
 #'   \code{\link{desInfo}}. For all study designs, the data is normalized to the
-#'   mean of all the samples. For non-logitudinal studies with controls, an
-#'   additional normalization to the mean of the controls is performed. For
-#'   longitudinal studies, baseline normalization is performed (each subject's
-#'   baseline is subtracted out from later time points), along with separate
+#'   mean of all the samples. For non-logitudinal studies with controls, an 
+#'   additional normalization to the mean of the controls is performed. For 
+#'   longitudinal studies, baseline normalization is performed (each subject's 
+#'   baseline is subtracted out from later time points), along with separate 
 #'   normalization of baseline samples only (proceeding as with non-longitudinal
 #'   studies). For each normalized expression matrix, hierarchical clustering of
 #'   the rows is performed.
-#' @return Returns dendrogram objects obtained through hierarchical clustering
+#' @return Returns dendrogram objects obtained through hierarchical clustering 
 #'   of the various normalized expression datasets.
 #' @examples
 #' # Example data

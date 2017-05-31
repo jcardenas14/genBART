@@ -1,7 +1,7 @@
 Package: genBART
 Type: Package
 Title: Biostatistical Analysis Reporting Tool
-Version: 0.1.0
+Version: 0.99.0
 Author: Jacob Cardenas
 Maintainer: Jacob Cardenas <jacob.cardenas@bswhealth.org>
 Description: A set of functions to generate and format results from statistical

@@ -9,7 +9,7 @@ Description: A set of functions to generate and format results from statistical
     be uploaded into the BART shiny app. The app provides users with tools
     to visualize and efficiently sift through large amounts of data and results. 
 Depends: R (>= 3.3.3)
-Imports: 
+Imports:
     clValid (>= 0.6-6),
     data.table (>= 1.10.4),
     fastcluster (>= 1.1.22),
@@ -32,12 +32,13 @@ Imports:
     stringr (>= 1.2.0),
     tools (>= 3.3.3),
     VennDiagram (>= 1.6.17)
-Suggests: 
+Suggests:
     DESeq2 (>= 1.14.1),
     edgeR (>= 3.16.5),
     knitr (>= 1.15.1),
     statmod (>= 1.4.29),
-    SummarizedExperiment (>= 1.1.6)
+    SummarizedExperiment (>= 1.1.6),
+    testthat
 License: GPL-2|GPL-3
 Materials: README
 Encoding: UTF-8

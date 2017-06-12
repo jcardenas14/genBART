@@ -48,20 +48,39 @@ desInfo <- function(y, design, data_type = "micro", long = FALSE,
     hc <- TRUE
   }
   if (is.null(columnname)) {
-    return("Must enter columnname to match design and expression")
+    return(warning("Must enter columnname to match design and expression"))
   } else {
     if (!is.null(sample_id)) {
-      if (columnname == sample_id) {
-        design$columnname <- as.character(design[[sample_id]])
+      if (!is.null(patient_id)) {
+        if (columnname == sample_id) {
+          design$columnname <- as.character(design[[sample_id]])
+        }
+        if (columnname == patient_id) {
+          design$columnname <- as.character(design[[patient_id]])
+        }
+        if (columnname != sample_id & columnname != patient_id) {
+          colnames(design)[colnames(design) %in% columnname] <- "columnname"
+        }
+      } else {
+        if (columnname == sample_id) {
+          design$columnname <- as.character(design[[sample_id]])
+        } else {
+          colnames(design)[colnames(design) %in% columnname] <- "columnname"
+        }
+      }
+    } else {
+      if (!is.null(patient_id)) {
+        if (columnname == patient_id) {
+          design$columnname <- as.character(design[[patient_id]])
+        } else {
+          colnames(design)[colnames(design) %in% columnname] <- "columnname"
+        }
       }
     }
-    if (!is.null(patient_id)) {
-      if (columnname == patient_id) {
-        design$columnname <- as.character(design[[patient_id]])
-      }
-    }
-    if (columnname != sample_id & columnname != patient_id) {
-      colnames(design)[which(colnames(design) %in% columnname)] <- "columnname"
+    if (!any(design$columnname %in% colnames(y))) {
+      return(
+        warning("columnname values in design do not match any columnnames in y")
+      )
     }
   }
   if (nrow(design) > ncol(y)) {

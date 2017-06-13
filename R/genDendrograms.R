@@ -120,10 +120,10 @@ dataManipulate <- function(y, x, colname, ref_var, ref_level, long = FALSE,
 #' 
 #' # Create desInfo object
 #' des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
-#'                     columnname = "columnname", long = TRUE, patient_id = "monkey_id",
-#'                     baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
-#'                     responder_var = "clinical_status", sample_id = "sample_id", 
-#'                     project_name = "TB")
+#'                     columnname = "columnname", long = TRUE, sample_id = "sample_id",
+#'                     patient_id = "monkey_id", time_var = "timepoint",
+#'                     baseline_var = "timepoint", baseline_val = 0, 
+#'                     responder_var = "clinical_status", project_name = "TB")
 #' 
 #' # Normalize and cluster data
 #' dendros <- genDendrograms(des.info)
@@ -147,8 +147,7 @@ genDendrograms <- function(design_info) {
   ind1 <- which(colnames(final_expression) %in% c("PROBE_ID", "SYMBOL"))
   ind2 <- which(colnames(final_expression) %in% base_sample_id)
   exp_base <- final_expression[, c(ind1, ind2)]
-  des_base <- design[which(design$columnname %in% colnames(exp_base)),
-                     ]
+  des_base <- design[which(design$columnname %in% colnames(exp_base)), ]
   y1b <- dataManipulate(y = exp_base, x = des_base, colname = "columnname",
                         format = "Probes", allsamples = TRUE)
   print("Clustering Baseline Median Normalized Heatmap")

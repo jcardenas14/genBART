@@ -12,13 +12,13 @@ genModules(design_info, gene_sets)
 \item{gene_sets}{list of gene sets}
 }
 \value{
-\code{base_ctrl} Percentage matrix of baseline samples with respect to
-  controls
+\code{base_ctrl} Percentage matrix of baseline samples with respect
+  to controls
 
-\code{long_base} Percentage matrix of all time point samples with
+\code{long_base} Percentage matrix of all time point samples with 
   respect to their baseline
 
-\code{long_ctrl} Percentage matrix of all time point samples with
+\code{long_ctrl} Percentage matrix of all time point samples with 
   respect to controls
 }
 \description{
@@ -27,16 +27,16 @@ Generate module (gene set) maps for plotting
 \details{
 This function calculates modules scores whose values are constructed
   on individual samples at baseline and for all time points (for longitudinal
-  studies). For non-longitudinal studies with controls, the control samples
-  are used to determine an upper and lower threshold (mean HC +/- 2 sd). The
-  module proportion for each sample is then calculated based on the
-  percentage of probes within a module that are above or below this
+  studies). For non-longitudinal studies with controls, the control samples 
+  are used to determine an upper and lower threshold (mean HC +/- 2 sd). The 
+  module proportion for each sample is then calculated based on the 
+  percentage of probes within a module that are above or below this 
   threshold. For example, if 40\% of the probes within a module are above the
-  threshold and 15\% are below it, then the final module score would be 40\%
-  - 15\% = 25\% up. For longitudinal studies, additional module scores are
-  calculated using baseline samples to determine the threshold. For
-  non-longitudinal studies without controls, \code{genModules} cannot be
-  used, since there are no reference samples with which to calculate a
+  threshold and 15\% are below it, then the final module score would be 40\% 
+  - 15\% = 25\% up. For longitudinal studies, additional module scores are 
+  calculated using baseline samples to determine the threshold. For 
+  non-longitudinal studies without controls, \code{genModules} cannot be 
+  used, since there are no reference samples with which to calculate a 
   threshold.
 }
 \examples{

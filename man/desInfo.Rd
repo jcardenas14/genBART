@@ -5,28 +5,34 @@
 \title{Declare design information for downstream analysis}
 \usage{
 desInfo(y, design, data_type = "micro", long = FALSE, columnname = NULL,
-  patient_id = NULL, baseline_var = NULL, baseline_val = NULL,
-  control_var = NULL, control_val = NULL, time_var = NULL,
-  responder_var = NULL, summary_var = NULL, sample_id = NULL,
+  sample_id = NULL, patient_id = NULL, time_var = NULL,
+  baseline_var = NULL, baseline_val = NULL, control_var = NULL,
+  control_val = NULL, summary_var = NULL, responder_var = NULL,
   project_name = NULL)
 }
 \arguments{
 \item{y}{An expression matrix or dataframe}
 
-\item{design}{A design matrix or dataframe containing sample information
+\item{design}{A design matrix or dataframe containing sample information 
 (e.g. age, condition, timepoint, etc.)}
 
-\item{data_type}{What type of data is being analyzed? ("micro", "rna",
+\item{data_type}{What type of data is being analyzed? ("micro", "rna", 
 "flow", "metab"). Default is data_type="micro"}
 
 \item{long}{logical; Is the study longitudinal?}
 
-\item{columnname}{Name of column in design that contains the column names of
+\item{columnname}{Name of column in design that contains the column names of 
 y}
+
+\item{sample_id}{Name of column in design that contains unique sample 
+identification}
 
 \item{patient_id}{Name of column in design that contains patient ids}
 
-\item{baseline_var}{Name of column in design that contains values referring
+\item{time_var}{For longitudinal studies. Name of column in design that 
+contains the study timepoints}
+
+\item{baseline_var}{Name of column in design that contains values referring 
 to baseline observations}
 
 \item{baseline_val}{string or numeric value denoting baseline observations}
@@ -36,17 +42,11 @@ controls}
 
 \item{control_val}{string or numeric value denoting controls}
 
-\item{time_var}{For longitudinal studies. Name of column in design that
-contains the study timepoints}
+\item{summary_var}{Column name in design denoting a numeric variable over 
+which sample design summary tables are initialized (e.g. Age)}
 
 \item{responder_var}{Name of column in design that contains subject responder
 status or condition}
-
-\item{summary_var}{Column name in design denoting a numeric variable over
-which sample design summary tables are initialized (e.g. Age)}
-
-\item{sample_id}{Name of column in design that contains unique sample
-identification}
 
 \item{project_name}{String denoting the name of the project or study}
 }
@@ -62,8 +62,8 @@ Match design and expression matrices. Declare and store design parameters.
 data(tb.expr)
 data(tb.design)
 des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 
-                    columnname = "columnname", long = TRUE, patient_id = "monkey_id",
-                    baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
-                    responder_var = "clinical_status", sample_id = "sample_id", 
-                    project_name = "TB")
+                    columnname = "columnname", long = TRUE, sample_id = "sample_id",
+                    patient_id = "monkey_id", time_var = "timepoint",
+                    baseline_var = "timepoint", baseline_val = 0,
+                    responder_var = "clinical_status", project_name = "TB")
 }

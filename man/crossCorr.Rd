@@ -11,32 +11,39 @@ crossCorr(x, y, by = NULL, by_name = NULL, description = "X vs Y",
 \arguments{
 \item{x}{A numeric matrix or data frame.}
 
-\item{y}{A second numeric matrix or data frame with the same number of rows as \code{x}.}
+\item{y}{A second numeric matrix or data frame with the same number of rows
+as \code{x}.}
 
-\item{by}{Default is NULL. A grouping vector with length equal to \code{nrow(x)}. Allows
-correlation by group (e.g. time).}
+\item{by}{Default is NULL. A grouping vector with length equal to
+\code{nrow(x)}. Allows correlation by group (e.g. time).}
 
-\item{by_name}{Default is NULL. String denoting the name of the grouping factor.}
+\item{by_name}{Default is NULL. String denoting the name of the grouping
+factor.}
 
-\item{description}{String giving description of what's being correlated. Default is "X vs Y".}
+\item{description}{String giving description of what's being correlated.
+Default is "X vs Y".}
 
 \item{x_var}{String denoting type of variables in \code{x}. Default is "X".}
 
 \item{y_var}{String denoting type of variables in \code{y}. Default is "Y".}
 
-\item{method}{Default is set to "pearson". The alternatives are "spearman" and "kendall".}
+\item{method}{Default is set to "pearson". The alternatives are "spearman"
+and "kendall".}
 
-\item{order_by}{Order by p-value ("p") or correlation value ("r"). Default is "p".}
+\item{order_by}{Order by p-value ("p") or correlation value ("r"). Default is
+"p".}
 
-\item{decreasing}{logical. Should the sort be increasing or decreasing? Default is TRUE.}
+\item{decreasing}{logical. Should the sort be increasing or decreasing?
+Default is TRUE.}
 }
 \value{
 \code{correlations} Tall dataframe of correlations and p-values.
 
-\code{correlation_files} A dataframe obtained by \code{cbind(by,x,y)}.
+\code{correlation_files} A dataframe obtained by
+  \code{cbind(by,x,y)}.
 
-\code{correlation_names} A string denoting the description of the variables being
-  correlated.
+\code{correlation_names} A string denoting the description of the
+  variables being correlated.
 
 \code{x_var} String denoting type of variables in \code{x}.
 
@@ -48,9 +55,9 @@ correlation by group (e.g. time).}
 Perform pairwise correlations formatted for BART
 }
 \details{
-This function uses the \code{\link[psych]{corr.test}} function in the \code{pysch}
-  package to find the correlations and p-values. It then formats the results in a tall format for
-  BART.
+This function uses the \code{\link[psych]{corr.test}} function in
+  the \code{pysch} package to find the correlations and p-values. It then
+  formats the results in a tall format for BART.
 }
 \examples{
 # Example data

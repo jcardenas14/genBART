@@ -17,22 +17,22 @@ updateFile(load.path = NULL, output.path = NULL, design_info = NULL,
 \arguments{
 \item{design_info}{list generated from \code{desInfo}}
 
-\item{model_results}{Default is NULL. Object generated from function
+\item{model_results}{Default is NULL. Object generated from function 
 \code{genModelResults}}
 
-\item{module_maps}{Default is NULL. Object generated from function
+\item{module_maps}{Default is NULL. Object generated from function 
 \code{genModules}}
 
-\item{dendros}{Default is NULL. Object generated from function
+\item{dendros}{Default is NULL. Object generated from function 
 \code{genDendrograms}}
 
-\item{qusage_results}{Default is NULL. Object generated from function
+\item{qusage_results}{Default is NULL. Object generated from function 
 \code{qBart}}
 
-\item{roast_results}{Default is NULL. Object generated from function
+\item{roast_results}{Default is NULL. Object generated from function 
 \code{rBart}}
 
-\item{corr_results}{Default is NULL. Object generated from function
+\item{corr_results}{Default is NULL. Object generated from function 
 \code{crossCorr}}
 
 \item{illumina}{Logical. Are the probe IDs Illumina? Default is TRUE.}
@@ -43,15 +43,15 @@ updateFile(load.path = NULL, output.path = NULL, design_info = NULL,
 updated BART file will override the old one.}
 }
 \description{
-Generate and/or update BART file that can be directly uploaded into the BART
+Generate and/or update BART file that can be directly uploaded into the BART 
 app
 }
 \details{
-\code{genFile} creates a formatted BART file (Unsupervised.RData)
-  based on input components that the user provides. The function then saves
-  the file in a folder named after the project name that was defined in the
-  function \code{\link{desInfo}}. The folder is created in the current
-  workign directory. All function inputs are the objects generated from
+\code{genFile} creates a formatted BART file (Unsupervised.RData) 
+  based on input components that the user provides. The function then saves 
+  the file in a folder named after the project name that was defined in the 
+  function \code{\link{desInfo}}. The folder is created in the current 
+  workign directory. All function inputs are the objects generated from 
   running the other available functions in \code{genBART}.
 
 \code{updateFile} takes an existing BART file and allows the user to

@@ -22,10 +22,10 @@ qBart(object, gene_sets)
 Run Qusage algorithm using gene level statistics
 }
 \details{
-This function takes the gene level comparison estimates and test
-  statistics contained in the object produced from
-  \code{\link{genModelResults}} and runs the Qusage algorithm across all of
-  the comparisons. The VIFs are estimated using the raw residuals, which are
+This function takes the gene level comparison estimates and test 
+  statistics contained in the object produced from 
+  \code{\link{genModelResults}} and runs the Qusage algorithm across all of 
+  the comparisons. The VIFs are estimated using the raw residuals, which are 
   also contained in the output of \code{\link{genModelResults}}.
 }
 \examples{

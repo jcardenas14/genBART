@@ -8,11 +8,11 @@ head(tb.design)
 
 ## ------------------------------------------------------------------------
 des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 
-                    columnname = "columnname", long = TRUE, patient_id = "monkey_id", 
-                    baseline_var = "timepoint", baseline_val = 0, 
+                    columnname = "columnname", long = TRUE, 
+                    sample_id = "sample_id", patient_id = "monkey_id", 
+                    time_var = "timepoint", baseline_var = "timepoint", baseline_val = 0, 
                     control_var = "clinical_status", control_val = "Latent", 
-                    time_var = "timepoint", summary_var = NULL, 
-                    responder_var = "clinical_status", sample_id = "sample_id", 
+                    summary_var = NULL, responder_var = "clinical_status",  
                     project_name = "TB")
 
 ## ------------------------------------------------------------------------

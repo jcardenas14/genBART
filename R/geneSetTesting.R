@@ -87,7 +87,8 @@ qBart <- function(object, gene_sets) {
   stde <- abs(comparisons / tstats)
   for (i in 1:ncol(stde)) {
     if (length(which(is.na(stde[, i]))) > 0) {
-      stde[, i][which(is.na(stde[, i]))] <- min(stde[, i][stde[, i] > 10 ^ -6])
+      stde[, i][which(is.na(stde[, i]))] <- min(stde[, i][stde[, i] > 10 ^ -6], 
+                                                na.rm = TRUE)
     }
     stde[, i][stde[, i] < (10) ^ -6] <- min(stde[, i][stde[, i] > (10 ^ -6)])
   }

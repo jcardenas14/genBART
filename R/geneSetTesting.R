@@ -86,6 +86,9 @@ qBart <- function(object, gene_sets) {
   tstats <- results[, grep("^Test.statistic", colnames(results))]
   stde <- abs(comparisons / tstats)
   for (i in 1:ncol(stde)) {
+    if (length(which(is.na(stde[, i]))) > 0) {
+      stde[, i][which(is.na(stde[, i]))] <- min(stde[, i][stde[, i] > 10 ^ -6])
+    }
     stde[, i][stde[, i] < (10) ^ -6] <- min(stde[, i][stde[, i] > (10 ^ -6)])
   }
   colnames(stde) <- paste("Std_error.", colnames(stde), sep = "")

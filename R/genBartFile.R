@@ -15,7 +15,6 @@
 #'   \code{rBart}
 #' @param corr_results Default is NULL. Object generated from function 
 #'   \code{crossCorr}
-#' @param illumina Logical. Are the probe IDs Illumina? Default is TRUE.
 #' @details \code{genFile} creates a formatted BART file (Unsupervised.RData) 
 #'   based on input components that the user provides. The function then saves 
 #'   the file in a folder named after the project name that was defined in the 
@@ -68,9 +67,9 @@ genFile <- function(design_info, model_results = NULL, module_maps = NULL,
   long <- NULL
   mod1 <- NULL
   mod2 <- NULL
-  base_mod <- NULL
-  long_mod <- NULL
-  long_mod2 <- NULL
+  base_ctrl <- NULL
+  long_ctrl <- NULL
+  long_base <- NULL
   h1b_coldendro <- NULL
   h1b_rowdendro <- NULL
   h2b_coldendro <- NULL
@@ -129,9 +128,9 @@ genFile <- function(design_info, model_results = NULL, module_maps = NULL,
   project_name <- NULL
   data_type <- NULL
   if (!is.null(module_maps)) {
-    base_mod <- module_maps$base_mod
-    long_mod <- module_maps$long_mod
-    long_mod2 <- module_maps$long_mod2
+    base_ctrl <- module_maps$base_ctrl
+    long_ctrl <- module_maps$long_ctrl
+    long_base <- module_maps$long_base
   }
   if (!is.null(dendros)) {
     h1b_coldendro <- dendros$h1b_coldendro
@@ -248,7 +247,7 @@ genFile <- function(design_info, model_results = NULL, module_maps = NULL,
   if (!dir.exists(paste(getwd(), "/", project_name, " Pipeline/", sep = ""))) {
     dir.create(paste(getwd(), "/", project_name, " Pipeline/", sep = ""))
   }
-  save(mod1, mod2, final_expression, design, base_mod, long, long_mod, long_mod2,
+  save(mod1, mod2, final_expression, design, base_ctrl, long, long_ctrl, long_base,
        h1b_rowdendro, h1b_coldendro, h2b_rowdendro, h2b_coldendro, h1_rowdendro,
        h2_rowdendro, h3_rowdendro, h1_coldendro, h2_coldendro, h3_coldendro,
        summary_var, time_var, responder_var, control_var, control_val,
@@ -286,9 +285,9 @@ updateFile <- function(load.path = NULL, output.path = NULL, design_info = NULL,
       mod1 <- mod2 <- long <- data_type <- NULL
       data <- load(paste(load.path,"/Unsupervised.RData",sep = ""))
       if (!is.null(module_maps)) {
-        base_mod <- module_maps$base_mod
-        long_mod <- module_maps$long_mod
-        long_mod2 <- module_maps$long_mod2
+        base_ctrl <- module_maps$base_ctrl
+        long_ctrl <- module_maps$long_ctrl
+        long_base <- module_maps$long_base
       }
       if (!is.null(dendros)) {
         h1b_coldendro <- dendros$h1b_coldendro
@@ -409,8 +408,8 @@ updateFile <- function(load.path = NULL, output.path = NULL, design_info = NULL,
         setwd(output.path)
         dir.create(paste(getwd(), "/", project_name, " Pipeline/", sep = ""))
       }
-      save(mod1, mod2, final_expression, design, base_mod, long_mod, long, 
-           long_mod2, h1b_rowdendro, h1b_coldendro, h2b_rowdendro, 
+      save(mod1, mod2, final_expression, design, base_ctrl, long_ctrl, long, 
+           long_base, h1b_rowdendro, h1b_coldendro, h2b_rowdendro, 
            h2b_coldendro, h1_rowdendro, h2_rowdendro, h3_rowdendro, 
            h1_coldendro, h2_coldendro, h3_coldendro, summary_var, time_var, 
            responder_var, control_var, control_val, baseline_var, baseline_val, 

@@ -12,5 +12,5 @@ runBart <- function() {
          #call. = FALSE)
   #}
   #shiny::runApp(appDir, display.mode = "normal")
-  shiny::runGitHub("BART_app", "jcardenas14")
+  shiny::runGitHub("BART", "jcardenas14", ref = "beta_updates")
 }

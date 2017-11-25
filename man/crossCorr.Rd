@@ -4,8 +4,8 @@
 \alias{crossCorr}
 \title{Cross Correlations}
 \usage{
-crossCorr(x, y, by = NULL, by_name = NULL, description = "X vs Y",
-  x_var = "X", y_var = "Y", method = "pearson", order_by = "p",
+crossCorr(x, y, by = NULL, by.name = NULL, description = "X vs Y",
+  x.var = "X", y.var = "Y", method = "pearson", order.by = "p",
   decreasing = TRUE)
 }
 \arguments{
@@ -17,39 +17,39 @@ as \code{x}.}
 \item{by}{Default is NULL. A grouping vector with length equal to
 \code{nrow(x)}. Allows correlation by group (e.g. time).}
 
-\item{by_name}{Default is NULL. String denoting the name of the grouping
+\item{by.name}{Default is NULL. String denoting the name of the grouping
 factor.}
 
 \item{description}{String giving description of what's being correlated.
 Default is "X vs Y".}
 
-\item{x_var}{String denoting type of variables in \code{x}. Default is "X".}
+\item{x.var}{String denoting type of variables in \code{x}. Default is "X".}
 
-\item{y_var}{String denoting type of variables in \code{y}. Default is "Y".}
+\item{y.var}{String denoting type of variables in \code{y}. Default is "Y".}
 
 \item{method}{Default is set to "pearson". The alternatives are "spearman"
 and "kendall".}
 
-\item{order_by}{Order by p-value ("p") or correlation value ("r"). Default is
+\item{order.by}{Order by p-value ("p") or correlation value ("r"). Default is
 "p".}
 
 \item{decreasing}{logical. Should the sort be increasing or decreasing?
 Default is TRUE.}
 }
 \value{
-\code{correlations} Tall dataframe of correlations and p-values.
+\code{corrs} Tall dataframe of correlations and p-values.
 
-\code{correlation_files} A dataframe obtained by
+\code{corr.files} A dataframe obtained by
   \code{cbind(by,x,y)}.
 
-\code{correlation_names} A string denoting the description of the
+\code{corr.names} A string denoting the description of the
   variables being correlated.
 
-\code{x_var} String denoting type of variables in \code{x}.
+\code{x.var} String denoting type of variables in \code{x}.
 
-\code{y_var} String denoting type of variables in \code{y}.
+\code{y.var} String denoting type of variables in \code{y}.
 
-\code{correlation_method} One of "pearson", "spearman", or "kendall".
+\code{corr.method} One of "pearson", "spearman", or "kendall".
 }
 \description{
 Perform pairwise correlations formatted for BART
@@ -73,7 +73,7 @@ flow <- data.frame(t(tb.flow))
 flow <- flow[match(rownames(module.as), rownames(flow), nomatch = 0), ]
 
 # Run correlations and format for BART
-corrs <- crossCorr(x = module.as, y = flow, by = time, by_name = "days", 
-                   description = "Mod.Act.Score vs Flow", x_var = "Mod.Act.Score", 
-                   y_var = "Flow", method = "spearman")
+corrs <- crossCorr(x = module.as, y = flow, by = time, by.name = "days", 
+                   description = "Mod.Act.Score vs Flow", x.var = "Mod.Act.Score", 
+                   y.var = "Flow", method = "spearman")
 }

@@ -3,39 +3,37 @@
 \name{genFile}
 \alias{genFile}
 \alias{updateFile}
-\title{Generate and Update BART files}
+\title{Generate and Update BART Result files}
 \usage{
-genFile(design_info, model_results = NULL, module_maps = NULL,
-  dendros = NULL, qusage_results = NULL, roast_results = NULL,
-  corr_results = NULL, illumina = TRUE)
+genFile(meta, model.results = NULL, module.scores = NULL,
+  dendrograms = NULL, qusage.results = NULL, roast.results = NULL,
+  corr.results = NULL, project.name = "BART Project")
 
-updateFile(load.path = NULL, output.path = NULL, design_info = NULL,
-  model_results = NULL, module_maps = NULL, dendros = NULL,
-  qusage_results = NULL, roast_results = NULL, corr_results = NULL,
-  illumina = NULL)
+updateFile(load.path = NULL, output.path = NULL, meta = NULL,
+  model.results = NULL, module.scores = NULL, dendrograms = NULL,
+  qusage.results = NULL, roast.results = NULL, corr.results = NULL,
+  project.name = NULL)
 }
 \arguments{
-\item{design_info}{list generated from \code{desInfo}}
+\item{meta}{A list of a single or multiple objects generated from 
+\code{metaData}. Default is NULL.}
 
-\item{model_results}{Default is NULL. Object generated from function 
-\code{genModelResults}}
+\item{model.results}{A list of a single or multiple objects generated from 
+\code{genModelResults}. Default is NULL.}
 
-\item{module_maps}{Default is NULL. Object generated from function 
-\code{genModules}}
+\item{module.scores}{Object generated from \code{genModScores}. Default is 
+NULL.}
 
-\item{dendros}{Default is NULL. Object generated from function 
-\code{genDendrograms}}
+\item{dendrograms}{Object generated from \code{clusterData}. Default is NULL.}
 
-\item{qusage_results}{Default is NULL. Object generated from function 
-\code{qBart}}
+\item{qusage.results}{Object generated from \code{qBart}. Default is NULL.}
 
-\item{roast_results}{Default is NULL. Object generated from function 
-\code{rBart}}
+\item{roast.results}{Object generated from \code{rBart}. Default is NULL.}
 
-\item{corr_results}{Default is NULL. Object generated from function 
-\code{crossCorr}}
+\item{corr.results}{Object generated from \code{crossCorr}. Default is NULL.}
 
-\item{illumina}{Logical. Are the probe IDs Illumina? Default is TRUE.}
+\item{project.name}{String giving the name project name. Default is 
+"BART Project".}
 
 \item{load.path}{Folder path of BART file that needs to be updated.}
 
@@ -43,16 +41,15 @@ updateFile(load.path = NULL, output.path = NULL, design_info = NULL,
 updated BART file will override the old one.}
 }
 \description{
-Generate and/or update BART file that can be directly uploaded into the BART 
-app
+Generate/Update BART file that can be directly uploaded into the BART app
 }
 \details{
-\code{genFile} creates a formatted BART file (Unsupervised.RData) 
-  based on input components that the user provides. The function then saves 
-  the file in a folder named after the project name that was defined in the 
-  function \code{\link{desInfo}}. The folder is created in the current 
-  workign directory. All function inputs are the objects generated from 
-  running the other available functions in \code{genBART}.
+\code{genFile} generates a formatted R data file (bartResults.rda) 
+  that can be uploaded into the BART web application. The file is created 
+  based on result objects generated from the various functions in 
+  \code{genBart}. The function saves the file in a folder whose name is
+  defined by \code{project.name}. The folder is created in the current 
+  working directory.
 
 \code{updateFile} takes an existing BART file and allows the user to
   easily add and/or revise components. The user can override the old BART
@@ -68,20 +65,20 @@ data(tb.design)
 dat <- tb.expr[1:100,]
 
 # Create desInfo object
-des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
-                    columnname = "columnname", long = TRUE, patient_id = "monkey_id",
-                    baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
-                    responder_var = "clinical_status", sample_id = "sample_id", 
-                    project_name = "TB")
+meta.data <- metaData(y = dat, design = tb.design, data.type = "microarray", 
+                    columnname = "columnname", long = TRUE, subject.id = "monkey_id",
+                    baseline.var = "timepoint", baseline.val = 0, time.var = "timepoint", 
+                    sample.id = "sample_id")
                     
 # create BART file (minimal example)
-genFile(design_info = list(des.info))                     
+genFile(meta = list(meta.data))                     
 
-# generate module maps and cluster probes
-mods <- genModules(des.info, modules)
-dendros <- genDendrograms(des.info)
+# generate module scores, normalize and cluster genes
+mods <- genModScores(meta.data, modules)
+data.norm <- normalizeData(meta = meta.data)
+dendros <- clusterData(norm.data = data.norm)
 
-# Update BART file with module maps and heat maps
-path <- paste(getwd(), "/", des.info$project_name, " Pipeline", sep = "")
-updateFile(load.path = path, module_maps = mods, dendros = dendros)
+# Update BART file with module scores and clustered genes
+path <- paste(getwd(), "/", "BART Project", " Pipeline", sep = "")
+updateFile(load.path = path, module.scores = mods, dendrograms = dendros)
 }

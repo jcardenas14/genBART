@@ -10,5 +10,5 @@ runBart()
 This function runs the BART shiny app.
 }
 \examples{
-if (interactive()) genBART::runBart()
+if (interactive()) genBart::runBart()
 }

@@ -1,34 +1,29 @@
 ## ----setup, echo = FALSE, message = FALSE--------------------------------
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
-library(genBART)
+library(genBart)
 library(limma)
 
 ## ------------------------------------------------------------------------
 head(tb.design)
 
 ## ------------------------------------------------------------------------
-des.info <- desInfo(y = tb.expr, design = tb.design, data_type = "micro", 
-                    columnname = "columnname", long = TRUE, 
-                    sample_id = "sample_id", patient_id = "monkey_id", 
-                    time_var = "timepoint", baseline_var = "timepoint", baseline_val = 0, 
-                    control_var = "clinical_status", control_val = "Latent", 
-                    summary_var = NULL, responder_var = "clinical_status",  
-                    project_name = "TB")
+meta <- metaData(y = tb.expr, design = tb.design, data.type = "microarray", 
+                 columnname = "columnname", long = TRUE, sample.id = "sample_id", 
+                 subject.id = "monkey_id", time.var = "timepoint", 
+                 baseline.var = "timepoint", baseline.val = 0)
 
 ## ------------------------------------------------------------------------
-des.info.flow <- desInfo(y = tb.flow, design = tb.flow.des, data_type = "flow", 
-                         columnname = "columnname", long = TRUE, patient_id = "monkey_id", 
-                         baseline_var = "timepoint", baseline_val = 0, 
-                         control_var = "clinical_status", control_val = "Latent", 
-                         time_var = "timepoint", summary_var = NULL, 
-                         responder_var = "clinical_status", sample_id = "sample_id", 
-                         project_name = "TB")
+meta.flow <- metaData(y = tb.flow, design = tb.flow.des, data.type = "flow", 
+                      columnname = "columnname", long = TRUE, sample.id = "sample_id", 
+                      subject.id = "monkey_id", time.var = "timepoint", 
+                      baseline.var = "timepoint", baseline.val = 0)
 
 ## ------------------------------------------------------------------------
-dendros <- genDendrograms(design_info = des.info)
+norm.data <- normalizeData(meta = meta, norm.method = "mean")
+cluster.data <- clusterData(norm.data = norm.data, dist.method = "euclidean", agg.method = "complete")
 
 ## ------------------------------------------------------------------------
-mods <- genModules(design_info = des.info, gene_sets = clusters)
+mod.scores <- genModScores(meta = meta, gene.sets = clusters, sd.lim = 2)
 
 ## ------------------------------------------------------------------------
 tb.design$Group <- paste(tb.design$clinical_status, tb.design$timepoint, sep = "")
@@ -72,12 +67,11 @@ fit2.flow <- contrasts.fit(fit.flow, contrasts)
 fit2.flow <- eBayes(fit2.flow, trend = FALSE)
 
 ## ------------------------------------------------------------------------
-mod_results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, method = "limma")
-mod_results.flow <- genModelResults(design_info = des.info.flow, object = fit2.flow, lm_Fit = fit.flow,
-                                    method = "limma")
+mod.results <- genModelResults(y = tb.expr, data.type = "microarray", object = fit2, lm.Fit = fit, method = "limma")
+mod.results.flow <- genModelResults(y = tb.flow, data.type = "flow", object = fit2.flow, lm.Fit = fit.flow, method = "limma")
 
 ## ------------------------------------------------------------------------
-qus <- qBart(object = mod_results, gene_sets = modules)
+qus <- qBart(model.results = mod.results, gene.sets = modules)
 
 ## ------------------------------------------------------------------------
 # Create time variable
@@ -89,18 +83,18 @@ flow <- data.frame(t(tb.flow))
 flow <- flow[match(rownames(module.as), rownames(flow), nomatch = 0), ]
 
 # Run correlations formatted for BART
-corrs <- crossCorr(x = module.as, y = flow, by = time, by_name = "days", 
-                   description = "Mod.Act.Score vs Flow", x_var = "Mod.Act.Score", 
-                   y_var = "Flow", method = "spearman")
+corrs <- crossCorr(x = module.as, y = flow, by = time, by.name = "days", 
+                   description = "Mod.Act.Score vs Flow", x.var = "Mod.Act.Score", 
+                   y.var = "Flow", method = "spearman")
 
 
 ## ------------------------------------------------------------------------
-genFile(design_info = list(des.info, des.info.flow), module_maps = mods, dendros = dendros, 
-        model_results = list(mod_results, mod_results.flow))
+genFile(meta = list(meta, meta.flow), module.scores = mod.scores, dendrograms = cluster.data, 
+        model.results = list(mod.results, mod.results.flow), project.name = "BART example")
 
 ## ---- eval = FALSE-------------------------------------------------------
-#  path <- paste(getwd(), "/", des.info$project_name, " Pipeline", sep = "")
-#  updateFile(load.path = path, qusage_results = qus, corr_results = list(corrs))
+#  path <- paste(getwd(), "/", "BART example", sep = "")
+#  updateFile(load.path = path, qusage.results = qus, corr.results = list(corrs))
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  runBart()

@@ -4,38 +4,53 @@
 \alias{genModelResults}
 \title{Generate formatted results file}
 \usage{
-genModelResults(design_info, object, lm_Fit, method = "limma",
-  comp_names = NULL, var_names = NULL, var_symbols = NULL)
+genModelResults(y, data.type, object, lm.Fit, method = "limma",
+  comp.names = NULL, var.names = NULL, var.symbols = NULL,
+  gene.sets = NULL, annotations = NULL)
 }
 \arguments{
-\item{design_info}{list generated from \code{\link{desInfo}}}
+\item{y}{data frame the model was run on.}
+
+\item{data.type}{type of data being analyzed ("microarray", "rnaseq", 
+"flow", "metab"). Default is data.type="microarray".}
 
 \item{object}{result object generated from \code{limma}, \code{DESeq2}, or 
-\code{edgeR}}
+\code{edgeR}.}
 
-\item{lm_Fit}{linear model fit object generated from \code{limma}, 
+\item{lm.Fit}{linear model fit object generated from \code{limma}, 
 \code{DESeq2}, or \code{edgeR}}
 
 \item{method}{Which method is being used? ("limma","deseq2","edgeR")}
 
-\item{comp_names}{comp_names=NULL is the default. A vector of comparison 
+\item{comp.names}{comp.names=NULL is the default. A vector of comparison 
 (contrast) names}
 
-\item{var_names}{var_names=NULL is the default. Optional vector of variable 
-names. Otherwise, the rownames of the expression dataframe are used}
+\item{var.names}{var.names=NULL is the default. Optional vector of variable 
+names. Otherwise, the rownames of the expression data frame or matrix are 
+used.}
 
-\item{var_symbols}{var_symbols=NULL is the default. Optional vector of 
-secondary annotations for the variables. Otherwise, the rownames of the 
-expression dataframe are used}
+\item{var.symbols}{var.symbols=NULL is the default. Optional vector of 
+annotations for the variables. Otherwise, the rownames of the 
+expression dataframe are used.}
+
+\item{gene.sets}{A list of gene sets.}
+
+\item{annotations}{A data frame of additional annotations for the gene sets.}
 }
 \value{
-\code{data_type} String denoting the type of data that was analyzed
+\code{data.type} string denoting the type of data that was analyzed
 
-\code{results} The formatted results file
+\code{results} the formatted results returned as a data frame
 
-\code{resids} Matrix of residuals. Returned only if data_type="micro"
-  or "rna". Used to estimate VIFs when running the QUSAGE algorithim in 
-  \code{\link{qBart}}
+\code{resids} data frame of residuals. Returned only if 
+  data.type="microarray" or "rnaseq" and method="limma". Used to estimate VIFs 
+  when running the QUSAGE algorithim in \code{\link{qBart}}.
+
+\code{gene.sets} list of gene sets provided by the user. NULL if no 
+  list provided.
+
+\code{annotations} data frame of gene set annotations provided by the
+  user. Null if no annotations are provided.
 }
 \description{
 Generate formatted results file from completed differential analysis in 
@@ -47,7 +62,7 @@ This function formats the results obtained from running differential
   parameter \code{object} accepts as input a results object from functions 
   \code{\link[limma]{eBayes}} (limma), \code{\link[DESeq2]{results}} 
   (DESeq2), \code{\link[edgeR]{glmLRT}} or \code{\link[edgeR]{glmQLFTest}} 
-  (edgeR). The parameter \code{lm_Fit} accepts a fitted model object from 
+  (edgeR). The parameter \code{lm.Fit} accepts a fitted model object from 
   functions \code{\link[limma]{lmFit}} (limma), \code{\link[DESeq2]{DESeq}} 
   (DESeq2), \code{\link[edgeR]{glmFit}} or \code{\link[edgeR]{glmQLFit}} 
   (edgeR).
@@ -57,19 +72,11 @@ This function formats the results obtained from running differential
 data(tb.expr)
 data(tb.design)
 
-# Only use first 100 probes to demonstrate
+# Only use first 100 genes to demonstrate
 dat <- tb.expr[1:100,]
 
-# Create desInfo object
-des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
-                    columnname = "columnname", long = TRUE, patient_id = "monkey_id",
-                    baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
-                    responder_var = "clinical_status", sample_id = "sample_id", 
-                    project_name = "TB")
-
 # Generate lmFit and eBayes (limma) objects needed for genModelResults
-tb.design$Group <- paste(tb.design$clinical_status,tb.design$timepoint,
-                         sep = "")
+tb.design$Group <- paste(tb.design$clinical_status,tb.design$timepoint,sep = "")
 grp <- factor(tb.design$Group)
 design2 <- model.matrix(~0+grp)
 colnames(design2) <- levels(grp)
@@ -83,6 +90,6 @@ fit2 <- limma::contrasts.fit(fit, contrasts)
 fit2 <- limma::eBayes(fit2, trend = FALSE)
 
 # Format results
-model.results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, 
-                               method = "limma")
+model.results <- genModelResults(y = dat, data.type = "microarray", object = fit2,
+                                 lm.Fit = fit, method = "limma")
 }

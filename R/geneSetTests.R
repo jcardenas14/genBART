@@ -1,8 +1,5 @@
-qusageGen <- function(resids, labels, estimates, dof, std_errors, gene_sets,
-                      var.equal = TRUE) {
-  if (var.equal) {
-    labels <- rep("Resids", ncol(resids))
-  }
+qusageGen <- function(resids, estimates, dof, std.errors, gene.sets) {
+  labels <- rep("Resids", ncol(resids))
   if (nrow(resids) != length(estimates)) {
     return("Error: Number of rows in residual matrix do not equal length of
            estimate vectors")
@@ -11,35 +8,39 @@ qusageGen <- function(resids, labels, estimates, dof, std_errors, gene_sets,
     return("Error: Number of rows in residual matrix do not equal length of dof
            vectors")
   }
-  if (nrow(resids) != length(std_errors)) {
+  if (nrow(resids) != length(std.errors)) {
     return("Error: Number of rows in residual matrix do not equal length of
-           std_errors vectors")
+           std.errors vectors")
   }
   names(estimates) <- rownames(resids)
   names(dof) <- rownames(resids)
-  names(std_errors) <- rownames(resids)
-  qlist <- list(mean = estimates, SD = std_errors, dof = dof, labels = labels)
+  names(std.errors) <- rownames(resids)
+  qlist <- list(mean = estimates, SD = std.errors, dof = dof, labels = labels)
   results <- newQSarray(qlist)
   cat("Aggregating gene data for gene sets.")
-  results <- aggregateGeneSet(results, gene_sets, n.points = 2 ^ 14)
+  results <- aggregateGeneSet(results, gene.sets, n.points = 2 ^ 14)
   cat("Done. \nCalculating VIF's on residual matrix.")
   results <- calcVIF(resids, results, useCAMERA = FALSE)
   cat("\nQ-Gen analysis complete.")
-  results
-  }
+  return(results)
+}
 
 #' Run Qusage algorithm using gene level statistics
 #' 
-#' @param object object generated from \code{genModelResults}
-#' @param gene_sets list of gene_sets
+#' @param model.results object generated from \code{genModelResults}.
+#' @param gene.sets list of gene sets.
+#' @param annotations A data frame of additional annotations for the gene sets.
 #' @details This function takes the gene level comparison estimates and test 
 #'   statistics contained in the object produced from 
 #'   \code{\link{genModelResults}} and runs the Qusage algorithm across all of 
 #'   the comparisons. The VIFs are estimated using the raw residuals, which are 
 #'   also contained in the output of \code{\link{genModelResults}}.
-#' @return \code{qusage_results} tall formatted matrix of results
-#' @return \code{lowerCI} Matrix of gene level lower 95\% confidence intervals
-#' @return \code{upperCI} Matrix gene level upper 95\% confidence intervals
+#' @return \code{qusage.results} tall formatted matrix of results
+#' @return \code{lower.ci} Matrix of gene level lower 95\% confidence intervals
+#' @return \code{upper.ci} Matrix gene level upper 95\% confidence intervals
+#' @return \code{gene.sets} List of gene sets provided through \code{gene.sets}
+#' @return \code{annotations} data frame of gene set annotations. Default is 
+#'   NULL
 #' @examples
 #' # Example data
 #' data(tb.expr)
@@ -49,11 +50,10 @@ qusageGen <- function(resids, labels, estimates, dof, std_errors, gene_sets,
 #' dat <- tb.expr[1:100,]
 #' 
 #' # Create desInfo object
-#' des.info <- desInfo(y = dat, design = tb.design, data_type = "micro", 
-#'                     columnname = "columnname", long = TRUE, patient_id = "monkey_id",
-#'                     baseline_var = "timepoint", baseline_val = 0, time_var = "timepoint", 
-#'                     responder_var = "clinical_status", sample_id = "sample_id", 
-#'                     project_name = "TB")
+#' meta.data <- metaData(y = dat, design = tb.design, data.type = "microarray", 
+#'                     columnname = "columnname", long = TRUE, subject.id = "monkey_id",
+#'                     baseline.var = "timepoint", baseline.val = 0, time.var = "timepoint", 
+#'                     sample.id = "sample_id")
 #' 
 #' # Generate lmFit and eBayes (limma) objects needed for genModelResults
 #' tb.design$Group <- paste(tb.design$clinical_status,tb.design$timepoint, sep = "")
@@ -69,20 +69,22 @@ qusageGen <- function(resids, labels, estimates, dof, std_errors, gene_sets,
 #' fit2 <- limma::eBayes(fit2, trend = FALSE)
 #' 
 #' # Create model results object for qBart
-#' model.results <- genModelResults(design_info = des.info, object = fit2, lm_Fit = fit, 
-#'                                method = "limma")
+#' model.results <- genModelResults(y = dat, data.type = "microarray", object = fit2, lm.Fit = fit, 
+#'                                  method = "limma")
 #'                                
 #' # Run qusage on baylor modules                             
 #' data(modules)
-#' qus <- qBart(model.results, modules)
+#' qus.results <- qBart(model.results, modules)
 #' @export
-qBart <- function(object, gene_sets) {
-  results <- object$results
-  mod_overlap <- sapply(gene_sets, function(x) {
-    sum(x %in% results$PROBE_ID)
+qBart <- function(model.results, gene.sets, annotations = NULL) {
+  results <- model.results$results
+  rownames(results) <- results$Transcript.ID
+  mod.overlap <- sapply(gene.sets, function(x) {
+    sum(x %in% results$Transcript.ID)
   })
-  module_list <- gene_sets[mod_overlap > 3]
+  module.list <- gene.sets[mod.overlap > 3]
   comparisons <- results[, grep("^Estimate", colnames(results))]
+  colnames(comparisons) <- gsub("Estimate.of.", "", colnames(comparisons))
   tstats <- results[, grep("^Test.statistic", colnames(results))]
   stde <- abs(comparisons / tstats)
   for (i in 1:ncol(stde)) {
@@ -92,64 +94,55 @@ qBart <- function(object, gene_sets) {
     }
     stde[, i][stde[, i] < (10) ^ -6] <- min(stde[, i][stde[, i] > (10 ^ -6)])
   }
-  colnames(stde) <- paste("Std_error.", colnames(stde), sep = "")
-  df <- as.matrix(results[, grep("DF.", colnames(results))])
-  my_df <- list()
-  for (i in 1:dim(df)[2]) {
-    my_df[[i]] <- df[, i]
-  }
-  lowerCI <- upperCI <- data.frame(matrix(nrow = nrow(comparisons),
-                                          ncol = ncol(comparisons)))
-  for (i in 1:ncol(comparisons)) {
-    lowerCI[, i] <- comparisons[, i] - qt(0.975, my_df[[i]][1]) * stde[, i]
-    upperCI[, i] <- comparisons[, i] + qt(0.975, my_df[[i]][1]) * stde[, i]
-  }
-  colnames(lowerCI) <- colnames(upperCI) <- sub("Estimate of ", "",
-                                                colnames(comparisons))
-  rownames(lowerCI) <- rownames(upperCI) <- rownames(comparisons)
-  final_residual <- as.matrix(object$resids)
+  colnames(stde) <- paste("Std.error.", colnames(stde), sep = "")
+  df <- results[, grep("DF.", colnames(results))]
+  lim95 <- apply(df, 2, function(x) qt(p = 0.975, df = x)) * stde
+  lower.ci <- comparisons - lim95
+  upper.ci <- comparisons + lim95
+  residuals <- as.matrix(model.results$resids)
   comparisons <- as.matrix(comparisons)
-  std_error <- as.matrix(stde)
-  q_results <- list()
+  std.error <- as.matrix(stde)
+  q.results <- list()
   for (i in 1:ncol(comparisons)) {
-    q_results[[i]] <- qusageGen(resids = final_residual,
-                                estimates = comparisons[, i], dof = my_df[[i]],
-                                std_errors = std_error[, i],
-                                gene_sets = module_list, var.equal = TRUE)
+    q.results[[i]] <- qusageGen(resids = residuals,
+                                estimates = comparisons[, i], dof = df[[i]],
+                                std.errors = std.error[, i],
+                                gene.sets = module.list)
   }
-  names(q_results) <- sub("Estimate of ", "", colnames(comparisons))
-  for (i in 0:(length(q_results) - 1)) {
-    mytable <- qsTable(q_results[[i + 1]], number = length(module_list))
+  names(q.results) <- colnames(comparisons)
+  for (i in 0:(length(q.results) - 1)) {
+    mytable <- qsTable(q.results[[i + 1]], number = length(module.list))
     mytable <- mytable[order(as.numeric(rownames(mytable))), ]
-    myCI <- calcBayesCI(q_results[[i + 1]], low = 0.025, up = 0.975,
-                        addVIF = !is.null(q_results[[i + 1]]$vif))
-    final_table <- cbind(mytable, t(myCI))
-    names(final_table) <- paste(names(q_results[i + 1]), names(final_table),
+    myCI <- calcBayesCI(q.results[[i + 1]], low = 0.025, up = 0.975,
+                        addVIF = !is.null(q.results[[i + 1]]$vif))
+    final.table <- cbind(mytable, t(myCI))
+    names(final.table) <- paste(names(q.results[i + 1]), names(final.table),
                                 sep = "_")
     if (i == 0) {
-      master <- cbind(final_table[order(final_table[, 1]), ],
-                      rep(names(q_results[i + 1]), dim(final_table)[1]))
+      master <- cbind(final.table[order(final.table[, 1]), ],
+                      rep(names(q.results[i + 1]), dim(final.table)[1]))
       names(master) <- c(paste(names(mytable), sep = ""), "low", "up",
                          "Comparison")
     }
     if (i > 0) {
-      dummy <- cbind(final_table[order(final_table[, 1]), ],
-                     rep(names(q_results[i + 1]), dim(final_table)[1]))
+      dummy <- cbind(final.table[order(final.table[, 1]), ],
+                     rep(names(q.results[i + 1]), dim(final.table)[1]))
       names(dummy) <- c(paste(names(mytable), sep = ""), "low", "up",
                         "Comparison")
       master <- rbind(master, dummy)
     }
   }
-  qusage_results <- master
-  z <- list(qusage_results = qusage_results, lowerCI = lowerCI,
-            upperCI = upperCI)
+  qusage.results <- master
+  z <- list(qusage.results = qusage.results, lower.ci = lower.ci, 
+            upper.ci = upper.ci, gene.sets = gene.sets, 
+            annotations = annotations)
   return(z)
 }
 
 #' Run ROAST method and format results for BART
 #'
-#' @param design_info design_info list generated from \code{desInfo}
-#' @param gene_sets list of gene sets
+#' @param meta list generated from \code{metaData}
+#' @param gene.sets list of gene sets
 #' @param design design matrix
 #' @param contrast numeric matrix with rows corresponding to coefficients and
 #'   columns containing contrasts. May be a vector if there is only one
@@ -170,41 +163,41 @@ qBart <- function(object, gene_sets) {
 #'   results for BART.
 #'
 #' @export
-rBart <- function(design_info, gene_sets, design, contrast, block = NULL,
+rBart <- function(meta, gene.sets, design, contrast, block = NULL,
                   correlation = NULL, gene.weights = NULL, var.prior = NULL,
                   df.prior = NULL, nrot = 999) {
-  y <- design_info$y
-  rst_mean <- rst_floormean <- rst_mean50 <- rst_msq <- list()
+  y <- meta$y
+  rst.mean <- rst.floormean <- rst.mean50 <- rst.msq <- list()
   contrast.t <- t(contrast)
   n <- ncol(contrast)
   for (i in 1:n) {
 
-    rst_mean[[i]] <- mroast(y = y, index = gene_sets, design = design,
+    rst.mean[[i]] <- mroast(y = y, index = gene.sets, design = design,
                             contrast = unname(contrast.t[i, ]), block = block,
                             correlation = correlation, var.prior = var.prior,
                             gene.weights = gene.weights, df.prior = df.prior,
                             nrot = nrot)
-    rst_floormean[[i]] <- mroast(y = y, index = gene_sets, design = design,
+    rst.floormean[[i]] <- mroast(y = y, index = gene.sets, design = design,
                                  contrast = unname(contrast.t[i, ]),
                                  correlation = correlation, df.prior = df.prior,
                                  gene.weights = gene.weights, block = block,
                                  var.prior = var.prior, nrot = nrot,
                                  set.statistic = "floormean")
-    rst_mean50[[i]] <- mroast(y = y, index = gene_sets, design = design,
+    rst.mean50[[i]] <- mroast(y = y, index = gene.sets, design = design,
                               contrast = unname(contrast.t[i, ]),
                               correlation = correlation, df.prior = df.prior,
                               gene.weights = gene.weights, block = block,
                               var.prior = var.prior, nrot = nrot,
                               set.statistic = "mean50")
-    rst_msq[[i]] <- mroast(y = y, index = gene_sets, design = design,
+    rst.msq[[i]] <- mroast(y = y, index = gene.sets, design = design,
                            contrast = unname(contrast.t[i, ]), block = block,
                            correlation = correlation, var.prior = var.prior,
                            gene.weights = gene.weights, df.prior = df.prior,
                            nrot = nrot, set.statistic = "msq")
   }
-  names(rst_mean) <- names(rst_floormean) <- names(rst_mean50) <-
-    names(rst_msq) <- colnames(contrast)
-  roast_results <- list(mean = rst_mean, floormean = rst_floormean,
-                        mean50 = rst_mean50, msq = rst_msq)
-  return(roast_results)
+  names(rst.mean) <- names(rst.floormean) <- names(rst.mean50) <-
+    names(rst.msq) <- colnames(contrast)
+  roast.results <- list(mean = rst.mean, floormean = rst.floormean,
+                        mean50 = rst.mean50, msq = rst.msq)
+  return(roast.results)
 }

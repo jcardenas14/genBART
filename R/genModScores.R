@@ -62,7 +62,7 @@ genModScores <- function(meta, gene.sets, sd.lim = 2) {
     if (long) {
       if (is.null(baseline.var) || is.null(baseline.val)) {
         warning("Baseline variable unspecified. Must define baseline variable 
-                  when long = TRUE. Returning NULL.")
+when long = TRUE. Returning NULL.")
         z <- list(scores.ctrl = NULL, scores.base = NULL, gene.sets = NULL)
         return(z)
       }
@@ -70,16 +70,16 @@ genModScores <- function(meta, gene.sets, sd.lim = 2) {
       if (!is.null(time.var) & !is.null(subject.id)) {
         desOrd <- design[order(design[, time.var], design[, subject.id]), ]
       } 
-      expOrd <- modExp[, match(desOrd[, "columnname"], names(modExp),
+      expOrd <- modExp[, match(desOrd[, "columnname"], colnames(modExp), 
                                nomatch = 0)]
       if (!is.null(sample.id)) {
-        names(expOrd) <- desOrd[, sample.id]
+        colnames(expOrd) <- desOrd[, sample.id]
       }
       baseData <- expOrd[, which(desOrd[, baseline.var] == baseline.val)]
       baseMean <- apply(baseData, 1, mean, na.rm = TRUE)
       baseSd <- apply(baseData, 1, sd, na.rm = TRUE)
-      finalData <- as.matrix(expOrd[, -which(names(expOrd) %in% 
-                                               names(baseData))])
+      finalData <- as.matrix(expOrd[, -which(colnames(expOrd) %in% 
+                                               colnames(baseData))])
       rownames(finalData) <- modExp$Module
       signMat <- finalData
       signMat[is.numeric(finalData)] <- 0
@@ -112,14 +112,14 @@ genModScores <- function(meta, gene.sets, sd.lim = 2) {
     }
   } else {
     desCtrl <- design[design[, control.var] == control.val, ]
-    expCtrl <- modExp[, match(desCtrl[, "columnname"], names(modExp), 
-                               nomatch = 0)]
+    expCtrl <- modExp[, match(desCtrl[, "columnname"], colnames(modExp), 
+                              nomatch = 0)]
     desCase <- design[design[, control.var] != control.val, ]
-    expCase <- as.matrix(modExp[, match(desCase[, "columnname"], names(modExp), 
-                                         nomatch = 0)])
+    expCase <- as.matrix(modExp[, match(desCase[, "columnname"], 
+                                        colnames(modExp), nomatch = 0)])
     rownames(expCase) <- modExp$Module
     if (!is.null(sample.id)) {
-      names(expCase) <- desCase[, sample.id]
+      colnames(expCase) <- desCase[, sample.id]
     }
     ctrlMean <- apply(expCtrl, 1, mean, na.rm = TRUE)
     ctrlSd <- apply(expCtrl, 1, sd, na.rm = TRUE)
@@ -148,7 +148,7 @@ genModScores <- function(meta, gene.sets, sd.lim = 2) {
     if (long) {
       if (is.null(baseline.var) || is.null(baseline.val)) {
         warning("Baseline variable unspecified. Must specify baseline variable 
-                when long = TRUE to calculate scores.base.")
+when long = TRUE to calculate scores.base.")
         z <- list(scores.ctrl = scores.ctrl, scores.base = NULL, gene.sets = 
                     gene.sets)
         return(z)
@@ -158,16 +158,16 @@ genModScores <- function(meta, gene.sets, sd.lim = 2) {
       if (!is.null(time.var) & !is.null(subject.id)) {
         desOrd <- desCase[order(desCase[, time.var], desCase[, subject.id]), ]
       } 
-      expOrd <- modExp[, match(desOrd[, "columnname"], names(modExp),
+      expOrd <- modExp[, match(desOrd[, "columnname"], colnames(modExp),
                                nomatch = 0)]
       if (!is.null(sample.id)) {
-        names(expOrd) <- desOrd[, sample.id]
+        colnames(expOrd) <- desOrd[, sample.id]
       }
       baseData <- expOrd[, desOrd[, baseline.var] == baseline.val]
       baseMean <- apply(baseData, 1, mean, na.rm = TRUE)
       baseSd <- apply(baseData, 1, sd, na.rm = TRUE)
-      finalData <- as.matrix(expOrd[, !names(expOrd) %in% 
-                                           names(baseData)])
+      finalData <- as.matrix(expOrd[, !colnames(expOrd) %in% 
+                                           colnames(baseData)])
       rownames(finalData) <- modExp$Module
       signMat <- finalData
       signMat[is.numeric(finalData)] <- 0

@@ -1,3 +1,8 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
 <h2 style = "text-align: center">genBart</h2>
 
 #### Overview

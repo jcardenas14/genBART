@@ -52,10 +52,11 @@ genFile <- function(meta, model.results = NULL, module.scores = NULL,
   exprs <- design <- long <- sample.id <- subject.id <- control.var <- 
     control.val <- baseline.var <- baseline.val <- time.var <- scores.base <- 
     scores.ctrl <- modules <- rowdend1b <- rowdend2b <- rowdend1 <- rowdend2 <-
-    rowdend3 <- norm.method <- results.file <- dge.gsets <- dge.annots <- 
-    lower.ci <- upper.ci <- gene.sets <- annots <- corrs <- corr.files <- 
-    corr.num <- corr.names <- x.var <- y.var <- corr.method <- flow.results <- 
-    flow.data <- metab.results <- metab.data <- data.type <- NULL
+    rowdend3 <- norm.method <- dist.method <- agg.method <- results.file <- 
+    dge.gsets <- dge.annots <- lower.ci <- upper.ci <- gene.sets <- annots <- 
+    corrs <- corr.files <- corr.num <- corr.names <- x.var <- y.var <- 
+    corr.method <- flow.results <- flow.data <- metab.results <- metab.data <- 
+    data.type <- NULL
   if (!is.null(module.scores)) {
     scores.base <- module.scores$scores.base
     scores.ctrl <- module.scores$scores.ctrl
@@ -67,6 +68,8 @@ genFile <- function(meta, model.results = NULL, module.scores = NULL,
     rowdend2 <- dendrograms$rowdend2
     rowdend3 <- dendrograms$rowdend3
     norm.method <- dendrograms$norm.method
+    dist.method <- dendrograms$dist.method
+    agg.method <- dendrograms$agg.method
   }
   if (!is.null(qusage.results)) {
     lower.ci <- qusage.results$lower.ci
@@ -193,14 +196,14 @@ genFile <- function(meta, model.results = NULL, module.scores = NULL,
     dir.create(paste(getwd(), "/", project.name, "/", sep = ""))
   }
   save(exprs, design, scores.base, scores.ctrl, modules, rowdend1b, rowdend2b, 
-       rowdend1, rowdend2, rowdend3, norm.method, time.var, control.var, 
-       control.val, baseline.var, baseline.val, sample.id, subject.id, 
-       results.file, dge.gsets, dge.annots, qusage.results, lower.ci, upper.ci, 
-       gene.sets, annots, roast.results, flow.results, flow.data, metab.results, 
-       metab.data, corr.num, corr.names, x.var, y.var, corr.method, corrs, 
-       corr.files, project.name, 
-       file = file.path(paste(getwd(), "/", project.name, "/", "bartResults.rda", 
-                              sep = "")))
+       rowdend1, rowdend2, rowdend3, norm.method, dist.method, agg.method, 
+       time.var, control.var, control.val, baseline.var, baseline.val, 
+       sample.id, subject.id, results.file, dge.gsets, dge.annots, 
+       qusage.results, lower.ci, upper.ci, gene.sets, annots, roast.results, 
+       flow.results, flow.data, metab.results, metab.data, corr.num, corr.names, 
+       x.var, y.var, corr.method, corrs, corr.files, project.name, 
+       file = file.path(paste0(getwd(), "/", project.name, "/", 
+                               "bartResults.rda")))
 }
 
 #' @rdname genFile
@@ -223,7 +226,8 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
     if (file.exists(load.path)) {
       qresults <- qusage.results
       rst.results <- roast.results
-      modules <- norm.method <- gene.sets <- annots <- NULL
+      modules <- norm.method <- dist.method <- agg.method <- gene.sets <- 
+        annots <- NULL
       data <- load(paste(load.path,"/bartResults.rda",sep = ""))
       if (!is.null(module.scores)) {
         scores.base <- module.scores$scores.base
@@ -235,6 +239,9 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
         rowdend1 <- dendrograms$rowdend1
         rowdend2 <- dendrograms$rowdend2
         rowdend3 <- dendrograms$rowdend3
+        norm.method <- dendrograms$norm.method
+        dist.method <- dendrograms$dist.method
+        agg.method <- dendrograms$agg.method
       }
       if (!is.null(qresults)) {
         lower.ci <- qresults$lower.ci
@@ -367,14 +374,14 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
         dir.create(paste(getwd(), "/", project.name, "/", sep = ""))
       }
       save(exprs, design, scores.base, scores.ctrl, modules, rowdend1b, 
-           rowdend2b, rowdend1, rowdend2, rowdend3, norm.method, time.var, 
-           control.var, control.val, baseline.var, baseline.val, sample.id, 
-           subject.id, results.file, dge.gsets, dge.annots, qusage.results, 
-           lower.ci, upper.ci, gene.sets, annots, roast.results, flow.results, 
-           flow.data, metab.results, metab.data, corr.num, corr.names, x.var, 
-           y.var, corr.method, corrs, corr.files, project.name, 
-           file = file.path(paste(getwd(), "/", project.name, "/", 
-                                  "bartResults.rda", sep = "")))
+           rowdend2b, rowdend1, rowdend2, rowdend3, norm.method, dist.method, 
+           agg.method, time.var, control.var, control.val, baseline.var, 
+           baseline.val, sample.id, subject.id, results.file, dge.gsets, 
+           dge.annots, qusage.results, lower.ci, upper.ci, gene.sets, annots, 
+           roast.results, flow.results, flow.data, metab.results, metab.data, 
+           corr.num, corr.names, x.var, y.var, corr.method, corrs, corr.files, 
+           project.name, file = file.path(paste0(getwd(), "/", project.name, 
+                                                 "/", "bartResults.rda")))
     } else {
       return(print("File path or data file does not exist"))
     }

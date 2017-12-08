@@ -86,9 +86,8 @@ metaData <- function(y, design, data.type = "microarray", columnname = NULL,
       message("More samples in design than y. Throwing out excess samples.")
       design <- design[match(colnames(y), design$columnname, nomatch = 0), ]
     } else {
-      message("More samples in design than y, but some samples in y are not in
-              design. Throwing out excess and unmatched samples from design and
-              y.")
+      message("More samples in design than y, but some samples in y are not in 
+design. Throwing out excess and unmatched samples from design and y.")
       design <- design[match(colnames(y), design$columnname, nomatch = 0), ]
       y <- y[, match(design$columnname, colnames(y), nomatch = 0)]
     }
@@ -97,9 +96,8 @@ metaData <- function(y, design, data.type = "microarray", columnname = NULL,
       message("More samples in y than design. Throwing out excess samples.")
       y <- y[, match(design$columnname, colnames(y), nomatch = 0)]
     } else {
-      message("More samples in y than design, but some samples in design are not
-              in y. Throwing out excess and unmatched samples from design and 
-              y.")
+      message("More samples in y than design, but some samples in design are not 
+in y. Throwing out excess and unmatched samples from design and y.")
       y <- y[, match(design$columnname, colnames(y), nomatch = 0)]
       design <- design[match(colnames(y), design$columnname, nomatch = 0), ]
     }
@@ -107,8 +105,8 @@ metaData <- function(y, design, data.type = "microarray", columnname = NULL,
     if (all(design$columnname %in% colnames(y))) {
       y <- y[, match(design$columnname, colnames(y), nomatch = 0)]
     } else {
-      message("There are an equal number of sample in design and y, but some 
-              sample names do not match. Throwing out unmatched samples.")
+      message("There are an equal number of samples in design and y, but some 
+sample names do not match. Throwing out unmatched samples.")
       y <- y[, match(design$columnname, colnames(y), nomatch = 0)]
       design <- design[match(colnames(y), design$columnname, nomatch = 0), ]
     }
@@ -116,14 +114,14 @@ metaData <- function(y, design, data.type = "microarray", columnname = NULL,
   if (is.null(control.var) || is.null(control.val)) {
     if (!is.null(control.var) & is.null(control.val)) {
       return(
-        warning("control.var specified but not control.val. Please specify
-                control.val")
+        warning("control.var specified but not control.val. Please specify 
+control.val")
       )
     }
     if (!is.null(control.val) & is.null(control.var)) {
       return(
-        warning("control.val specified but not control.var. Please specify
-                control.var")
+        warning("control.val specified but not control.var. Please specify 
+control.var")
       )
     }
   } 
@@ -143,14 +141,14 @@ metaData <- function(y, design, data.type = "microarray", columnname = NULL,
       if (is.null(baseline.var) || is.null(baseline.val)) {
         if (!is.null(baseline.var) & is.null(baseline.val)) {
           return(
-            warning("baseline.var specified but not baseline.val. Please specify
-                  baseline.val.")
+            warning("baseline.var specified but not baseline.val. Please specify 
+baseline.val.")
           )
         }
         if (!is.null(baseline.val) & is.null(baseline.var)) {
           return(
-            warning("baseline.val specified but not baseline.var. Please specify
-                    baseline.var.")
+            warning("baseline.val specified but not baseline.var. Please specify 
+baseline.var.")
           )
         }
         if (is.null(baseline.var) & is.null(baseline.val)) {

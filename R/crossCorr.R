@@ -33,7 +33,8 @@ corr.test <- function (x, y = NULL, use = "pairwise", method = "pearson",
   z <- psych::fisherz(r[lower.tri(r)])
   if (ci) {
     if (min(n) < 4) {
-      warning("Number of subjects must be greater than 3 to find confidence intervals.")
+      warning("Number of subjects must be greater than 3 to find confidence 
+intervals.")
     }
     alpha <- 1 - alpha/2
     dif <- qnorm(alpha)

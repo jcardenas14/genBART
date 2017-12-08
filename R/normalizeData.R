@@ -133,7 +133,7 @@ normalizeData <- function(meta, norm.method = "mean") {
                               keep.ref = TRUE)$exprs.norm
         if (is.null(subject.id)) {
           message("subject.id is not defined. Cannot produce baseline normalized 
-                  data.")
+data.")
         } else {
           y3 <- manipulateData(y = expCase, x = desCase, colname = "columnname", 
                                ref.var = baseline.var, ref.val = baseline.val, 
@@ -141,10 +141,9 @@ normalizeData <- function(meta, norm.method = "mean") {
                                keep.ref = FALSE)$exprs.norm
         }
       } else {
-        message(paste("baseline.var and/or baseline.val is unspecified. Cannot 
-                  produce baseline", norm.method, "normalized, baseline healthy 
-                  normalized, or all samples baseline normalized data.", 
-                      sep = " "))
+        message("baseline.var and/or baseline.val is unspecified. Cannot produce 
+baseline ", norm.method, " normalized, baseline healthy normalized, or all 
+samples baseline normalized data.")
       }
     }
   }
@@ -158,7 +157,7 @@ normalizeData <- function(meta, norm.method = "mean") {
                               colname = "columnname")$exprs.norm
         if (is.null(subject.id)) {
           message("subject.id is not defined. Cannot produce baseline normalized 
-                  data.")
+data.")
         } else {
           y3 <- manipulateData(y = exprs, x = design, colname = "columnname", 
                                ref.var = baseline.var, ref.val = baseline.val, 
@@ -167,8 +166,7 @@ normalizeData <- function(meta, norm.method = "mean") {
         }
       } else {
         message("baseline.var and/or baseline.val is unspecified. Cannot produce 
-                baseline median normalized or all samples baseline normalized 
-                data.")
+baseline ",norm.method, " normalized or all samples baseline normalized data.")
       }
     } 
   }

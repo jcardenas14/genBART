@@ -104,7 +104,7 @@ genModelResults <- function (y, data.type, object, lm.Fit, method = "limma",
     }
     if (is.null(comp.names)) {
       colnames(estimates) <- paste0("Estimate.", colnames(estimates))
-      colnames(zstats) <- paste0("Test.statistic.", colnames(tstats))
+      colnames(zstats) <- paste0("Test.statistic.", colnames(zstats))
       colnames(pvals) <- paste0("P.Value.", colnames(pvals))
       colnames(fdr) <- paste0("FDR.P.Value.", colnames(fdr))
     }
@@ -164,7 +164,7 @@ genModelResults <- function (y, data.type, object, lm.Fit, method = "limma",
     for (i in 3:ncol(results)) {
       results[, i] <- as.numeric(as.character(results[, i]))
     }
-    resids <- residuals.MArrayLM(lm.Fit, y)
+    resids <- limma::residuals.MArrayLM(lm.Fit, y)
     resids <- data.frame(resids)
     if (data.type %in% c("flow", "metab")) {
       results <- results[, -1]

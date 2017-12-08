@@ -83,6 +83,8 @@ clusterData <- function(norm.data, dist.method = "euclidean",
     }
   }
   rowDendros$norm.method <- norm.data$norm.method
+  rowDendros$dist.method <- dist.method
+  rowDendros$agg.method <- agg.method
   return(rowDendros)
 }
 

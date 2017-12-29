@@ -369,9 +369,12 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
       }
       if(is.null(output.path)){
         setwd(load.path)
+        path <- file.path(paste0(getwd(), "/bartResults.rda"))
       } else {
         setwd(output.path)
         dir.create(paste(getwd(), "/", project.name, "/", sep = ""))
+        path <- file.path(paste0(getwd(), "/", project.name, "/bartResults.rda")
+        )
       }
       save(exprs, design, scores.base, scores.ctrl, modules, rowdend1b, 
            rowdend2b, rowdend1, rowdend2, rowdend3, norm.method, dist.method, 
@@ -380,8 +383,7 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
            dge.annots, qusage.results, lower.ci, upper.ci, gene.sets, annots, 
            roast.results, flow.results, flow.data, metab.results, metab.data, 
            corr.num, corr.names, x.var, y.var, corr.method, corrs, corr.files, 
-           project.name, file = file.path(paste0(getwd(), "/", project.name, 
-                                                 "/", "bartResults.rda")))
+           project.name, file = path)
     } else {
       return(print("File path or data file does not exist"))
     }

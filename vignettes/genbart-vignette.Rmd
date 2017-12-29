@@ -24,7 +24,7 @@ BART (Biostatistical Analysis Reporting Tool) is a user friendly, point and clic
 - Correlation analysis within and between biological data types
 
 
-So that BART is readily available, we introduce the genBart package. genBart is a series of functions that transforms R objects generated from statistical and modeling packages such as limma, DESeq2, and edgeR into files that are uploaded into BART. In the following sections, we illustrate how to use the functions available in genBart by walking through the analysis of a longitudinal microarray study tracking gene expression changes in 38 healthy cynomolgus macaques infected with *M. tuberculosis* [(Skinner et al.)](http://www.jimmunol.org/content/197/12/4817.long). Briefly, this study consisted of data measurements taken at baseline (before infection) and at 11 additional timepoints, up to 6 months post infection. Each macaque was identified as developing symptomatic (active) TB or asymptomatic (latent) infection. For the purposes of illustration and time, a subset of the microarray data was chosen for analysis. We randomly selected 4000 probes and 10 macaques and include 3 time points (days 0, 20, and 42). For the flow, data was collected on 19 of the 38 macaques and 13 variables are analyzed. In addition to microarray data, the study also has flow data that will be incorporated to demonstrate the flexibility of the BART app.
+In order to effectively use BART, we introduce the genBart package. genBart is a series of functions that transforms R objects generated from statistical and modeling packages such as limma, DESeq2, and edgeR into files that are uploaded into BART. In the following sections, we illustrate how to use the functions available in genBart by walking through the analysis of a longitudinal microarray study tracking gene expression changes in 38 healthy cynomolgus macaques infected with *M. tuberculosis* [(Skinner et al.)](http://www.jimmunol.org/content/197/12/4817.long). Briefly, this study consisted of data measurements taken at baseline (before infection) and at 11 additional timepoints, up to 6 months post infection. Each macaque was identified as developing symptomatic (active) TB or asymptomatic (latent) infection. For the purposes of illustration and time, a subset of the microarray data was chosen for analysis. We randomly selected 4000 probes and 10 macaques and include 3 time points (days 0, 20, and 42). In addition to microarray data, flow cytometry data consisting of 13 variables was collected on 19 of the 38 macaques. Flow cytometry data analyses results are incorporated to demonstrate the flexibility of the BART app.
 
 \vspace{12pt}
 \begin{center} \large{\textbf{Summary of genBart package}} \end{center}
@@ -61,7 +61,7 @@ Below are the first six lines of the design file from the TB microarray study de
 head(tb.design)
 ```
 
-For this study, the function call would be:
+The `metaData` function serves two general purposes. The first is to ensure that the design and expression data align by running through a series of checks (i.e. equal number of samples and same sample names). If any of the checks fail, the user is notified with a warning or message and a hint at where the issue is. The `columnname` argument is the key to running these checks since it specifies the column name in the design that contains the column names of the expression. If `columnname` is not specified or misspecified, then `metaData` has no point of reference to run the checks. The second purpose is to store a list of user defined design and sample information parameters that can be used for downstream analyses and in the BART app itself. In our example, since the study design is longitudinal, we can specify `long` = TRUE and declare the column in the design that contains the baseline value (`baseline.var` = “timepoint”, `baseline.val` = 0). The complete function call would be:
 ```{r}
 meta <- metaData(y = tb.expr, design = tb.design, data.type = "microarray", 
                  columnname = "columnname", long = TRUE, sample.id = "sample_id", 
@@ -85,7 +85,8 @@ Since BART's primary function is to serve as a reporting tool for analyzed data,
 
 ```{r}
 norm.data <- normalizeData(meta = meta, norm.method = "mean")
-cluster.data <- clusterData(norm.data = norm.data, dist.method = "euclidean", agg.method = "complete")
+cluster.data <- clusterData(norm.data = norm.data, dist.method = "euclidean", 
+                            agg.method = "complete")
 ```
 
  
@@ -93,18 +94,32 @@ cluster.data <- clusterData(norm.data = norm.data, dist.method = "euclidean", ag
 \vspace{12pt}
 \begin{center} \large{\textbf{Generate Gene Set Figures}} \end{center}
 
-It is often of interest to examine the behavior of genes that have been grouped together based on similar biological function or other metric. The `genModScores` function calculates the percentage of genes within a gene set that are up or down regulated with respect to baseline and/or a set of controls. These *up* or *down* percentages, referred to as a *module scores*, are calculated for every gene set and sample in the study and are plotted within BART as a heatmap. As an example, we formed gene sets by creating a list of 10 clusters formed through hierarchical clustering. The function call to generate the module scores is below.
+It is often of interest to examine the behavior of genes that have been grouped together based on similar biological function or other metric. The `genModScores` function calculates the percentage of genes within a gene set that are up or down regulated with respect to baseline and/or a set of controls. These *up* or *down* percentages, referred to as *module scores*, are calculated for every gene set and sample in the study and are plotted within BART as a heatmap. As an example, we form 10 gene sets defined by clusters from hierarchical clustering and compute their sample level module scores.
 
 ```{r}
+# Form clusters
+tb.expr.scale <- data.frame(t(scale(t(tb.expr)))) # center and scale probes
+hc <- fastcluster::hclust(dist(tb.expr.scale))
+cls <- cutree(hc, 10)
+clusters <- list()
+for(i in 1:10){
+  clusters[[i]] <- names(cls)[which(cls == i)]
+  names(clusters)[i] <- paste0("C",i)
+}
+
+# Generate module scores
 mod.scores <- genModScores(meta = meta, gene.sets = clusters, sd.lim = 2)
 ```
 
 Refer to the R help for `genModScores` for more detail on function parameters and how the module scores are calculated. 
 \vspace{12pt}
+\begin{center} \large{\textbf{Differential Analysis}} \end{center}
+
+Differential expression analysis can contain numerous comparisons, making it time consuming to sort through the results. BART provides a solution through an interface in which users can efficiently sort through differential results across all comparisons. The `genModelResults` function acts as a bridge between BART and common differential analysis pipelines found in R packages limma, DESeq2, and edgeR. The function takes result objects returned by any one of these pipelines and creates a data frame of results properly formatted for BART. There are a few things to note regarding genModelResults arguments: 1) `method` must be correctly specified as one of “limma”, “deseq2”, or “edgeR” in order for the function to work properly 2) `object` argument generated by DESeq2 or edgeR must be wrapped in a list (not necessary if using limma) 3) `lm.Fit` argument only necessary when `method` = “limma” and `data.type` = “microarray” or “rnaseq”. For more details about linear modeling in limma, DESeq2, and edgeR, please refer to the following user guides: 1) [limma: Linear Models for Microarray and RNA-Seq Data](https://www.bioconductor.org/packages/3.7/bioc/vignettes/limma/inst/doc/usersguide.pdf) 2) [Analyzing RNA-seq data with DESeq2](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) 3) [edgeR: differential expression analysis of digital gene expression data](http://bioconductor.org/packages/release/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf).
+
 \begin{center} \large{\textbf{Sample Differential Expression Analysis with limma}} \end{center}
 
-Now we demonstrate a quick walkthrough of differential expression analysis of microarray and flow cytometry data using limma. For more details about linear modeling in limma, refer to the [limma User's Guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf).
-
+Now we demonstrate a quick walkthrough of differential expression analysis of microarray and flow cytometry data using limma.
 
 #### Microarray
 Create a grouping factor by combining clinical status and time point. 
@@ -124,7 +139,8 @@ dupcor <- duplicateCorrelation(tb.expr, design2, block = tb.design$monkey_id)
 ```
 Fit model and extract contrasts of interest.
 ```{r}
-fit <- lmFit(tb.expr, design2, block = tb.design$monkey_id, correlation = dupcor$consensus.correlation)
+fit <- lmFit(tb.expr, design2, block = tb.design$monkey_id, 
+             correlation = dupcor$consensus.correlation)
 contrasts <- makeContrasts(A_20vsPre = Active20-Active0, A_42vsPre = Active42-Active0,
                            L_20vsPre = Latent20-Latent0, L_42vsPre = Latent42-Latent0,
                            levels=design2)
@@ -144,11 +160,12 @@ grp <- factor(tb.flow.des$Group)
 
 design2 <- model.matrix(~0+grp)
 colnames(design2) <- levels(grp)
-dupcor <- duplicateCorrelation(tb.flow, design2, block = tb.flow.des$monkey_id)
+tb.flow.l2 <- log2(tb.flow + 1) # log2 transform
+dupcor <- duplicateCorrelation(tb.flow.l2, design2, block = tb.flow.des$monkey_id)
+fit.flow <- lmFit(tb.flow.l2, design2, block = tb.flow.des$monkey_id,
+correlation = dupcor$consensus.correlation)
 
-fit.flow <- lmFit(tb.flow, design2, block = tb.flow.des$monkey_id, correlation = dupcor$consensus.correlation)
-
-# Add more contrasts since we have all timepoints available. Additional contrasts could be added as well.
+# Additional contrasts since all timepoints available. 
 contrasts <- makeContrasts(A_20vsPre = Active20-Active0, A_30vsPre = Active30-Active0,
                            A_42vsPre = Active42-Active0, A_56vsPre = Active56-Active0,
                            L_20vsPre = Latent20-Latent0, L_30vsPre = Latent30-Latent0,
@@ -165,8 +182,11 @@ fit2.flow <- eBayes(fit2.flow, trend = FALSE)
 The next step in the process is generating a model results file that is formatted specifically for BART. This can be done using `genModelResults`, which takes as input the expression data used for modeling, as well as model result output from limma, DESeq2, or edgeR. In our example, we ran linear models using limma for both the microarray and flow data.
 
 ```{r}
-mod.results <- genModelResults(y = tb.expr, data.type = "microarray", object = fit2, lm.Fit = fit, method = "limma")
-mod.results.flow <- genModelResults(y = tb.flow, data.type = "flow", object = fit2.flow, lm.Fit = fit.flow, method = "limma")
+data(gene.symbols) # gene symbols for Illumina probes
+mod.results <- genModelResults(y = tb.expr, data.type = "microarray", object = fit2, 
+                               lm.Fit = fit, method = "limma", var.symbols = gene.symbols)
+mod.results.flow <- genModelResults(y = tb.flow, data.type = "flow", object = fit2.flow, 
+                                    lm.Fit = fit.flow, method = "limma")
 ```
 
 \vspace{12pt}
@@ -181,20 +201,22 @@ qus <- qBart(model.results = mod.results, gene.sets = modules)
 \vspace{12pt}
 \begin{center} \large{\textbf{Correlations}} \end{center}
 
-In addition to providing tools for standard analysis, BART also offers a tool that allows users to visualize and sort through potentially hundreds of thousands pairwise correlations across multiple platforms (e.g. gene expression vs metabolites) or versus clinical outcomes. `crossCorr` takes two numeric data frames and outputs a long format file of all pairwise correlations. The function has an option to run correlations by a grouping factor and various additional parameters for labeling in BART. We walk through an example in which we wish to correlate module activity scores with flow variables. Since this is a longitudinal setting, we correlate by time.
+In addition to providing tools for standard analysis, BART also offers a tool that allows users to visualize and sort through potentially hundreds of thousands pairwise correlations across multiple platforms (e.g. gene expression vs metabolites) or versus clinical outcomes. `crossCorr` takes two numeric data frames and outputs a long format file of all pairwise correlations. The function has an option to run correlations by a grouping factor and various additional parameters for labeling in BART. We walk through an example in which we wish to correlate gene expression with flow variables. Since this is a longitudinal setting, we correlate by time.
 
 ```{r}
-# Create time variable
-time <- module.as$time
-module.as$time <- NULL
+# Format expression data to align with flow data
+gene.data <- data.frame(t(tb.expr))
+rownames(gene.data) <- paste0(tb.design$monkey_id, "_", tb.design$timepoint)
+flow.data <- data.frame(t(tb.flow))
+flow.data <- flow.data[match(rownames(gene.data), rownames(flow.data), nomatch = 0), ]
+gene.data <- gene.data[match(rownames(flow.data), rownames(gene.data), nomatch = 0), ]
 
-# Format flow data to run correlations and match flow samples with module.as
-flow <- data.frame(t(tb.flow))
-flow <- flow[match(rownames(module.as), rownames(flow), nomatch = 0), ]
+# Create time variable
+time <- tb.flow.des$timepoint[match(rownames(flow.data),tb.flow.des$columnname,nomatch = 0)]
 
 # Run correlations formatted for BART
-corrs <- crossCorr(x = module.as, y = flow, by = time, by.name = "days", 
-                   description = "Mod.Act.Score vs Flow", x.var = "Mod.Act.Score", 
+corrs <- crossCorr(x = gene.data, y = flow.data, by = time, by.name = "days", 
+                   description = "Genes vs Flow", x.var = "Genes", 
                    y.var = "Flow", method = "spearman")
 
 ```
@@ -205,8 +227,9 @@ corrs <- crossCorr(x = module.as, y = flow, by = time, by.name = "days",
 The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function `genFile`, which takes as its arguments the objects generated from the previous functions. Not every object is required to generate a BART file. For example, if gene set analysis and correlations are not run, `metaData`, `clusterData`, `genModScores`, and `genModelResults` objects can still be run through `genFile`. BART will only show the results that are input.
 
 ```{r}
-genFile(meta = list(meta, meta.flow), module.scores = mod.scores, dendrograms = cluster.data, 
-        model.results = list(mod.results, mod.results.flow), project.name = "BART example")
+genFile(meta = list(meta, meta.flow), module.scores = mod.scores, 
+        dendrograms = cluster.data, model.results = list(mod.results, mod.results.flow), 
+        project.name = "BART example")
 ```
 
 In our example, we did run gene set analysis and correlations. Adding these results into BART is made simple through the `updateFile` function. The user must simply provide the path to the BART file that needs to be updated and add the new additions in the same way that `genFile` takes them.
@@ -219,7 +242,7 @@ updateFile(load.path = path, qusage.results = qus, corr.results = list(corrs))
 \vspace{12pt}
 \begin{center} \large{\textbf{Run BART App}} \end{center}
 
-Now that a BART file has been created, it is now time to begin using the app by running the function `runBart`.
+Now that a BART file has been created, the application can be run with a call to `runBart`. Please note that the default parameters for figures and tables (e.g. height, width, labeling, significance thresholds, etc.) are not optimized for any given project. As a result, it is likely that initial visualizations are far from expected or desired. However, default parameters can be easily adjusted via various widgets provided in the tool.
 
 ```{r, eval = FALSE}
 runBart()

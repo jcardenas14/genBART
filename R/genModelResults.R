@@ -142,7 +142,7 @@ genModelResults <- function (y, data.type, object, lm.Fit, method = "limma",
       colnames(estimates) <- paste0("Estimate.", colnames(estimates))
       colnames(tstats) <- paste0("Test.statistic.", colnames(tstats))
       colnames(pvals) <- paste0("P.Value.", colnames(pvals))
-      colnames(fdr) <- paste0("FDR.P.Value", colnames(fdr))
+      colnames(fdr) <- paste0("FDR.P.Value.", colnames(fdr))
     }
     if (!is.null(comp.names)) {
       colnames(df) <- paste0("DF.", comp.names)

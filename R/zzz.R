@@ -1,4 +1,4 @@
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage('Welcome to genBART. To get started, I recommend walking 
-through the vignette. It can be accessed by browseVignettes("genBart").')
+  packageStartupMessage('Welcome to genBart! To get started, it is recommended to walk 
+through the vignette. It can be accessed through browseVignettes("genBart").')
 }

@@ -28,6 +28,7 @@ Imports:
     shiny (>= 1.0.3),
     shinydashboard (>= 0.5.3),
     shinyjs (>= 0.9),
+    statmod (>= 1.2.2),
     stats (>= 3.3.3),
     stringr (>= 1.2.0),
     tools (>= 3.3.3),

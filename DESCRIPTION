@@ -8,7 +8,7 @@ Description: A set of functions to generate and format results from statistical
     analysis of a wide range of high throughput experiments that can then 
     be uploaded into the BART shiny app. The app provides users with tools
     to visualize and efficiently sift through large amounts of data and results. 
-Depends: R (>= 3.3.3)
+Depends: R (>= 3.4.3)
 Imports:
     clValid (>= 0.6-6),
     data.table (>= 1.10.4),

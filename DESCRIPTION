@@ -37,7 +37,6 @@ Suggests:
     DESeq2 (>= 1.14.1),
     edgeR (>= 3.16.5),
     knitr (>= 1.15.1),
-    statmod (>= 1.4.29),
     SummarizedExperiment (>= 1.1.6),
     testthat
 License: GPL-2|GPL-3

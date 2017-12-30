@@ -65,33 +65,6 @@
 #' @source baylor modules
 "modules"
 
-#' Cluster Gene Sets
-#' 
-#' A list of clusters
-#' 
-#' @format A list of 10 clusters formed through hierarchical clustering of the 
-#'   4000 probes described in \code{\link{tb.expr}}. The probes were clustered
-#'   after centering and scaling each of the rows.
-#' @source \url{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84152}
-"clusters"
-
-
-#' Module Activity Scores
-#' 
-#' This is a dataset containing module activity scores for cynomolgus macaques 
-#' infected with M. tuberculosis. For a given module, monkey, and time point, 
-#' each score was calculated by summing the difference in probe-level 
-#' post-infection expression values and the average basline expression value for
-#' all probes within the module. This sum was then divided by the number of 
-#' probes within each module plus the number of samples within each time point.
-#' 
-#' @format A data frame with 194 rows of samples and 260 columns of baylor
-#'   modules.
-#'   
-#' @source baylor modules and 
-#'   \url{http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84152}
-"module.as"
-
 
 #' Gene Symbols
 #' 

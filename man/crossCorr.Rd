@@ -62,18 +62,19 @@ This function uses the \code{\link[psych]{corr.test}} function in
 \examples{
 # Example data
 data(tb.flow)
-data(module.as)
 
-# Define time variable
-time <- module.as$time
-module.as$time <- NULL
+# Format expression data to align with flow data
+gene.data <- data.frame(t(tb.expr[1:100, ]))
+rownames(gene.data) <- paste0(tb.design$monkey_id, "_", tb.design$timepoint)
+flow.data <- data.frame(t(tb.flow))
+flow.data <- flow.data[match(rownames(gene.data), rownames(flow.data), nomatch = 0), ]
+gene.data <- gene.data[match(rownames(flow.data), rownames(gene.data), nomatch = 0), ]
 
-# Format flow data to run correlations and match flow samples with module.as 
-flow <- data.frame(t(tb.flow))
-flow <- flow[match(rownames(module.as), rownames(flow), nomatch = 0), ]
+# Create time variable
+time <- tb.flow.des$timepoint[match(rownames(flow.data),tb.flow.des$columnname,nomatch = 0)]
 
 # Run correlations and format for BART
-corrs <- crossCorr(x = module.as, y = flow, by = time, by.name = "days", 
-                   description = "Mod.Act.Score vs Flow", x.var = "Mod.Act.Score", 
+corrs <- crossCorr(x = gene.data, y = flow.data, by = time, by.name = "days", 
+                   description = "Genes vs Flow", x.var = "Genes", 
                    y.var = "Flow", method = "spearman")
 }

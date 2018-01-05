@@ -2,7 +2,7 @@
 
 language: r
 r:
-  - release
+  - 3.4.3
   - devel
 use-bioc: true
 bioc-required: true

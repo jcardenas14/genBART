@@ -6,6 +6,7 @@ r:
   - devel
 use-bioc: true
 bioc-required: true
+bioc_packages: BiocInstaller
 sudo: false
 cache: packages
 

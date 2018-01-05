@@ -2,8 +2,7 @@
 
 language: r
 r:
-  - 3.4.3
-  - devel
+  - release
 use-bioc: true
 bioc-required: true
 bioc_packages: BiocInstaller

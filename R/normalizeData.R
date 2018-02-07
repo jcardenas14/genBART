@@ -52,8 +52,8 @@ manipulateData <- function(y, x, colname, norm.method = "mean", ref.var = NULL,
 #' Data Normalization
 #' 
 #' Perform various normalizations of expression data
-#' @param meta list generated from \code{metaData}
-#' @param norm.method string denoting whether to normalize to the mean or median 
+#' @param meta list returned by \code{metaData}
+#' @param norm.method String denoting whether to normalize to the mean or median 
 #'   of all samples or a control group specified in \code{meta}. Default is
 #'   norm.method = "mean".  
 #' @details This function performs various normalizations of the expression 

@@ -1,28 +1,28 @@
-#' Declare design information for downstream analysis
+#' Declare meta data information for downstream analysis
 #' 
 #' Match design and expression data frames. Declare and store design parameters.
 #' @param y An expression data frame.
 #' @param design A sample annotation data frame containing sample information
 #'   (e.g. age, condition, timepoint, etc.).
-#' @param data.type type of data that's going to be analyzed ("microarray", 
+#' @param data.type Type of data that's going to be analyzed ("microarray", 
 #'   "rnaseq","flow", "metab"). Default is data.type="microarray".
 #' @param columnname Name of column in design that contains the column names of 
 #'   y.
 #' @param long logical; Is the study longitudinal?.
-#' @param time.var for longitudinal studies. Name of column in design that 
+#' @param time.var For longitudinal studies. Name of column in design that 
 #'   contains the study time points.
-#' @param subject.id name of column in design that contains ids for individual
+#' @param subject.id Name of column in design that contains ids for individual
 #'   subjects.
-#' @param baseline.var name of column in design that contains values referring 
+#' @param baseline.var Name of column in design that contains values referring 
 #'   to baseline observations.
-#' @param baseline.val string or numeric value denoting baseline observations.
-#' @param control.var name of column in design that contains values referring to
+#' @param baseline.val String or numeric value denoting baseline observations.
+#' @param control.var Name of column in design that contains values referring to
 #'   controls.
-#' @param control.val string or numeric value denoting controls.
-#' @param sample.id name of column in design that contains unique sample 
+#' @param control.val String or numeric value denoting controls.
+#' @param sample.id Name of column in design that contains unique sample 
 #'   identification.
-#' @return a list containing matched design and expression and all of the design
-#'   parameters specified.
+#' @return A list containing the matched design and expression data and all of 
+#'   the design parameters specified.
 #' @examples
 #' # Using example data
 #' data(tb.expr)

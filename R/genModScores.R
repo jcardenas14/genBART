@@ -1,9 +1,10 @@
-#' Generate module (gene set) maps for plotting
+#' Generate modular (gene set) maps for plotting
 #' 
-#' @param meta list generated from \code{metaData}
-#' @param gene.sets list of gene sets
+#' @param meta list returned by \code{metaData}
+#' @param gene.sets list of gene sets. See \code{\link{genModelResults}} for 
+#'   additional formatting details.
 #' @param sd.lim number of standard deviations away from the mean of the 
-#'   reference samples
+#'   reference samples. Default is 2.
 #' @details This function calculates module scores for individual samples. In 
 #'   cross sectional studies with controls, the control samples are used to 
 #'   determine an upper and lower threshold (mean of controls +/- 2 sd). The 

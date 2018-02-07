@@ -1,12 +1,12 @@
 #' Hierarchical clustering of normalized expression data
 #' 
 #' Perform hierarchical clustering on normalized data
-#' @param norm.data list of normalized expression data frames generated from 
+#' @param norm.data list of normalized expression data returned by 
 #'   \code{normalizeData}
-#' @param dist.method the distance measure to be used. This must be one of 
+#' @param dist.method The distance measure to be used. This must be one of 
 #'   "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".
 #'   See \code{\link[stats]{dist}} for more details.
-#' @param agg.method the agglomeration method to be used. This must be one of 
+#' @param agg.method The agglomeration method to be used. This must be one of 
 #'   "single", "complete", "average", "mcquitty", "ward.D", "ward.D2", 
 #'   "centroid" or "median". \code{\link[fastcluster]{hclust}} for more details.
 #' @details This function performs hierarchical clustering on the rows of the 

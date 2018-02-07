@@ -107,11 +107,10 @@ intervals.")
 #' @details This function uses the \code{\link[psych]{corr.test}} function in
 #'   the \code{pysch} package to find the correlations and p-values. It then
 #'   formats the results in a tall format for BART.
-#' @return \code{corrs} Tall dataframe of correlations and p-values.
-#' @return \code{corr.files} A dataframe obtained by
-#'   \code{cbind(by,x,y)}.
-#' @return \code{corr.names} A string denoting the description of the
-#'   variables being correlated.
+#' @return \code{corrs} Tall data frame of correlations and p-values.
+#' @return \code{corr.files} A data frame obtained by \code{cbind(by,x,y)}.
+#' @return \code{corr.names} A string denoting the description of the variables 
+#'   being correlated.
 #' @return \code{x.var} String denoting type of variables in \code{x}.
 #' @return \code{y.var} String denoting type of variables in \code{y}.
 #' @return \code{corr.method} One of "pearson", "spearman", or "kendall".

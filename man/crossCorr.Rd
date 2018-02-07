@@ -37,13 +37,12 @@ and "kendall".}
 Default is TRUE.}
 }
 \value{
-\code{corrs} Tall dataframe of correlations and p-values.
+\code{corrs} Tall data frame of correlations and p-values.
 
-\code{corr.files} A dataframe obtained by
-  \code{cbind(by,x,y)}.
+\code{corr.files} A data frame obtained by \code{cbind(by,x,y)}.
 
-\code{corr.names} A string denoting the description of the
-  variables being correlated.
+\code{corr.names} A string denoting the description of the variables 
+  being correlated.
 
 \code{x.var} String denoting type of variables in \code{x}.
 

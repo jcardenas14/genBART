@@ -7,30 +7,32 @@
 qBart(model.results, gene.sets, annotations = NULL)
 }
 \arguments{
-\item{model.results}{object generated from \code{genModelResults}.}
+\item{model.results}{object returned by \code{genModelResults}.}
 
-\item{gene.sets}{list of gene sets.}
+\item{gene.sets}{list of gene sets. See \code{\link{genModelResults}} for more
+formatting details.}
 
-\item{annotations}{A data frame of additional annotations for the gene sets.}
+\item{annotations}{A data frame of additional annotations for the gene sets. 
+See \code{\link{genModelResults}} for more formatting details.}
 }
 \value{
-\code{qusage.results} tall formatted matrix of results
+\code{qusage.results} Tall formatted matrix of results
 
 \code{lower.ci} Matrix of gene level lower 95\% confidence intervals
 
 \code{upper.ci} Matrix gene level upper 95\% confidence intervals
 
-\code{gene.sets} List of gene sets provided through \code{gene.sets}
+\code{gene.sets} List of gene sets provided to \code{gene.sets}
 
 \code{annotations} data frame of gene set annotations. Default is 
-  NULL
+  NULL.
 }
 \description{
 Run Qusage algorithm using gene level statistics
 }
 \details{
 This function takes the gene level comparison estimates and test 
-  statistics contained in the object produced from 
+  statistics contained in the object returned by 
   \code{\link{genModelResults}} and runs the Qusage algorithm across all of 
   the comparisons. The VIFs are estimated using the raw residuals, which are 
   also contained in the output of \code{\link{genModelResults}}.

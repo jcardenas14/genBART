@@ -15,7 +15,7 @@ updateFile(load.path = NULL, output.path = NULL, meta = NULL,
   project.name = NULL)
 }
 \arguments{
-\item{meta}{A list of a single or multiple objects generated from 
+\item{meta}{A list of a single or multiple objects returned by 
 \code{metaData}. Default is NULL.}
 
 \item{model.results}{A list of a single or multiple objects generated from 
@@ -24,13 +24,13 @@ updateFile(load.path = NULL, output.path = NULL, meta = NULL,
 \item{module.scores}{Object generated from \code{genModScores}. Default is 
 NULL.}
 
-\item{dendrograms}{Object generated from \code{clusterData}. Default is NULL.}
+\item{dendrograms}{Object returned by \code{clusterData}. Default is NULL.}
 
-\item{qusage.results}{Object generated from \code{qBart}. Default is NULL.}
+\item{qusage.results}{Object returned by \code{qBart}. Default is NULL.}
 
-\item{roast.results}{Object generated from \code{rBart}. Default is NULL.}
+\item{roast.results}{Object returned by \code{rBart}. Default is NULL.}
 
-\item{corr.results}{Object generated from \code{crossCorr}. Default is NULL.}
+\item{corr.results}{Object returned by \code{crossCorr}. Default is NULL.}
 
 \item{project.name}{String giving the name project name. Default is 
 "BART Project".}
@@ -46,7 +46,7 @@ Generate/Update BART file that can be directly uploaded into the BART app
 \details{
 \code{genFile} generates a formatted R data file (bartResults.rda) 
   that can be uploaded into the BART web application. The file is created 
-  based on result objects generated from the various functions in 
+  based on result objects returned by the various functions in 
   \code{genBart}. The function saves the file in a folder whose name is
   defined by \code{project.name}. The folder is created in the current 
   working directory.

@@ -4,38 +4,40 @@
 \alias{genModelResults}
 \title{Generate formatted results file}
 \usage{
-genModelResults(y, data.type, object, lm.Fit, method = "limma",
-  comp.names = NULL, var.names = NULL, var.symbols = NULL,
+genModelResults(y = NULL, data.type = "rnaseq", method = "limma", object,
+  lm.Fit = NULL, comp.names = NULL, var.symbols = NULL,
   gene.sets = NULL, annotations = NULL)
 }
 \arguments{
-\item{y}{data frame the model was run on.}
+\item{y}{Expression data frame the model was run on. Default is NULL.}
 
-\item{data.type}{type of data being analyzed ("microarray", "rnaseq", 
-"flow", "metab"). Default is data.type="microarray".}
+\item{data.type}{Type of data being analyzed ("rnaseq", "microarray", "flow", 
+"metab"). Default is data.type="microarray".}
 
-\item{object}{result object generated from \code{limma}, \code{DESeq2}, or 
-\code{edgeR}.}
+\item{method}{string denoting modeling method used ("limma","deseq2","edgeR")}
 
-\item{lm.Fit}{linear model fit object generated from \code{limma}, 
-\code{DESeq2}, or \code{edgeR}}
+\item{object}{results object generated from \code{\link[limma]{eBayes}} 
+(limma), \code{\link[DESeq2]{results}} (DESeq2), 
+\code{\link[edgeR]{glmLRT}} or \code{\link[edgeR]{glmQLFTest}} (edgeR). 
+Objects generated from \code{results}, \code{glmLRT}, or \code{glmlQLFTest} 
+must be wrapped in a list. See Details for further description.}
 
-\item{method}{Which method is being used? ("limma","deseq2","edgeR")}
+\item{lm.Fit}{linear model fit object generated from 
+\code{\link[limma]{lmFit}} (limma). This parameter can can be left as NULL 
+when \code{method} equals "deseq2" or "edgeR".}
 
-\item{comp.names}{comp.names=NULL is the default. A vector of comparison 
-(contrast) names}
+\item{comp.names}{Optional vector of comparison (contrast) names. Default 
+is NULL.}
 
-\item{var.names}{var.names=NULL is the default. Optional vector of variable 
-names. Otherwise, the rownames of the expression data frame or matrix are 
-used.}
+\item{var.symbols}{Optional vector of additional annotations for the 
+variables. Otherwise, the rownames of the expression data are used. Default 
+is NULL.}
 
-\item{var.symbols}{var.symbols=NULL is the default. Optional vector of 
-annotations for the variables. Otherwise, the rownames of the 
-expression dataframe are used.}
+\item{gene.sets}{A list of gene sets. Default is NULL. See Details for 
+further description.}
 
-\item{gene.sets}{A list of gene sets.}
-
-\item{annotations}{A data frame of additional annotations for the gene sets.}
+\item{annotations}{A data frame of additional annotations for the gene sets. 
+Default is NULL. See Details for further description.}
 }
 \value{
 \code{data.type} string denoting the type of data that was analyzed
@@ -43,8 +45,8 @@ expression dataframe are used.}
 \code{results} the formatted results returned as a data frame
 
 \code{resids} data frame of residuals. Returned only if 
-  data.type="microarray" or "rnaseq" and method="limma". Used to estimate VIFs 
-  when running the QUSAGE algorithim in \code{\link{qBart}}.
+  data.type="microarray" or "rnaseq" and method="limma". Used to estimate the 
+  VIFs when running the QUSAGE algorithim in \code{\link{qBart}}.
 
 \code{gene.sets} list of gene sets provided by the user. NULL if no 
   list provided.
@@ -53,19 +55,51 @@ expression dataframe are used.}
   user. Null if no annotations are provided.
 }
 \description{
-Generate formatted results file from completed differential analysis in 
-limma, DESeq2, or edgeR
+Generate formatted results file from result objects returned by limma, 
+DESeq2, and edgeR pipelines
 }
 \details{
-This function formats the results obtained from running differential
-  analysis in either one of \code{limma}, \code{DESeq2}, or \code{edgeR}. The
-  parameter \code{object} accepts as input a results object from functions 
-  \code{\link[limma]{eBayes}} (limma), \code{\link[DESeq2]{results}} 
-  (DESeq2), \code{\link[edgeR]{glmLRT}} or \code{\link[edgeR]{glmQLFTest}} 
-  (edgeR). The parameter \code{lm.Fit} accepts a fitted model object from 
-  functions \code{\link[limma]{lmFit}} (limma), \code{\link[DESeq2]{DESeq}} 
-  (DESeq2), \code{\link[edgeR]{glmFit}} or \code{\link[edgeR]{glmQLFit}} 
-  (edgeR).
+This function takes results obtained from differential analysis 
+  pipelines found in \code{limma}, \code{DESeq2}, or \code{edgeR} and formats 
+  them for the BART app. 
+  
+  The expression data \code{y} and \code{lm.Fit} objects are used to obtain 
+  the residual matrix from the fitted model. These parameters are only needed 
+  when method = "limma" and data.type = "rnaseq" or "microarray" and can 
+  otherwise be left as NULL. The residual matrix is stored as an element of 
+  the returned list and can be used in downstream gene set analysis using 
+  \code{\link{qBart}} (Please visit for more details).
+  
+  The \code{object} parameter takes as input model result objects returned by 
+  functions in limma, DESeq2, or edgeR. When method = "limma", the expected 
+  input is the single object returned by \code{\link[limma]{eBayes}} since it 
+  is able to store results across multiple comparisons. When method = 
+  "deseq2" or "edgeR", the result object(s) returned by 
+  \code{\link[DESeq2]{results}}, \code{\link[edgeR]{glmLRT}}, or 
+  \code{\link[edgeR]{glmQLFTest}} must be wrapped in a list in which each 
+  element is an object containing the results for a single comparison. 
+  
+  The \code{comp.names} parameter is a character vector of comparison names 
+  that is particularly useful when method = "deseq2" or "edgeR" since 
+  comparison names are not extracted from the result objects generated by 
+  either of those pipelines. When using limma, the comparison names can also 
+  be defined in \code{\link[limma]{makeContrasts}}. It is important that the 
+  names are written in the correct order. For example, if object = list(AvsB, 
+  CvsD), where AvsB and CvsD are result objects for the comparisons "group A 
+  vs group B" and "group C vs group D" respectively, then comp.names = 
+  c("CvsD", "AvsB") would incorrectly assign the name "CvsD" to the 
+  comparison "group A vs group B" and vice versa. The \code{var.symbols} 
+  parameter is typically used to provide a character vector of gene symbols. 
+  The vector provided must be the same length and in the same order as the 
+  row names of the data used for modeling.
+  
+  The \code{gene.sets} parameter is a list in which each element is a 
+  character vector of gene names comprising a gene set. The gene names must 
+  match the rownames of the data used for modeling. The gene sets are used to 
+  create modular maps for each comparison in the DGE section of BART. The 
+  \code{annotations} parameter is a data frame consisting of two columns. The 
+  first column consists of gene set names and the second column consists of 
+  additional descriptions for the gene sets.
 }
 \examples{
 # Example data

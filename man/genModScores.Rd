@@ -2,17 +2,18 @@
 % Please edit documentation in R/genModScores.R
 \name{genModScores}
 \alias{genModScores}
-\title{Generate module (gene set) maps for plotting}
+\title{Generate modular (gene set) maps for plotting}
 \usage{
 genModScores(meta, gene.sets, sd.lim = 2)
 }
 \arguments{
-\item{meta}{list generated from \code{metaData}}
+\item{meta}{list returned by \code{metaData}}
 
-\item{gene.sets}{list of gene sets}
+\item{gene.sets}{list of gene sets. See \code{\link{genModelResults}} for 
+additional formatting details.}
 
 \item{sd.lim}{number of standard deviations away from the mean of the 
-reference samples}
+reference samples. Default is 2.}
 }
 \value{
 \code{scores.ctrl} data frame of module scores for all samples 
@@ -24,7 +25,7 @@ reference samples}
 \code{gene.sets} List of gene sets provided through \code{gene.sets}
 }
 \description{
-Generate module (gene set) maps for plotting
+Generate modular (gene set) maps for plotting
 }
 \details{
 This function calculates module scores for individual samples. In 

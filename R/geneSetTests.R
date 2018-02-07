@@ -28,10 +28,10 @@ qusageGen <- function(resids, estimates, dof, std.errors, gene.sets) {
 #' Run Qusage algorithm using gene level statistics
 #' 
 #' @param model.results object returned by \code{genModelResults}.
-#' @param gene.sets list of gene sets. See \code\link{genModelResults} for more
+#' @param gene.sets list of gene sets. See \code{\link{genModelResults}} for more
 #'   formatting details.
 #' @param annotations A data frame of additional annotations for the gene sets. 
-#'   See \code\link{genModelResults} for more formatting details.
+#'   See \code{\link{genModelResults}} for more formatting details.
 #' @details This function takes the gene level comparison estimates and test 
 #'   statistics contained in the object returned by 
 #'   \code{\link{genModelResults}} and runs the Qusage algorithm across all of 

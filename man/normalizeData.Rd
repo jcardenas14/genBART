@@ -7,9 +7,9 @@
 normalizeData(meta, norm.method = "mean")
 }
 \arguments{
-\item{meta}{list generated from \code{metaData}}
+\item{meta}{list returned by \code{metaData}}
 
-\item{norm.method}{string denoting whether to normalize to the mean or median 
+\item{norm.method}{String denoting whether to normalize to the mean or median 
 of all samples or a control group specified in \code{meta}. Default is
 norm.method = "mean".}
 }

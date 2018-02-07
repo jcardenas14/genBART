@@ -2,7 +2,7 @@
 % Please edit documentation in R/metaData.R
 \name{metaData}
 \alias{metaData}
-\title{Declare design information for downstream analysis}
+\title{Declare meta data information for downstream analysis}
 \usage{
 metaData(y, design, data.type = "microarray", columnname = NULL,
   long = FALSE, time.var = NULL, sample.id = NULL, subject.id = NULL,
@@ -15,7 +15,7 @@ metaData(y, design, data.type = "microarray", columnname = NULL,
 \item{design}{A sample annotation data frame containing sample information
 (e.g. age, condition, timepoint, etc.).}
 
-\item{data.type}{type of data that's going to be analyzed ("microarray", 
+\item{data.type}{Type of data that's going to be analyzed ("microarray", 
 "rnaseq","flow", "metab"). Default is data.type="microarray".}
 
 \item{columnname}{Name of column in design that contains the column names of 
@@ -23,28 +23,28 @@ y.}
 
 \item{long}{logical; Is the study longitudinal?.}
 
-\item{time.var}{for longitudinal studies. Name of column in design that 
+\item{time.var}{For longitudinal studies. Name of column in design that 
 contains the study time points.}
 
-\item{sample.id}{name of column in design that contains unique sample 
+\item{sample.id}{Name of column in design that contains unique sample 
 identification.}
 
-\item{subject.id}{name of column in design that contains ids for individual
+\item{subject.id}{Name of column in design that contains ids for individual
 subjects.}
 
-\item{baseline.var}{name of column in design that contains values referring 
+\item{baseline.var}{Name of column in design that contains values referring 
 to baseline observations.}
 
-\item{baseline.val}{string or numeric value denoting baseline observations.}
+\item{baseline.val}{String or numeric value denoting baseline observations.}
 
-\item{control.var}{name of column in design that contains values referring to
+\item{control.var}{Name of column in design that contains values referring to
 controls.}
 
-\item{control.val}{string or numeric value denoting controls.}
+\item{control.val}{String or numeric value denoting controls.}
 }
 \value{
-a list containing matched design and expression and all of the design
-  parameters specified.
+A list containing the matched design and expression data and all of 
+  the design parameters specified.
 }
 \description{
 Match design and expression data frames. Declare and store design parameters.

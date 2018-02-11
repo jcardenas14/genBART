@@ -9,7 +9,8 @@ genModelResults(y = NULL, data.type = "rnaseq", method = "limma", object,
   gene.sets = NULL, annotations = NULL)
 }
 \arguments{
-\item{y}{Expression data frame the model was run on. Default is NULL.}
+\item{y}{Expression data frame the model was run on. Default is NULL. See 
+Details for further description.}
 
 \item{data.type}{Type of data being analyzed ("rnaseq", "microarray", "flow", 
 "metab"). Default is data.type="microarray".}
@@ -66,9 +67,11 @@ This function takes results obtained from differential analysis
   The expression data \code{y} and \code{lm.Fit} objects are used to obtain 
   the residual matrix from the fitted model. These parameters are only needed 
   when method = "limma" and data.type = "rnaseq" or "microarray" and can 
-  otherwise be left as NULL. The residual matrix is stored as an element of 
-  the returned list and can be used in downstream gene set analysis using 
-  \code{\link{qBart}} (Please visit for more details).
+  otherwise be left as NULL. It is important to remember that \code{y} should 
+  be the expression data used for modeling (e.g. voom transformed data). The 
+  residual matrix is stored as an element of the returned list and can be 
+  used in downstream gene set analysis using \code{\link{qBart}} (Please 
+  visit for more details).
   
   The \code{object} parameter takes as input model result objects returned by 
   functions in limma, DESeq2, or edgeR. When method = "limma", the expected 

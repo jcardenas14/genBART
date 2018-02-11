@@ -4,7 +4,7 @@
 \alias{genModScores}
 \title{Generate modular (gene set) maps for plotting}
 \usage{
-genModScores(meta, gene.sets, sd.lim = 2)
+genModScores(meta, gene.sets, sd.lim = 2, annotations = NULL)
 }
 \arguments{
 \item{meta}{list returned by \code{metaData}}
@@ -14,6 +14,9 @@ additional formatting details.}
 
 \item{sd.lim}{number of standard deviations away from the mean of the 
 reference samples. Default is 2.}
+
+\item{annotations}{A data frame of additional annotations for the gene sets. 
+Default is NULL. See \code{\link{genModelResults}} for additional details.}
 }
 \value{
 \code{scores.ctrl} data frame of module scores for all samples 

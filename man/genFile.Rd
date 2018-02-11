@@ -18,10 +18,10 @@ updateFile(load.path = NULL, output.path = NULL, meta = NULL,
 \item{meta}{A list of a single or multiple objects returned by 
 \code{metaData}. Default is NULL.}
 
-\item{model.results}{A list of a single or multiple objects generated from 
+\item{model.results}{A list of a single or multiple objects returned by 
 \code{genModelResults}. Default is NULL.}
 
-\item{module.scores}{Object generated from \code{genModScores}. Default is 
+\item{module.scores}{Object returned by \code{genModScores}. Default is 
 NULL.}
 
 \item{dendrograms}{Object returned by \code{clusterData}. Default is NULL.}
@@ -30,7 +30,8 @@ NULL.}
 
 \item{roast.results}{Object returned by \code{rBart}. Default is NULL.}
 
-\item{corr.results}{Object returned by \code{crossCorr}. Default is NULL.}
+\item{corr.results}{A list of a single or multiple objects returned by 
+\code{crossCorr}. Default is NULL.}
 
 \item{project.name}{String giving the name project name. Default is 
 "BART Project".}
@@ -47,9 +48,12 @@ Generate/Update BART file that can be directly uploaded into the BART app
 \code{genFile} generates a formatted R data file (bartResults.rda) 
   that can be uploaded into the BART web application. The file is created 
   based on result objects returned by the various functions in 
-  \code{genBart}. The function saves the file in a folder whose name is
-  defined by \code{project.name}. The folder is created in the current 
-  working directory.
+  \code{genBart}. Since BART can store and display results across multiple 
+  platforms at one time (e.g. RNA-seq, flow cytometry, metabolomics), some of 
+  the parameters (i.e. meta, model.results, corr.results) require the input 
+  objects to be wrapped in a list. The function saves the file in a folder 
+  whose name is given by \code{project.name}. The folder is created in the 
+  current working directory.
 
 \code{updateFile} takes an existing BART file and allows the user to
   easily add and/or revise components. The user can override the old BART

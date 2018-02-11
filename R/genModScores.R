@@ -5,6 +5,8 @@
 #'   additional formatting details.
 #' @param sd.lim number of standard deviations away from the mean of the 
 #'   reference samples. Default is 2.
+#' @param annotations A data frame of additional annotations for the gene sets. 
+#'   Default is NULL. See \code{\link{genModelResults}} for additional details.   
 #' @details This function calculates module scores for individual samples. In 
 #'   cross sectional studies with controls, the control samples are used to 
 #'   determine an upper and lower threshold (mean of controls +/- 2 sd). The 
@@ -39,8 +41,8 @@
 #' # Generate module maps                                      
 #' mods <- genModScores(meta.data, modules)
 #' @export
-genModScores <- function(meta, gene.sets, sd.lim = 2) {
-  y <- meta$y
+genModScores <- function(meta, gene.sets, sd.lim = 2, annotations = NULL) {
+  y <- data.frame(meta$y)
   design <- meta$design
   Transcript.ID <- rownames(y)
   exprs <- cbind(Transcript.ID = Transcript.ID, y)
@@ -194,6 +196,24 @@ when long = TRUE to calculate scores.base.")
       scores.base <- percentMat + 1
     } else {
       scores.base <- NULL
+    }
+  }
+  if (!is.null(annotations)) {
+    if (!is.null(scores.ctrl)) {
+      rows.annot <- rownames(scores.ctrl)[rownames(scores.ctrl) %in% 
+                                            as.character(annotations[,1])]
+      annots <- annotations[match(rows.annot, annotations[,1], nomatch = 0), ]
+      rows.annot <- paste(rows.annot, as.character(annots[,2]), sep = " ")
+      rownames(scores.ctrl)[rownames(scores.ctrl) %in% 
+                              as.character(annotations[,1])] <- rows.annot
+    }
+    if (!is.null(scores.base)) {
+      rows.annot <- rownames(scores.base)[rownames(scores.base) %in% 
+                                            as.character(annotations[,1])]
+      annots <- annotations[match(rows.annot, annotations[,1], nomatch = 0), ]
+      rows.annot <- paste(rows.annot, as.character(annots[,2]), sep = " ")
+      rownames(scores.base)[rownames(scores.base) %in% 
+                              as.character(annotations[,1])] <- rows.annot
     }
   }
   z <- list(scores.ctrl = scores.ctrl, scores.base = scores.base, gene.sets = 

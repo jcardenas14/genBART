@@ -3,22 +3,26 @@
 #' Generate/Update BART file that can be directly uploaded into the BART app
 #' @param meta A list of a single or multiple objects returned by 
 #'   \code{metaData}. Default is NULL. 
-#' @param model.results A list of a single or multiple objects generated from 
+#' @param model.results A list of a single or multiple objects returned by 
 #'   \code{genModelResults}. Default is NULL. 
-#' @param module.scores Object generated from \code{genModScores}. Default is 
+#' @param module.scores Object returned by \code{genModScores}. Default is 
 #'   NULL. 
 #' @param dendrograms Object returned by \code{clusterData}. Default is NULL. 
 #' @param qusage.results Object returned by \code{qBart}. Default is NULL.
 #' @param roast.results Object returned by \code{rBart}. Default is NULL. 
-#' @param corr.results Object returned by \code{crossCorr}. Default is NULL. 
+#' @param corr.results A list of a single or multiple objects returned by 
+#'   \code{crossCorr}. Default is NULL. 
 #' @param project.name String giving the name project name. Default is 
 #'   "BART Project".
 #' @details \code{genFile} generates a formatted R data file (bartResults.rda) 
 #'   that can be uploaded into the BART web application. The file is created 
 #'   based on result objects returned by the various functions in 
-#'   \code{genBart}. The function saves the file in a folder whose name is
-#'   defined by \code{project.name}. The folder is created in the current 
-#'   working directory.
+#'   \code{genBart}. Since BART can store and display results across multiple 
+#'   platforms at one time (e.g. RNA-seq, flow cytometry, metabolomics), some of 
+#'   the parameters (i.e. meta, model.results, corr.results) require the input 
+#'   objects to be wrapped in a list. The function saves the file in a folder 
+#'   whose name is given by \code{project.name}. The folder is created in the 
+#'   current working directory.
 #' @examples
 #' # Example data
 #' data(tb.expr)
@@ -75,7 +79,7 @@ genFile <- function(meta, model.results = NULL, module.scores = NULL,
     lower.ci <- qusage.results$lower.ci
     upper.ci <- qusage.results$upper.ci
     gene.sets <- qusage.results$gene.sets
-    annots <- qusage.results$annots
+    annots <- qusage.results$annotations
     qusage.results <- qusage.results$qusage.results
   }
   if (!is.null(corr.results)) {
@@ -247,6 +251,8 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
         lower.ci <- qresults$lower.ci
         upper.ci <- qresults$upper.ci
         qusage.results <- qresults$qusage.results
+        gene.sets <- qresults$gene.sets
+        annots <- qresults$annotations
       }
       if (!is.null(rst.results)) {
         roast.results <- rst.results

@@ -2,7 +2,8 @@
 #' 
 #' Generate formatted results file from result objects returned by limma, 
 #' DESeq2, and edgeR pipelines
-#' @param y Expression data frame the model was run on. Default is NULL.
+#' @param y Expression data frame the model was run on. Default is NULL. See 
+#'   Details for further description.
 #' @param data.type Type of data being analyzed ("rnaseq", "microarray", "flow", 
 #'   "metab"). Default is data.type="microarray".
 #' @param method string denoting modeling method used ("limma","deseq2","edgeR")
@@ -30,9 +31,11 @@
 #'   The expression data \code{y} and \code{lm.Fit} objects are used to obtain 
 #'   the residual matrix from the fitted model. These parameters are only needed 
 #'   when method = "limma" and data.type = "rnaseq" or "microarray" and can 
-#'   otherwise be left as NULL. The residual matrix is stored as an element of 
-#'   the returned list and can be used in downstream gene set analysis using 
-#'   \code{\link{qBart}} (Please visit for more details).
+#'   otherwise be left as NULL. It is important to remember that \code{y} should 
+#'   be the expression data used for modeling (e.g. voom transformed data). The 
+#'   residual matrix is stored as an element of the returned list and can be 
+#'   used in downstream gene set analysis using \code{\link{qBart}} (Please 
+#'   visit for more details).
 #'   
 #'   The \code{object} parameter takes as input model result objects returned by 
 #'   functions in limma, DESeq2, or edgeR. When method = "limma", the expected 

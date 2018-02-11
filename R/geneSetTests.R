@@ -85,9 +85,9 @@ qBart <- function(model.results, gene.sets, annotations = NULL) {
     sum(x %in% results$Transcript.ID)
   })
   module.list <- gene.sets[mod.overlap > 3]
-  comparisons <- results[, grep("^Estimate", colnames(results))]
-  colnames(comparisons) <- gsub("Estimate.of.", "", colnames(comparisons))
-  tstats <- results[, grep("^Test.statistic", colnames(results))]
+  comparisons <- results[, grep("^Estimate", colnames(results)), drop = FALSE]
+  colnames(comparisons) <- gsub("Estimate.", "", colnames(comparisons))
+  tstats <- results[, grep("^Test.statistic", colnames(results)), drop = FALSE]
   stde <- abs(comparisons / tstats)
   for (i in 1:ncol(stde)) {
     if (length(which(is.na(stde[, i]))) > 0) {
@@ -97,7 +97,7 @@ qBart <- function(model.results, gene.sets, annotations = NULL) {
     stde[, i][stde[, i] < (10) ^ -6] <- min(stde[, i][stde[, i] > (10 ^ -6)])
   }
   colnames(stde) <- paste("Std.error.", colnames(stde), sep = "")
-  df <- results[, grep("DF.", colnames(results))]
+  df <- results[, grep("DF.", colnames(results)), drop = FALSE]
   lim95 <- apply(df, 2, function(x) qt(p = 0.975, df = x)) * stde
   lower.ci <- comparisons - lim95
   upper.ci <- comparisons + lim95

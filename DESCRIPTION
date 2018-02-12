@@ -2,7 +2,7 @@ Package: genBart
 Type: Package
 Title: Generate BART (Bio-statistical Analysis Reporting Tool) File
 Version: 1.0.0
-Author@R: c(
+Authors@R: c(
     person("Jacob", "Cardenas", email = "jacob.cardenas@bswhealth.org", 
     role = c("aut", "cre")), person("Jacob", "Turner", role = "aut")
     )

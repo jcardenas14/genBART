@@ -1,7 +1,7 @@
 Package: genBart
 Type: Package
 Title: Generate BART (Biostatistical Analysis Reporting Tool) File
-Version: 0.99.0
+Version: 1.0.0
 Author: Jacob Cardenas
 Maintainer: Jacob Cardenas <jacob.cardenas@bswhealth.org>
 Description: A set of functions to generate and format results from statistical

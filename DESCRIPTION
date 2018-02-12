@@ -11,7 +11,7 @@ Description: A set of functions to generate and format results from statistical
     be uploaded into the BART shiny app. The app provides users with tools
     to visualize and efficiently sift through large amounts of data and results. 
 Depends: 
-    R (>= 3.4.2)
+    R (>= 3.4.0)
 Imports:
     clValid (>= 0.6-6),
     data.table (>= 1.10.4),

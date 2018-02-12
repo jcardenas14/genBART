@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/jcardenas14/genBart.svg?branch=master)](https://travis-ci.org/jcardenas14/genBart)
 <h2 style = "text-align: center">genBart</h2>
 
 #### Overview

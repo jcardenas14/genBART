@@ -71,7 +71,7 @@
 #' @return \code{results} the formatted results returned as a data frame
 #' @return \code{resids} data frame of residuals. Returned only if 
 #'   data.type="microarray" or "rnaseq" and method="limma". Used to estimate the 
-#'   VIFs when running the QUSAGE algorithim in \code{\link{qBart}}.
+#'   VIFs when running the Qusage algorithm in \code{\link{qBart}}.
 #' @return \code{gene.sets} list of gene sets provided by the user. NULL if no 
 #'   list provided.
 #' @return \code{annotations} data frame of gene set annotations provided by the

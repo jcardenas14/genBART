@@ -47,7 +47,7 @@ Default is NULL. See Details for further description.}
 
 \code{resids} data frame of residuals. Returned only if 
   data.type="microarray" or "rnaseq" and method="limma". Used to estimate the 
-  VIFs when running the QUSAGE algorithim in \code{\link{qBart}}.
+  VIFs when running the Qusage algorithm in \code{\link{qBart}}.
 
 \code{gene.sets} list of gene sets provided by the user. NULL if no 
   list provided.

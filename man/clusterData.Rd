@@ -19,29 +19,29 @@ See \code{\link[stats]{dist}} for more details.}
 "centroid" or "median". \code{\link[fastcluster]{hclust}} for more details.}
 }
 \value{
-\code{rowdend1b} dendrogram from hiearchical clustering of genes on
+\code{rowdend1b} dendrogram from hierarchical clustering of genes on
   baseline samples normalized according to \code{norm.method} specified in 
   \code{norm.data}. NULL if \code{y1b} in \code{norm.data} is NULL.
 
-\code{rowdend2b} dendrogram from hiearchical clustering of genes on
+\code{rowdend2b} dendrogram from hierarchical clustering of genes on
   baseline samples normalized to controls according to \code{norm.method} 
   specified in \code{norm.data}. NULL if \code{y2b} in \code{norm.data} is 
   NULL.
 
-\code{rowdend1} dendrogram from hiearchical clustering of genes on
+\code{rowdend1} dendrogram from hierarchical clustering of genes on
   all samples normalized according to \code{norm.method} specified in 
   \code{norm.data}. NULL if \code{y1} in \code{norm.data} is NULL.
 
-\code{rowdend2} dendrogram from hiearchical clustering of genes on
+\code{rowdend2} dendrogram from hierarchical clustering of genes on
   all samples normalized to controls according to \code{norm.method} 
   specified in \code{norm.data}. NULL if \code{y2} in \code{norm.data} is 
   NULL.
 
-\code{rowdend3} dendrogram from hiearchical clustering of genes on
+\code{rowdend3} dendrogram from hierarchical clustering of genes on
   all samples normalized to their baseline. NULL if \code{y3} in 
   \code{norm.data} is NULL.
 
-\code{norm.method} string describing the normaliztion method used in
+\code{norm.method} string describing the normalization method used in
   \code{\link{normalizeData}}
 }
 \description{

@@ -153,8 +153,8 @@ qBart <- function(model.results, gene.sets, annotations = NULL) {
 #' @param correlation the inter-duplicate or inter-technical replicate
 #'   correlation
 #' @param gene.weights numeric vector of directional (positive or negative)
-#'   probewise weights. Must have length equal to the number of rows in the
-#'   expression dataset.
+#'   transcript-wise weights. Must have length equal to the number of rows in 
+#'   the expression dataset.
 #' @param var.prior prior value for residual variances. If not provided, this is
 #'   estimated from all the data using squeezeVar.
 #' @param df.prior prior degrees of freedom for residual variances. If not

@@ -11,24 +11,24 @@
 #'   "centroid" or "median". \code{\link[fastcluster]{hclust}} for more details.
 #' @details This function performs hierarchical clustering on the rows of the 
 #'   normalized expression data contained in \code{norm.data}. 
-#' @return \code{rowdend1b} dendrogram from hiearchical clustering of genes on
+#' @return \code{rowdend1b} dendrogram from hierarchical clustering of genes on
 #'   baseline samples normalized according to \code{norm.method} specified in 
 #'   \code{norm.data}. NULL if \code{y1b} in \code{norm.data} is NULL.
-#' @return \code{rowdend2b} dendrogram from hiearchical clustering of genes on
+#' @return \code{rowdend2b} dendrogram from hierarchical clustering of genes on
 #'   baseline samples normalized to controls according to \code{norm.method} 
 #'   specified in \code{norm.data}. NULL if \code{y2b} in \code{norm.data} is 
 #'   NULL.
-#' @return \code{rowdend1} dendrogram from hiearchical clustering of genes on
+#' @return \code{rowdend1} dendrogram from hierarchical clustering of genes on
 #'   all samples normalized according to \code{norm.method} specified in 
 #'   \code{norm.data}. NULL if \code{y1} in \code{norm.data} is NULL.
-#' @return \code{rowdend2} dendrogram from hiearchical clustering of genes on
+#' @return \code{rowdend2} dendrogram from hierarchical clustering of genes on
 #'   all samples normalized to controls according to \code{norm.method} 
 #'   specified in \code{norm.data}. NULL if \code{y2} in \code{norm.data} is 
 #'   NULL.
-#' @return \code{rowdend3} dendrogram from hiearchical clustering of genes on
+#' @return \code{rowdend3} dendrogram from hierarchical clustering of genes on
 #'   all samples normalized to their baseline. NULL if \code{y3} in 
 #'   \code{norm.data} is NULL.
-#' @return \code{norm.method} string describing the normaliztion method used in
+#' @return \code{norm.method} string describing the normalization method used in
 #'   \code{\link{normalizeData}}
 #' @examples
 #' # Example data

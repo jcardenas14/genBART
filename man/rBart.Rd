@@ -24,8 +24,8 @@ contrast.}
 correlation}
 
 \item{gene.weights}{numeric vector of directional (positive or negative)
-probewise weights. Must have length equal to the number of rows in the
-expression dataset.}
+transcript-wise weights. Must have length equal to the number of rows in 
+the expression dataset.}
 
 \item{var.prior}{prior value for residual variances. If not provided, this is
 estimated from all the data using squeezeVar.}

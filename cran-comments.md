@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Converted the DESCRIPTION title to title case.
+* Moved the acronym breakdown from the title to the Description field.
+
 ## Test environments
 * local Windows 7 install, R 3.4.3
 * win-builder, devel

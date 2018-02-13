@@ -36,7 +36,7 @@ In order to effectively use BART, we introduce the genBart package. genBart is a
 | `clusterData()`     | Clusters normalized expression data.                                                  |
 | `genModScores()`    | Generates sample level module scores for plotting.                                    |
 | `genModelResults()` | Processes and formats differential expression modeling results.                       |
-| `qBart()|rBart()`   | Runs gene set analysis using QuSAGE or ROAST algorthms.                               |
+| `runQgen()`         | Runs gene set analysis using Q-Gen (generalized QuSAGE) algorithm.                    |
 | `crossCorr()`       | Runs pairwise cross platform correlations (e.g. metabolites vs gene expression).      |
 | `genFile()`         | Generates and saves BART ready R data file.                                           |
 | `updateFile()`      | Updates/adds analyses to existing BART file.                                          |
@@ -190,12 +190,12 @@ mod.results.flow <- genModelResults(y = tb.flow, data.type = "flow", object = fi
 ```
 
 \vspace{12pt}
-\begin{center} \large{\textbf{Gene Set Analysis: qBart}} \end{center}
+\begin{center} \large{\textbf{Gene Set Analysis: runQgen}} \end{center}
 
-Next we run gene set analysis by incorporating functions available in the `qusage` package, which tests whether the average log2 fold change of the genes within a gene set are different than 0. `qBart` simplifies the process by requiring two input parameters, the model results object produced by `genModelResults` and a list of gene sets.
+Next we run gene set analysis by incorporating functions available in the `qusage` package, which tests whether the average log2 fold change of the genes within a gene set are different than 0. `runQgen` simplifies the process by requiring two input parameters, the model results object produced by `genModelResults` and a list of gene sets.
 
 ```{r}
-qus <- qBart(model.results = mod.results, gene.sets = modules)
+qus <- runQgen(model.results = mod.results, gene.sets = modules)
 ```
 
 \vspace{12pt}

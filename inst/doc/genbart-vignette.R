@@ -88,7 +88,7 @@ mod.results.flow <- genModelResults(y = tb.flow, data.type = "flow", object = fi
                                     lm.Fit = fit.flow, method = "limma")
 
 ## ------------------------------------------------------------------------
-qus <- qBart(model.results = mod.results, gene.sets = modules)
+qus <- runQgen(model.results = mod.results, gene.sets = modules)
 
 ## ------------------------------------------------------------------------
 # Format expression data to align with flow data

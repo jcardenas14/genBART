@@ -25,7 +25,7 @@ qusageGen <- function(resids, estimates, dof, std.errors, gene.sets) {
   return(results)
 }
 
-#' Run Qusage algorithm using gene level statistics
+#' Run Q-Gen (generalized QuSAGE) algorithm using gene level statistics
 #' 
 #' @param model.results object returned by \code{genModelResults}.
 #' @param gene.sets list of gene sets. See \code{\link{genModelResults}} for more
@@ -34,7 +34,7 @@ qusageGen <- function(resids, estimates, dof, std.errors, gene.sets) {
 #'   See \code{\link{genModelResults}} for more formatting details.
 #' @details This function takes the gene level comparison estimates and test 
 #'   statistics contained in the object returned by 
-#'   \code{\link{genModelResults}} and runs the Qusage algorithm across all of 
+#'   \code{\link{genModelResults}} and runs the Q-Gen algorithm across all of 
 #'   the comparisons. The VIFs are estimated using the raw residuals, which are 
 #'   also contained in the output of \code{\link{genModelResults}}.
 #' @return \code{qusage.results} Tall formatted matrix of results
@@ -70,15 +70,15 @@ qusageGen <- function(resids, estimates, dof, std.errors, gene.sets) {
 #' fit2 <- limma::contrasts.fit(fit, contrasts)
 #' fit2 <- limma::eBayes(fit2, trend = FALSE)
 #' 
-#' # Create model results object for qBart
+#' # Create model results object for runQgen
 #' model.results <- genModelResults(y = dat, data.type = "microarray", object = fit2, lm.Fit = fit, 
 #'                                  method = "limma")
 #'                                
-#' # Run qusage on baylor modules                             
+#' # Run Q-Gen on baylor modules                             
 #' data(modules)
-#' qus.results <- qBart(model.results, modules)
+#' qus.results <- runQgen(model.results, modules)
 #' @export
-qBart <- function(model.results, gene.sets, annotations = NULL) {
+runQgen <- function(model.results, gene.sets, annotations = NULL) {
   results <- model.results$results
   rownames(results) <- results$Transcript.ID
   mod.overlap <- sapply(gene.sets, function(x) {
@@ -139,67 +139,4 @@ qBart <- function(model.results, gene.sets, annotations = NULL) {
             upper.ci = upper.ci, gene.sets = gene.sets, 
             annotations = annotations)
   return(z)
-}
-
-#' Run ROAST method and format results for BART
-#'
-#' @param meta list generated from \code{metaData}
-#' @param gene.sets list of gene sets
-#' @param design design matrix
-#' @param contrast numeric matrix with rows corresponding to coefficients and
-#'   columns containing contrasts. May be a vector if there is only one
-#'   contrast.
-#' @param block vector or factor specifying a blocking variable on the samples
-#' @param correlation the inter-duplicate or inter-technical replicate
-#'   correlation
-#' @param gene.weights numeric vector of directional (positive or negative)
-#'   transcript-wise weights. Must have length equal to the number of rows in 
-#'   the expression dataset.
-#' @param var.prior prior value for residual variances. If not provided, this is
-#'   estimated from all the data using squeezeVar.
-#' @param df.prior prior degrees of freedom for residual variances. If not
-#'   provided, this is estimated using squeezeVar.
-#' @param nrot number of rotations used to compute the p-values.
-#' @details This function runs the ROAST gene set tests across all summary set
-#'   statistics ("mean", "floormean", "mean50", and "msq") and returns formatted
-#'   results for BART.
-#'
-#' @export
-rBart <- function(meta, gene.sets, design, contrast, block = NULL,
-                  correlation = NULL, gene.weights = NULL, var.prior = NULL,
-                  df.prior = NULL, nrot = 999) {
-  y <- meta$y
-  rst.mean <- rst.floormean <- rst.mean50 <- rst.msq <- list()
-  contrast.t <- t(contrast)
-  n <- ncol(contrast)
-  for (i in 1:n) {
-
-    rst.mean[[i]] <- mroast(y = y, index = gene.sets, design = design,
-                            contrast = unname(contrast.t[i, ]), block = block,
-                            correlation = correlation, var.prior = var.prior,
-                            gene.weights = gene.weights, df.prior = df.prior,
-                            nrot = nrot)
-    rst.floormean[[i]] <- mroast(y = y, index = gene.sets, design = design,
-                                 contrast = unname(contrast.t[i, ]),
-                                 correlation = correlation, df.prior = df.prior,
-                                 gene.weights = gene.weights, block = block,
-                                 var.prior = var.prior, nrot = nrot,
-                                 set.statistic = "floormean")
-    rst.mean50[[i]] <- mroast(y = y, index = gene.sets, design = design,
-                              contrast = unname(contrast.t[i, ]),
-                              correlation = correlation, df.prior = df.prior,
-                              gene.weights = gene.weights, block = block,
-                              var.prior = var.prior, nrot = nrot,
-                              set.statistic = "mean50")
-    rst.msq[[i]] <- mroast(y = y, index = gene.sets, design = design,
-                           contrast = unname(contrast.t[i, ]), block = block,
-                           correlation = correlation, var.prior = var.prior,
-                           gene.weights = gene.weights, df.prior = df.prior,
-                           nrot = nrot, set.statistic = "msq")
-  }
-  names(rst.mean) <- names(rst.floormean) <- names(rst.mean50) <-
-    names(rst.msq) <- colnames(contrast)
-  roast.results <- list(mean = rst.mean, floormean = rst.floormean,
-                        mean50 = rst.mean50, msq = rst.msq)
-  return(roast.results)
 }

@@ -6,6 +6,9 @@ test_that("warnings are thrown when columnname is NULL or misspecified", {
   expect_warning(metaData(y = tb.expr, design = tb.design), "Must enter columnname to match design and expression")
   expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "sample_id"), 
                  "columnname values in design do not match any columnnames in y")
+  expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "Columnname"),
+                 "columnname parameter given is not a column name in design. 
+Please check spelling.")
 }) 
 
 context("design and expression matching")
@@ -61,6 +64,21 @@ control.val")
   expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "columnname", control.val = "Latent"), 
                  "control.val specified but not control.var. Please specify 
 control.var")
+  expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "columnname", control.var = "Clinical_status"),
+                 "control.var parameter given is not a column name in design. 
+Please check spelling.")
+})
+
+context("sample.id and subject.id correctly specified")
+test_that("designs with controls are specified correctly", {
+  expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "columnname", control.var = "clinical_status",
+                          control.val = "Latent", sample.id = "sample.id"), "sample.id parameter given is not a column name in design. 
+Please check spelling."
+                )
+  expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "columnname", control.var = "clinical_status",
+                          control.val = "Latent", sample.id = "sample_id", subject.id = "monkey.id"), "subject.id parameter given is not a column name in design. 
+Please check spelling."
+  )
 })
 
 expect_all_warnings <- function(warnings, test.warnings) {
@@ -76,9 +94,15 @@ test_that("longitudinal designs are specified correctly", {
   expect_all_warnings(capture_warnings(metaData(y = tb.expr, design = tb.design, columnname = "columnname",
                                                long = TRUE, time.var = "timepoint")), c("long is TRUE but baseline.var not specified", 
                                                                                         "long is TRUE but baseline.val not specified"))
+  expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "columnname", long = TRUE, time.var = "Timepoint"),
+                 "time.var parameter given is not a column name in design. 
+Please check spelling.")
   expect_all_warnings(capture_warnings(metaData(y = tb.expr, design = tb.design, columnname = "columnname",
                                                long = TRUE, time.var = "timepoint", baseline.var = "timepoint")), 
                       c("long is TRUE but baseline.val not specified"))
+  expect_warning(metaData(y = tb.expr, design = tb.design, columnname = "columnname", long = TRUE, time.var = "timepoint",
+                          baseline.var = "Timepoint"), "baseline.var parameter given is not a column name in design. 
+Please check spelling.")
   expect_all_warnings(capture_warnings(metaData(y = tb.expr, design = tb.design, columnname = "columnname",
                                                long = TRUE, time.var = "timepoint", baseline.val = 0)), 
                       c("long is TRUE but baseline.var not specified"))

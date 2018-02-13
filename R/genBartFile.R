@@ -8,7 +8,7 @@
 #' @param module.scores Object returned by \code{genModScores}. Default is 
 #'   NULL. 
 #' @param dendrograms Object returned by \code{clusterData}. Default is NULL. 
-#' @param qusage.results Object returned by \code{qBart}. Default is NULL.
+#' @param qusage.results Object returned by \code{runQgen}. Default is NULL.
 #' @param roast.results Object returned by \code{rBart}. Default is NULL. 
 #' @param corr.results A list of a single or multiple objects returned by 
 #'   \code{crossCorr}. Default is NULL. 

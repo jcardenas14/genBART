@@ -26,7 +26,7 @@ NULL.}
 
 \item{dendrograms}{Object returned by \code{clusterData}. Default is NULL.}
 
-\item{qusage.results}{Object returned by \code{qBart}. Default is NULL.}
+\item{qusage.results}{Object returned by \code{runQgen}. Default is NULL.}
 
 \item{roast.results}{Object returned by \code{rBart}. Default is NULL.}
 

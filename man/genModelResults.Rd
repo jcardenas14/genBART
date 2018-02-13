@@ -47,7 +47,7 @@ Default is NULL. See Details for further description.}
 
 \code{resids} data frame of residuals. Returned only if 
   data.type="microarray" or "rnaseq" and method="limma". Used to estimate the 
-  VIFs when running the Qusage algorithm in \code{\link{qBart}}.
+  VIFs when running the Qusage algorithm in \code{\link{runQgen}}.
 
 \code{gene.sets} list of gene sets provided by the user. NULL if no 
   list provided.
@@ -70,7 +70,7 @@ This function takes results obtained from differential analysis
   otherwise be left as NULL. It is important to remember that \code{y} should 
   be the expression data used for modeling (e.g. voom transformed data). The 
   residual matrix is stored as an element of the returned list and can be 
-  used in downstream gene set analysis using \code{\link{qBart}} (Please 
+  used in downstream gene set analysis using \code{\link{runQgen}} (Please 
   visit for more details).
   
   The \code{object} parameter takes as input model result objects returned by 

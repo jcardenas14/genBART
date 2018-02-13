@@ -34,7 +34,7 @@
 #'   otherwise be left as NULL. It is important to remember that \code{y} should 
 #'   be the expression data used for modeling (e.g. voom transformed data). The 
 #'   residual matrix is stored as an element of the returned list and can be 
-#'   used in downstream gene set analysis using \code{\link{qBart}} (Please 
+#'   used in downstream gene set analysis using \code{\link{runQgen}} (Please 
 #'   visit for more details).
 #'   
 #'   The \code{object} parameter takes as input model result objects returned by 
@@ -71,7 +71,7 @@
 #' @return \code{results} the formatted results returned as a data frame
 #' @return \code{resids} data frame of residuals. Returned only if 
 #'   data.type="microarray" or "rnaseq" and method="limma". Used to estimate the 
-#'   VIFs when running the Qusage algorithm in \code{\link{qBart}}.
+#'   VIFs when running the Qusage algorithm in \code{\link{runQgen}}.
 #' @return \code{gene.sets} list of gene sets provided by the user. NULL if no 
 #'   list provided.
 #' @return \code{annotations} data frame of gene set annotations provided by the

@@ -28,7 +28,7 @@
 #' data(tb.expr)
 #' data(tb.design)
 #' meta.data <- metaData(y = tb.expr, design = tb.design, data.type = "microarray", 
-#'                     columnname = "columnname", long = TRUE, sample.id = "sample.id",
+#'                     columnname = "columnname", long = TRUE, sample.id = "sample_id",
 #'                     subject.id = "monkey_id", time.var = "timepoint",
 #'                     baseline.var = "timepoint", baseline.val = 0)
 #' @export
@@ -46,13 +46,31 @@ metaData <- function(y, design, data.type = "microarray", columnname = NULL,
   if (is.null(columnname)) {
     return(warning("Must enter columnname to match design and expression"))
   } else {
+    if (is.null(design[[columnname]])) {
+      return(
+        warning("columnname parameter given is not a column name in design. 
+Please check spelling.")
+      )
+    }
     if (!any(design[[columnname]] %in% colnames(y))) {
       return(
         warning("columnname values in design do not match any columnnames in y")
       )
     }
     if (!is.null(sample.id)) {
+      if (is.null(design[[sample.id]])) {
+        return(
+          warning("sample.id parameter given is not a column name in design. 
+Please check spelling.")
+        )
+      }
       if (!is.null(subject.id)) {
+        if (is.null(design[[subject.id]])) {
+          return(
+            warning("subject.id parameter given is not a column name in design. 
+Please check spelling.")
+          )
+        }
         if (columnname == sample.id) {
           design$columnname <- as.character(design[[sample.id]])
         }
@@ -71,6 +89,12 @@ metaData <- function(y, design, data.type = "microarray", columnname = NULL,
       }
     } else {
       if (!is.null(subject.id)) {
+        if (is.null(design[[subject.id]])) {
+          return(
+            warning("subject.id parameter given is not a column name in design. 
+Please check spelling.")
+          )
+        }
         if (columnname == subject.id) {
           design$columnname <- as.character(design[[subject.id]])
         } else {
@@ -113,6 +137,12 @@ sample names do not match. Throwing out unmatched samples.")
   }
   if (is.null(control.var) || is.null(control.val)) {
     if (!is.null(control.var) & is.null(control.val)) {
+      if (is.null(design[[control.var]])) {
+        return(
+          warning("control.var parameter given is not a column name in design. 
+Please check spelling.")
+        )
+      }
       return(
         warning("control.var specified but not control.val. Please specify 
 control.val")
@@ -128,18 +158,44 @@ control.var")
   if (long) {
     if (is.null(time.var)) {
       warning("long is TRUE but time.var not specified")
+    } else {
+      if (is.null(design[[time.var]])) {
+        return(
+          warning("time.var parameter given is not a column name in design. 
+Please check spelling.")
+        )
+      }
     }
     if (is.null(baseline.var)) {
       warning("long is TRUE but baseline.var not specified")
+    } else {
+      if (is.null(design[[baseline.var]])) {
+        return(
+          warning("baseline.var parameter given is not a column name in design. 
+Please check spelling.")
+        )
+      }
     }
     if (is.null(baseline.val)) {
       warning("long is TRUE but baseline.val not specified")
     }
   } else {
     if (!is.null(time.var)) {
+      if (is.null(design[[time.var]])) {
+        return(
+          warning("time.var parameter given is not a column name in design. 
+Please check spelling.")
+        )
+      }
       message("time.var specified. Setting long to TRUE.")
       if (is.null(baseline.var) || is.null(baseline.val)) {
         if (!is.null(baseline.var) & is.null(baseline.val)) {
+          if (is.null(design[[baseline.var]])) {
+            return(
+              warning("baselie.var parameter given is not a column name in 
+design. Please check spelling.")
+            )
+          }
           return(
             warning("baseline.var specified but not baseline.val. Please specify 
 baseline.val.")

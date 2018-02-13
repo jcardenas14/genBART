@@ -54,7 +54,7 @@ Match design and expression data frames. Declare and store design parameters.
 data(tb.expr)
 data(tb.design)
 meta.data <- metaData(y = tb.expr, design = tb.design, data.type = "microarray", 
-                    columnname = "columnname", long = TRUE, sample.id = "sample.id",
+                    columnname = "columnname", long = TRUE, sample.id = "sample_id",
                     subject.id = "monkey_id", time.var = "timepoint",
                     baseline.var = "timepoint", baseline.val = 0)
 }

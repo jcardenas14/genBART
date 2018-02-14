@@ -1,6 +1,6 @@
 Package: genBart
 Type: Package
-Title: Generate BART File
+Title: Generate 'BART' File
 Version: 1.0.0
 Authors@R: c(
     person("Jacob", "Cardenas", email = "jacob.cardenas@bswhealth.org", 
@@ -8,9 +8,9 @@ Authors@R: c(
     )
 Description: A set of functions to generate and format results from statistical
     analyses of a wide range of high throughput experiments that can then 
-    be uploaded into the BART (Bio-Statistical Analysis Reporting Tool) shiny 
-    app. The app provides users with tools to visualize and efficiently sift 
-    through large amounts of data and results. 
+    be uploaded into the 'BART' (Bio-Statistical Analysis Reporting Tool) 'shiny' 
+    app <https://github.com/jcardenas14/BART>. The app provides users with tools 
+    to visualize and efficiently sift through large amounts of data and results.
 Depends: 
     R (>= 3.4.0)
 Imports:

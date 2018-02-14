@@ -7,7 +7,7 @@
 \usage{
 genFile(meta, model.results = NULL, module.scores = NULL,
   dendrograms = NULL, qusage.results = NULL, roast.results = NULL,
-  corr.results = NULL, project.name = "BART Project")
+  corr.results = NULL, project.name = "BART Project", folder.path = NULL)
 
 updateFile(load.path = NULL, output.path = NULL, meta = NULL,
   model.results = NULL, module.scores = NULL, dendrograms = NULL,
@@ -35,6 +35,10 @@ NULL.}
 
 \item{project.name}{String giving the name project name. Default is 
 "BART Project".}
+
+\item{folder.path}{Path to create folder that BART file will be saved to. If 
+NULL (default), BART folder will be created in the current working 
+directory.}
 
 \item{load.path}{Folder path of BART file that needs to be updated.}
 
@@ -75,7 +79,7 @@ meta.data <- metaData(y = dat, design = tb.design, data.type = "microarray",
                     sample.id = "sample_id")
                     
 # create BART file (minimal example)
-genFile(meta = list(meta.data))                     
+genFile(meta = list(meta.data), folder.path = tempdir())                     
 
 # generate module scores, normalize and cluster genes
 mods <- genModScores(meta.data, modules)
@@ -83,6 +87,6 @@ data.norm <- normalizeData(meta = meta.data)
 dendros <- clusterData(norm.data = data.norm)
 
 # Update BART file with module scores and clustered genes
-path <- paste(getwd(), "/", "BART Project", " Pipeline", sep = "")
+path <- paste0(tempdir(), "/", "BART Project")
 updateFile(load.path = path, module.scores = mods, dendrograms = dendros)
 }

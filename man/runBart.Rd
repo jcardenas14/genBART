@@ -7,8 +7,11 @@
 runBart()
 }
 \description{
-This function runs the BART shiny app.
+This function runs the BART shiny app
 }
 \examples{
-if (interactive()) genBart::runBart()
+## Only run this example in interactive R sessions
+if (interactive()) {
+  runBart()
+}
 }

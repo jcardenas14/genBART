@@ -226,7 +226,7 @@ corrs <- crossCorr(x = gene.data, y = flow.data, by = time, by.name = "days",
 
 The last step in the process is to generate the final file that can be uploaded into BART. This is done through the function `genFile`, which takes as its arguments the objects generated from the previous functions. Not every object is required to generate a BART file. For example, if gene set analysis and correlations are not run, `metaData`, `clusterData`, `genModScores`, and `genModelResults` objects can still be run through `genFile`. BART will only show the results that are input.
 
-```{r}
+```{r, eval = FALSE}
 genFile(meta = list(meta, meta.flow), module.scores = mod.scores, 
         dendrograms = cluster.data, model.results = list(mod.results, mod.results.flow), 
         project.name = "BART example")
@@ -235,7 +235,7 @@ genFile(meta = list(meta, meta.flow), module.scores = mod.scores,
 In our example, we did run gene set analysis and correlations. Adding these results into BART is made simple through the `updateFile` function. The user must simply provide the path to the BART file that needs to be updated and add the new additions in the same way that `genFile` takes them.
 
 ```{r, eval = FALSE}
-path <- paste(getwd(), "/", "BART example", sep = "")
+path <- paste0(getwd(), "/", "BART example")
 updateFile(load.path = path, qusage.results = qus, corr.results = list(corrs))
 ```
 

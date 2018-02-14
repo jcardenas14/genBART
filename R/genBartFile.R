@@ -14,6 +14,9 @@
 #'   \code{crossCorr}. Default is NULL. 
 #' @param project.name String giving the name project name. Default is 
 #'   "BART Project".
+#' @param folder.path Path to create folder that BART file will be saved to. If 
+#'   NULL (default), BART folder will be created in the current working 
+#'   directory.
 #' @details \code{genFile} generates a formatted R data file (bartResults.rda) 
 #'   that can be uploaded into the BART web application. The file is created 
 #'   based on result objects returned by the various functions in 
@@ -38,7 +41,7 @@
 #'                     sample.id = "sample_id")
 #'                     
 #' # create BART file (minimal example)
-#' genFile(meta = list(meta.data))                     
+#' genFile(meta = list(meta.data), folder.path = tempdir())                     
 #' 
 #' # generate module scores, normalize and cluster genes
 #' mods <- genModScores(meta.data, modules)
@@ -46,13 +49,13 @@
 #' dendros <- clusterData(norm.data = data.norm)
 #' 
 #' # Update BART file with module scores and clustered genes
-#' path <- paste(getwd(), "/", "BART Project", " Pipeline", sep = "")
+#' path <- paste0(tempdir(), "/", "BART Project")
 #' updateFile(load.path = path, module.scores = mods, dendrograms = dendros)
 #' @export
 genFile <- function(meta, model.results = NULL, module.scores = NULL,
                     dendrograms = NULL, qusage.results = NULL,
                     roast.results = NULL, corr.results = NULL, 
-                    project.name = "BART Project") {
+                    project.name = "BART Project", folder.path = NULL) {
   exprs <- design <- long <- sample.id <- subject.id <- control.var <- 
     control.val <- baseline.var <- baseline.val <- time.var <- scores.base <- 
     scores.ctrl <- modules <- rowdend1b <- rowdend2b <- rowdend1 <- rowdend2 <-
@@ -196,8 +199,16 @@ genFile <- function(meta, model.results = NULL, module.scores = NULL,
       }
     }
   }
-  if (!dir.exists(paste(getwd(), "/", project.name, "/", sep = ""))) {
-    dir.create(paste(getwd(), "/", project.name, "/", sep = ""))
+  if (!is.null(folder.path)) {
+    if (!dir.exists(paste0(folder.path, "/", project.name, "/"))) {
+      dir.create(paste0(folder.path, "/", project.name, "/"))
+    }
+    path <- file.path(paste0(folder.path, "/", project.name, "/"))
+  } else {
+    if (!dir.exists(paste(getwd(), "/", project.name, "/", sep = ""))) {
+      dir.create(paste(getwd(), "/", project.name, "/", sep = ""))
+    } 
+    path <- file.path(paste0(getwd(), "/", project.name, "/"))
   }
   save(exprs, design, scores.base, scores.ctrl, modules, rowdend1b, rowdend2b, 
        rowdend1, rowdend2, rowdend3, norm.method, dist.method, agg.method, 
@@ -206,8 +217,7 @@ genFile <- function(meta, model.results = NULL, module.scores = NULL,
        qusage.results, lower.ci, upper.ci, gene.sets, annots, roast.results, 
        flow.results, flow.data, metab.results, metab.data, corr.num, corr.names, 
        x.var, y.var, corr.method, corrs, corr.files, project.name, 
-       file = file.path(paste0(getwd(), "/", project.name, "/", 
-                               "bartResults.rda")))
+       file = paste0(path, "/bartResults.rda"))
 }
 
 #' @rdname genFile
@@ -224,8 +234,6 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
                        dendrograms = NULL, qusage.results = NULL, 
                        roast.results = NULL, corr.results = NULL, 
                        project.name = NULL) {
-  old <- setwd(tempdir())
-  on.exit(setwd(old), add = TRUE)
   if (!is.null(load.path)) {
     if (file.exists(load.path)) {
       qresults <- qusage.results
@@ -374,12 +382,11 @@ updateFile <- function(load.path = NULL, output.path = NULL, meta = NULL,
         }
       }
       if(is.null(output.path)){
-        setwd(load.path)
-        path <- file.path(paste0(getwd(), "/bartResults.rda"))
+        path <- file.path(paste0(load.path, "/bartResults.rda"))
       } else {
-        setwd(output.path)
-        dir.create(paste(getwd(), "/", project.name, "/", sep = ""))
-        path <- file.path(paste0(getwd(), "/", project.name, "/bartResults.rda")
+        dir.create(paste(output.path, "/", project.name, "/", sep = ""))
+        path <- file.path(paste0(output.path, "/", project.name, 
+                                 "/bartResults.rda")
         )
       }
       save(exprs, design, scores.base, scores.ctrl, modules, rowdend1b, 

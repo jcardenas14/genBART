@@ -4,7 +4,8 @@ Title: Generate 'BART' File
 Version: 1.0.0
 Authors@R: c(
     person("Jacob", "Cardenas", email = "jacob.cardenas@bswhealth.org", 
-    role = c("aut", "cre")), person("Jacob", "Turner", role = "aut")
+    role = c("aut", "cre")), person("Jacob", "Turner", role = "aut"),
+    person("Derek", "Blankenship", role = "aut")
     )
 Description: A set of functions to generate and format results from statistical
     analyses of a wide range of high throughput experiments that can then 

@@ -107,13 +107,13 @@ corrs <- crossCorr(x = gene.data, y = flow.data, by = time, by.name = "days",
                    y.var = "Flow", method = "spearman")
 
 
-## ------------------------------------------------------------------------
-genFile(meta = list(meta, meta.flow), module.scores = mod.scores, 
-        dendrograms = cluster.data, model.results = list(mod.results, mod.results.flow), 
-        project.name = "BART example")
+## ---- eval = FALSE-------------------------------------------------------
+#  genFile(meta = list(meta, meta.flow), module.scores = mod.scores,
+#          dendrograms = cluster.data, model.results = list(mod.results, mod.results.flow),
+#          project.name = "BART example")
 
 ## ---- eval = FALSE-------------------------------------------------------
-#  path <- paste(getwd(), "/", "BART example", sep = "")
+#  path <- paste0(getwd(), "/", "BART example")
 #  updateFile(load.path = path, qusage.results = qus, corr.results = list(corrs))
 
 ## ---- eval = FALSE-------------------------------------------------------

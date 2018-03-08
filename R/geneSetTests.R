@@ -77,6 +77,7 @@ qusageGen <- function(resids, estimates, dof, std.errors, gene.sets) {
 #' # Run Q-Gen on baylor modules                             
 #' data(modules)
 #' qus.results <- runQgen(model.results, modules)
+#' @import qusage
 #' @export
 runQgen <- function(model.results, gene.sets, annotations = NULL) {
   results <- model.results$results

@@ -1,7 +1,7 @@
 Package: genBart
 Type: Package
 Title: Generate 'BART' File
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Jacob", "Cardenas", email = "jacob.cardenas@bswhealth.org", 
     role = c("aut", "cre")), person("Jacob", "Turner", role = "aut"),

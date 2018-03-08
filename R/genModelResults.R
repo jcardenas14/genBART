@@ -102,7 +102,6 @@
 #' model.results <- genModelResults(y = dat, data.type = "microarray", object = fit2,
 #'                                  lm.Fit = fit, method = "limma")
 #' @import limma
-#' @import qusage
 #' @export
 genModelResults <- function (y = NULL, data.type = "rnaseq", method = "limma", 
                              object, lm.Fit = NULL, comp.names = NULL, 

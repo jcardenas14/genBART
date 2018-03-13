@@ -1,6 +1,6 @@
 ---
 title: "genBart package Vignette"
-author: "Jacob Cardenas"
+author: "Jacob Cardenas, Jacob Turner, and Derek Blankenship"
 date: "`r Sys.Date()`"
 output: rmarkdown::pdf_document
 vignette: >

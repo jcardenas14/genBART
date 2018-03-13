@@ -1,13 +1,8 @@
-## Resubmission number 2
-This is a resubmission. In this version I have:
-* Added single quotes to software names and packages in title and description.
-* Added a URL for the 'BART' app in the description.
-* Fixed functions in examples that wrote or saved to the user's home filespace
+## Resubmission for archived genBart
+This is a resubmission. genBart 1.0.0 was archived due to a dependency on package NMF, 
+which was archived but is now back on CRAN. In this version I have:
 
-## Resubmission number 1
-This is a resubmission. In this version I have:
-* Converted the DESCRIPTION title to title case.
-* Moved the acronym breakdown from the title to the Description field.
+* Updated the version number to 1.0.1
 
 ## Test environments
 * local Windows 7 install, R 3.4.3

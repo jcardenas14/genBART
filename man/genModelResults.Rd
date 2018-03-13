@@ -13,7 +13,7 @@ genModelResults(y = NULL, data.type = "rnaseq", method = "limma", object,
 Details for further description.}
 
 \item{data.type}{Type of data being analyzed ("rnaseq", "microarray", "flow", 
-"metab"). Default is data.type="microarray".}
+"metab"). Default is data.type="rnaseq".}
 
 \item{method}{string denoting modeling method used ("limma","deseq2","edgeR")}
 

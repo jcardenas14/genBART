@@ -4,8 +4,8 @@
 \alias{metaData}
 \title{Declare meta data information for downstream analysis}
 \usage{
-metaData(y, design, data.type = "microarray", columnname = NULL,
-  long = FALSE, time.var = NULL, sample.id = NULL, subject.id = NULL,
+metaData(y, design, data.type = "rnaseq", columnname = NULL, long = FALSE,
+  time.var = NULL, sample.id = NULL, subject.id = NULL,
   baseline.var = NULL, baseline.val = NULL, control.var = NULL,
   control.val = NULL)
 }
@@ -15,8 +15,8 @@ metaData(y, design, data.type = "microarray", columnname = NULL,
 \item{design}{A sample annotation data frame containing sample information
 (e.g. age, condition, timepoint, etc.).}
 
-\item{data.type}{Type of data that's going to be analyzed ("microarray", 
-"rnaseq","flow", "metab"). Default is data.type="microarray".}
+\item{data.type}{Type of data that's going to be analyzed ("rnaseq", 
+"microarray","flow", "metab"). Default is data.type="rnaseq".}
 
 \item{columnname}{Name of column in design that contains the column names of 
 y.}

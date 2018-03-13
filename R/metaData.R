@@ -4,8 +4,8 @@
 #' @param y An expression data frame.
 #' @param design A sample annotation data frame containing sample information
 #'   (e.g. age, condition, timepoint, etc.).
-#' @param data.type Type of data that's going to be analyzed ("microarray", 
-#'   "rnaseq","flow", "metab"). Default is data.type="microarray".
+#' @param data.type Type of data that's going to be analyzed ("rnaseq", 
+#'   "microarray","flow", "metab"). Default is data.type="rnaseq".
 #' @param columnname Name of column in design that contains the column names of 
 #'   y.
 #' @param long logical; Is the study longitudinal?.
@@ -32,14 +32,14 @@
 #'                     subject.id = "monkey_id", time.var = "timepoint",
 #'                     baseline.var = "timepoint", baseline.val = 0)
 #' @export
-metaData <- function(y, design, data.type = "microarray", columnname = NULL, 
+metaData <- function(y, design, data.type = "rnaseq", columnname = NULL, 
                     long = FALSE, time.var = NULL, sample.id = NULL, 
                     subject.id = NULL, baseline.var = NULL, baseline.val = NULL, 
                     control.var = NULL, control.val = NULL) 
 {
   if (!data.type %in% c("microarray", "rnaseq", "flow", "metab")) {
     return(
-      warning("data.type must be one of 'microarray', 'rnaseq', 'metab', or 
+      warning("data.type must be one of 'rnaseq', 'microarray', 'metab', or 
               'flow'.")
     )
   }
